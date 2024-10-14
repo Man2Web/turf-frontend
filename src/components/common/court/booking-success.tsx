@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
+import jsPDF from "jspdf";
 import { Link, useParams } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
 import axios from "axios";
@@ -77,9 +78,8 @@ const BookingSuccess = () => {
   const routes = all_routes;
   const { t_id } = useParams();
   const [bookingData, setBookingData] = useState<BookingData>();
-  const [toggle, setToggle] = useState(true);
-  const [slotEndTime, setSlotEndTime] = useState<string>();
-  const serviceCharge = Number(process.env.REACT_APP_SERVICE_CHARGE) || 0;
+
+  const pdfRef = useRef<HTMLDivElement>(null);
 
   const getBookingData = async (id: string) => {
     const response = await axios.get(
@@ -109,11 +109,26 @@ const BookingSuccess = () => {
     }
   };
 
+  const generatePdf = () => {
+    const doc = new jsPDF({
+      format: "a4",
+      unit: "px",
+    });
+    if (pdfRef.current) {
+      doc.html(pdfRef.current, {
+        async callback(doc) {
+          await doc.save("document");
+        },
+      });
+    }
+  };
+
   return (
     <>
       {!bookingData && <Loader />}
       {bookingData && (
         <div
+          ref={pdfRef}
           style={{ maxWidth: "80%" }}
           className="modal-dialog modal-dialog-centered modal-md mt-4"
         >
@@ -255,6 +270,18 @@ const BookingSuccess = () => {
                     <div className="appointment-info appoin-border double-row">
                       <ul className="appointmentset">
                         <li>
+                          <h6>Total </h6>
+                          <p className="color-green">
+                            ₹
+                            {decimalNumber(
+                              bookingData?.booking[0].amount_paid
+                            ) +
+                              decimalNumber(
+                                bookingData?.booking[0].pay_required
+                              )}
+                          </p>
+                        </li>
+                        <li>
                           <h6>Total Amount Paid</h6>
                           <p className="color-green">
                             ₹
@@ -269,10 +296,6 @@ const BookingSuccess = () => {
                               bookingData?.booking[0].pay_required
                             )}
                           </p>
-                        </li>
-                        <li>
-                          <h6>Service Charge</h6>
-                          <p>₹{decimalNumber(serviceCharge)}</p>
                         </li>
                       </ul>
                     </div>
@@ -332,7 +355,16 @@ const BookingSuccess = () => {
                 </div>
               </div>
               {/* /Court Request */}
-              <div className="d-flex justify-content-center my-4">
+              <div className="d-flex justify-content-center my-4 gap-2">
+                <button
+                  onClick={() => {
+                    generatePdf();
+                  }}
+                  className="btn btn-primary btn-icon"
+                >
+                  <i className="feather-mail me-1" />
+                  Download PDF
+                </button>
                 <Link to={redirectUrl()} className="btn btn-primary btn-icon">
                   <i className="feather-arrow-left-circle me-1" />
                   {`Back to ${!isAdmin && !isUser ? "Home" : "Dashboard"}`}

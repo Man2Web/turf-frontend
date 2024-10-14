@@ -316,7 +316,7 @@ const CourtsDataComponent = () => {
                                             deleteCourt(rowData.id)
                                           }
                                           to="#"
-                                          className="btn cancel-table-btn"
+                                          className="btn btn-red"
                                         >
                                           <i className="feather-x-circle"></i>
                                           Delete
@@ -339,7 +339,7 @@ const CourtsDataComponent = () => {
                                             deleteCourt(rowData.id)
                                           }
                                           to="#"
-                                          className="btn cancel-table-btn"
+                                          className="btn btn-red"
                                         >
                                           <i className="feather-x-circle"></i>
                                           Delete

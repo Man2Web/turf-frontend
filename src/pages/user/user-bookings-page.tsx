@@ -51,6 +51,7 @@ const UserBookingsPage = () => {
           },
         }
       );
+      console.log(response.data);
       if (response.data.upcomingBookings) {
         setUpcomingBooking(response.data.upcomingBookings);
       }
@@ -142,12 +143,44 @@ const UserBookingsPage = () => {
   }, [upcomingBooking]);
 
   const sliderOptions = {
-    dots: false,
     infinite: true,
     arrows: true,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 2,
+    slidesToShow: 4,
+    slidesToScroll: 2, // Scroll one slide at a time for smoother experience
+    responsive: [
+      {
+        breakpoint: 1200, // For larger screens
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 2,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 992, // For medium screens
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+        },
+      },
+      {
+        breakpoint: 768, // For tablets
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 480, // For small mobile screens
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          arrows: false, // Disable arrows on smaller screens
+        },
+      },
+    ],
   };
 
   return (
@@ -158,119 +191,119 @@ const UserBookingsPage = () => {
       {/* Page Content */}
       <div className="content court-bg">
         <div className="container">
-          <div className="row mb-4">
-            <div className="col-sm-12">
-              <div className="court-tab-content">
-                <div className="card card-tableset">
-                  <div className="card-body">
-                    <div className="court-table-head mb-4">
-                      <h4>Upcoming Bookings</h4>
-                      <p>
-                        Effortlessly track and manage your upcoming bookings
-                      </p>
-                    </div>
-                    <Slider {...sliderOptions} className="venue-space">
-                      {upcomingBooking?.map(
-                        (booking: BookingData, idx: number) => {
-                          return (
-                            <div key={idx} className={`col-md-6 mb-4 px-2`}>
-                              <div className="wrapper">
-                                <div className="listing-item listing-item-grid">
-                                  <div className="listing-img">
-                                    <Link
-                                      to={`${routes.courtDetailsLink}/${booking.courtDetails.id}`}
-                                    >
-                                      <img
-                                        style={{
-                                          height: "250px",
-                                          width: "415px",
-                                        }}
-                                        src={images && images[idx]}
-                                        alt="court img"
-                                      />
-                                    </Link>
-                                    <div className="fav-item-venues">
-                                      {booking.courtDetails.featured && (
-                                        <span className="tag tag-blue">
-                                          Featured
-                                        </span>
-                                      )}
-                                      <h5 className="tag tag-primary">
-                                        ₹{decimalNumber(10000)}
-                                      </h5>
-                                    </div>
-                                  </div>
-                                  <div className="listing-content">
-                                    <div className="list-reviews d-flex justify-content-between align-items-center">
-                                      <div className="d-flex align-items-center">
-                                        <h5 className="listing-title d-flex align-items-center m-0">
-                                          <Link
-                                            to={`${routes.courtDetailsLink}/${booking.courtDetails.id}`}
-                                          >
-                                            {booking.courtDetails.court_name}
-                                          </Link>
+          {upcomingBooking.length > 0 && (
+            <div className="row mb-4">
+              <div className="col-sm-12">
+                <div className="court-tab-content">
+                  <div className="card card-tableset">
+                    <div className="card-body">
+                      <div className="court-table-head mb-4">
+                        <h4>Upcoming Bookings</h4>
+                        <p>
+                          Effortlessly track and manage your upcoming bookings
+                        </p>
+                      </div>
+                      <Slider {...sliderOptions} className="venue-space">
+                        {upcomingBooking?.map(
+                          (booking: BookingData, idx: number) => {
+                            return (
+                              <div key={idx} className="h-6 mb-4 px-2">
+                                <div className="wrapper">
+                                  <div className="listing-item listing-item-grid">
+                                    <div className="listing-img">
+                                      <Link
+                                        to={`${routes.courtDetailsLink}/${booking.courtDetails.id}`}
+                                      >
+                                        <img
+                                          className="card-img-top"
+                                          src={images && images[idx]}
+                                          alt="court img"
+                                        />
+                                      </Link>
+                                      <div className="fav-item-venues">
+                                        {booking.courtDetails.featured && (
+                                          <span className="tag tag-blue">
+                                            Featured
+                                          </span>
+                                        )}
+                                        <h5 className="tag tag-primary">
+                                          ₹{decimalNumber(10000)}
                                         </h5>
                                       </div>
                                     </div>
-                                    <div className="listing-details-group">
-                                      <ul
-                                        style={{ fontWeight: "200" }}
-                                        className="listing-details-info"
-                                      >
-                                        <li className="mb-2">
+                                    <div className="listing-content">
+                                      <div className="list-reviews d-flex justify-content-between align-items-center">
+                                        <div className="d-flex align-items-center">
+                                          <h5 className="listing-title d-flex align-items-center m-0">
+                                            <Link
+                                              to={`${routes.courtDetailsLink}/${booking.courtDetails.id}`}
+                                            >
+                                              {booking.courtDetails.court_name}
+                                            </Link>
+                                          </h5>
+                                        </div>
+                                      </div>
+                                      <div className="listing-details-group">
+                                        <ul
+                                          style={{ fontWeight: "200" }}
+                                          className="listing-details-info"
+                                        >
+                                          <li className="mb-2">
+                                            <span>
+                                              <i>
+                                                {getIconBySport(
+                                                  booking.courtDetails
+                                                    .court_type
+                                                )}
+                                              </i>
+                                              {`${booking.courtDetails.court_type}`}
+                                            </span>
+                                            <span>
+                                              <i className="feather-clock" />
+                                              {`${dateFormat(booking.booking_date)}`}
+                                            </span>
+                                            <span>
+                                              <i className="feather-sun" />
+                                              {`${formatTime(booking.booking_time)} - ${formatTime(getSlotDurationInHrs(booking.booking_time, booking.duration))}`}
+                                            </span>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                      <div className="listing-button d-flex gap-2">
+                                        <Link
+                                          to={`${routes.courtDetailsLink}/${booking.courtDetails.id}/booking`}
+                                          className="user-book-now btn btn-primary text-white w-100 justify-content-center"
+                                        >
                                           <span>
-                                            <i>
-                                              {getIconBySport(
-                                                booking.courtDetails.court_type
-                                              )}
-                                            </i>
-                                            {`${booking.courtDetails.court_type}`}
+                                            <i className="feather-calendar me-2 text-white" />
                                           </span>
+                                          Reschedule
+                                        </Link>
+                                        <Link
+                                          to={`${routes.courtDetailsLink}/${booking.courtDetails.id}/booking`}
+                                          className="user-book-now btn btn-red text-white w-100 justify-content-center"
+                                        >
                                           <span>
-                                            <i className="feather-clock" />
-                                            {`${dateFormat(booking.booking_date)}`}
+                                            <i className="feather-x me-2 text-white" />
                                           </span>
-                                          <span>
-                                            <i className="feather-sun" />
-                                            {`${formatTime(booking.booking_time)} - ${formatTime(getSlotDurationInHrs(booking.booking_time, booking.duration))}`}
-                                          </span>
-                                        </li>
-                                      </ul>
+                                          Cancel
+                                        </Link>
+                                      </div>
+                                      <div className="listing-button"></div>
                                     </div>
-                                    <div className="listing-button d-flex gap-2">
-                                      <Link
-                                        to={`${routes.courtDetailsLink}/${booking.courtDetails.id}/booking`}
-                                        className="user-book-now btn btn-primary text-white w-100 justify-content-center"
-                                      >
-                                        <span>
-                                          <i className="feather-calendar me-2 text-white" />
-                                        </span>
-                                        Reschedule
-                                      </Link>
-                                      <Link
-                                        to={`${routes.courtDetailsLink}/${booking.courtDetails.id}/booking`}
-                                        className="user-book-now btn btn-red text-white w-100 justify-content-center"
-                                      >
-                                        <span>
-                                          <i className="feather-x me-2 text-white" />
-                                        </span>
-                                        Cancel
-                                      </Link>
-                                    </div>
-                                    <div className="listing-button"></div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          );
-                        }
-                      )}
-                    </Slider>
+                            );
+                          }
+                        )}
+                      </Slider>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Prev Bookings Data */}
           <div className="row">

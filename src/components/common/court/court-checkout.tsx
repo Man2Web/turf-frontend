@@ -1,22 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
-import { all_routes } from "../../../router/all_routes";
-import CourtDetailsComponent from "./court-details-component";
-import { useForm, Controller } from "react-hook-form";
+import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { nanoid } from "nanoid";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import UserDetailsComponent from "./user-details-component";
-import OrderConfirmationPage from "./court-order-confirm";
-import { formatEndTime } from "../../../utils/formatEndTime";
-import { monthNames } from "../../../utils/monthNames";
-import { UserDetailsFormData } from "../../../utils/types/userDetailsBookingForm";
 import ButtonLoader from "../button-loader";
 import AdminDetailsComponent from "./admin-details-component";
 import { decimalNumber } from "../../../utils/decimalNumber";
 import BookingConfirmModal from "../../admin/booking-confirm";
-import { register } from "module";
+
+interface CheckoutForm {
+  policy: boolean;
+}
 
 const CourtCheckout = ({
   courtData,
@@ -37,14 +33,20 @@ const CourtCheckout = ({
   courtId: any;
   courtDuration: any;
 }) => {
-  const { register, control, handleSubmit, watch } = useForm();
-  const [errors, setErrors] = useState<any>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<CheckoutForm>({
+    mode: "onTouched",
+  });
+  const [localErrors, setErrors] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [isValid, setIsValid] = useState<boolean>();
   const [adminLoading, setAdminLoading] = useState<boolean>(false);
   const [toggleModal, setToggleModal] = useState<boolean>(false);
   const [isCourtAdmin, setIsCourtAdmin] = useState<boolean>(false);
-
   const policy = watch("policy");
 
   // const month = monthNames[selectedDate.getMonth()];
@@ -98,16 +100,12 @@ const CourtCheckout = ({
     (Number(courtData.pricing.advance_pay) / 100) * totalPrice;
 
   // Function to handle API call for default payment method
-  const onlinePay = async (data: any) => {
-    console.log("Trig");
-
+  const onlinePay = async () => {
     // if (isValid) {
     const updatedData = {
-      // name: "Random Name",
       amount: advanceAmount,
       amountTobePaid: Number(Math.round(totalPrice - advanceAmount)),
       courtDuration: courtDuration,
-      // number: "87908770087",
       MID: nanoid(10),
       transactionId: nanoid(10),
       userDetails,
@@ -120,7 +118,7 @@ const CourtCheckout = ({
         null,
     };
 
-    if (data.policy) {
+    if (policy && isValid) {
       try {
         setLoading(true);
         const response = await axios.post(
@@ -147,7 +145,6 @@ const CourtCheckout = ({
 
   // Function to handle API call for CASH payment method
   const onCashPayment = async () => {
-    // if (isValid) {
     const cashData = {
       courtDuration: courtDuration,
       amount: totalPrice,
@@ -163,26 +160,28 @@ const CourtCheckout = ({
         null,
     };
 
-    try {
-      setAdminLoading(true);
-      const response = await axios.post(
-        `${process.env.REACT_APP_BACKEND_URL}payment/admin`,
-        cashData
-      );
-      if (response.status === 200) {
-        setToggleModal(true);
-      } else {
+    if (policy && isValid) {
+      try {
+        setAdminLoading(true);
+        const response = await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}payment/admin`,
+          cashData
+        );
+        if (response.status === 200) {
+          setToggleModal(true);
+        } else {
+          toast.error("Error processing cash booking.");
+        }
+      } catch (error) {
+        console.error("Error during CASH payment:", error);
         toast.error("Error processing cash booking.");
+      } finally {
+        setAdminLoading(false);
       }
-    } catch (error) {
-      console.error("Error during CASH payment:", error);
-      toast.error("Error processing cash booking.");
-    } finally {
-      setAdminLoading(false);
     }
-    // }
   };
-
+  console.log("policy", policy);
+  console.log("valid", isValid);
   // const disableCheck = policy && Object.keys(errors).length === 0 && isValid;
   // const disableCheck = isValid;
   return (
@@ -349,49 +348,43 @@ const CourtCheckout = ({
                           </>
                         )}
                       </div>
-
-                      <form onSubmit={handleSubmit(onlinePay)}>
+                      <form
+                        onSubmit={handleSubmit(
+                          isCourtAdmin ? onCashPayment : onlinePay
+                        )}
+                      >
                         <div className="form-check d-flex justify-content-start align-items-center policy m-0 mb-2">
-                          <div className="d-inline-block">
+                          <div className="d-flex align-items-center">
                             <input
                               className="form-check-input"
                               type="checkbox"
                               id="policy"
                               {...register("policy", {
-                                required: "You must agree to the policy",
+                                required:
+                                  "To proceed with booking, you must agree to the privacy policy, refund policy, and terms and conditions.",
                               })}
                             />
-
-                            {errors?.policy && (
-                              <p className="text-danger">
-                                {errors.policy.message}
-                              </p>
-                            )}
+                            <label
+                              className="form-check-label"
+                              htmlFor="policy"
+                            >
+                              By checking this box, I agree to the{" "}
+                              <Link to="privacy-policy">Privacy Policy</Link>,{" "}
+                              <Link to="terms-condition">Refund Policy</Link>,
+                              and{" "}
+                              <Link to="terms-condition">
+                                Terms & Conditions.
+                              </Link>
+                            </label>
                           </div>
-                          <label className="form-check-label" htmlFor="policy">
-                            By checking this box, I agree to the{" "}
-                            <Link to="privacy-policy">Privacy Policy</Link>,{" "}
-                            <Link to="terms-condition">Refund Policy</Link>, and{" "}
-                            <Link to="terms-condition">
-                              Terms & Conditions.
-                            </Link>
-                          </label>
                         </div>
-                        {!policy && (
-                          <p className="text-danger">
-                            Please check this box in order to complete booking
-                          </p>
+                        {errors?.policy && (
+                          <p className="text-danger">{errors.policy.message}</p>
                         )}
+
                         <div className="d-grid btn-block">
                           {isCourtAdmin && (
-                            <button
-                              type="button"
-                              className="mb-2 btn btn-primary"
-                              // disabled={!disableCheck}
-                              onClick={onCashPayment} // Trigger onCashPayment when clicked
-                              // data-bs-toggle="modal"
-                              // data-bs-target="#bookingconfirmModal"
-                            >
+                            <button className="mb-2 btn btn-primary">
                               {adminLoading ? (
                                 <ButtonLoader />
                               ) : (
@@ -400,10 +393,7 @@ const CourtCheckout = ({
                             </button>
                           )}
                           {!isCourtAdmin && (
-                            <button
-                              type="submit"
-                              className="mb-2 btn btn-primary"
-                            >
+                            <button className="mb-2 btn btn-primary">
                               {loading ? <ButtonLoader /> : "Reserve Now"}
                             </button>
                           )}

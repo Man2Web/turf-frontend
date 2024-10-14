@@ -110,6 +110,8 @@ const UserDetailsComponent = ({
     }
   };
 
+  console.log(isValid);
+
   return (
     <div>
       <div className="container">

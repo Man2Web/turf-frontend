@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { all_routes } from "../../router/all_routes";
 import axios from "axios";
 import Loader from "../../components/common/Loader";
 import CourtTimeSlotsComponent from "../../components/common/court/court-timeslots-component";
@@ -70,24 +69,6 @@ const CourtBooking = () => {
     }
   }, [courtData, selectedDate]);
 
-  // console.log(selectedSlots);
-
-  // // console.log(courtData);
-
-  const routes = all_routes;
-
-  const updateProgress = (movement: string) => {
-    if (movement === "next") {
-      if (progress < 4) {
-        setProgress(progress + 1);
-      }
-    } else {
-      if (progress > 0) {
-        setProgress(progress - 1);
-      }
-    }
-  };
-
   dayjs.extend(customParseFormat);
 
   return (
@@ -135,37 +116,6 @@ const CourtBooking = () => {
                   />
                 </>
               )}
-              {/* {
-                <div
-                  style={{
-                    position: "fixed",
-                    bottom: "0",
-                    left: "0",
-                    width: "100%",
-                    backgroundColor: "#fff", // Optional: Add background color to ensure it's visible
-                    padding: "10px", // Optional: Add padding for spacing
-                    // zIndex: 1000, // Optional: Ensure it's above other elements
-                  }}
-                  className="text-center btn-row"
-                >
-                  <button
-                    className={`btn btn-secondary btn-icon me-3 ${progress === 0 ? "pe-none" : ""}`}
-                    // className="btn btn-primary me-3 btn-icon"
-                    onClick={() => updateProgress("prev")}
-                    disabled={progress === 0}
-                  >
-                    <i className="feather-arrow-left-circle me-1" /> Back
-                  </button>
-                  <button
-                    type={`${progress === 1 ? "submit" : "button"}`}
-                    disabled={progress === 1 || selectedSlots.length === 0}
-                    className={`btn btn-secondary btn-icon ${progress === 1 ? "pe-none" : ""}`}
-                    onClick={() => updateProgress("next")}
-                  >
-                    Next <i className="feather-arrow-right-circle ms-1" />
-                  </button>
-                </div>
-              } */}
             </div>
             {/* /Container */}
           </div>
