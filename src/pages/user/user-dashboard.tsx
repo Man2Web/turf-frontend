@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { all_routes } from "../../router/all_routes";
 import UserMenuComponent from "../../components/user/userMenu";
 import LocationDataModal from "../../components/common/location-data-modal";
-import { citiesList } from "../../utils/citiesList";
+import { UserLocationContext } from "../..";
 
 const UserDashboard = () => {
   const routes = all_routes;
-  const [userLocation, setUserLocation] = useState<string | null>(
-    localStorage.getItem("userLocation")
-  );
+  const locationContext = useContext(UserLocationContext);
 
-  useEffect(() => {
-    userLocation && localStorage.setItem("userLocation", userLocation);
-  }, [userLocation]);
+  if (!locationContext) {
+    throw new Error("Error getting user location");
+  }
+
+  const { userLocationInContext } = locationContext;
 
   return (
     <div>
-      {!userLocation && <LocationDataModal setUserLocation={setUserLocation} />}
+      {!userLocationInContext && <LocationDataModal />}
       {/* Dashboard Menu */}
       <UserMenuComponent />
       {/* /Dashboard Menu */}

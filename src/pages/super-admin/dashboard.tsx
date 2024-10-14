@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import ReactApexChart from "react-apexcharts";
@@ -11,20 +11,22 @@ import { citiesList } from "../../utils/citiesList";
 import LocationDataModal from "../../components/common/location-data-modal";
 import StatsCardComponent from "../../components/super-admin/stats-card";
 import CourtsDataComponent from "../../components/super-admin/courts-data-component";
+import { UserLocationContext } from "../..";
 
 const SuperAdminDashboard = () => {
   const routes = all_routes;
-  const [userLocation, setUserLocation] = useState<string | null>(
-    localStorage.getItem("userLocation")
-  );
 
-  useEffect(() => {
-    userLocation && localStorage.setItem("userLocation", userLocation);
-  }, [userLocation]);
+  const locationContext = useContext(UserLocationContext);
+
+  if (!locationContext) {
+    throw new Error("Error getting user location");
+  }
+
+  const { userLocationInContext } = locationContext;
 
   return (
     <div>
-      {!userLocation && <LocationDataModal setUserLocation={setUserLocation} />}
+      {!userLocationInContext && <LocationDataModal />}
       {/* Dashboard Menu */}
       {/* <AdminMenuComponent /> */}
       {/* /Dashboard Menu */}

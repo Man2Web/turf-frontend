@@ -71,9 +71,8 @@ const CourtsDataComponent = () => {
 
   const deleteCourt = async (id: number) => {
     try {
-      const response = await axios.put(
-        `${process.env.REACT_APP_BACKEND_URL}superadmin/court/approve/${id}`,
-        { status: status }
+      const response = await axios.delete(
+        `${process.env.REACT_APP_BACKEND_URL}superadmin/court/${id}`
       );
       toast.success(response.data.message);
       getCourtsData();
@@ -318,8 +317,6 @@ const CourtsDataComponent = () => {
                                           }
                                           to="#"
                                           className="btn cancel-table-btn"
-                                          data-bs-toggle="modal"
-                                          data-bs-target="#request-reject"
                                         >
                                           <i className="feather-x-circle"></i>
                                           Delete
@@ -343,8 +340,6 @@ const CourtsDataComponent = () => {
                                           }
                                           to="#"
                                           className="btn cancel-table-btn"
-                                          data-bs-toggle="modal"
-                                          data-bs-target="#request-reject"
                                         >
                                           <i className="feather-x-circle"></i>
                                           Delete
