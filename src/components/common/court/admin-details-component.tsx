@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { UserDetailsFormData } from "../../../utils/types/userDetailsBookingForm";
 import { AdminDetailsFormData } from "../../../utils/types/adminDetailsBookingForm";
+import { updateGuestCount } from "../../../utils/updateGuestCount";
 
 const AdminDetailsComponent = ({
   courtData,
@@ -24,7 +25,7 @@ const AdminDetailsComponent = ({
   } = useForm<AdminDetailsFormData>({
     mode: "onTouched",
     defaultValues: {
-      numberOfGuests: courtData.pricing.max_guests,
+      numberOfGuests: courtData.venueprice.max_guests,
       additionalNumberOfGuests: 0,
     },
   }); // Validation on field touch
@@ -59,38 +60,6 @@ const AdminDetailsComponent = ({
     additionalNumberOfGuests,
     setUserDetails,
   ]);
-
-  const updateGuestCount = (movement: number, direction: number) => {
-    if (movement === 0) {
-      if (direction === 0) {
-        if (numberOfGuests > 1) {
-          setValue("numberOfGuests", numberOfGuests - 1, {
-            shouldValidate: true,
-          });
-        }
-      } else {
-        if (numberOfGuests < courtData.pricing.max_guests) {
-          setValue("numberOfGuests", numberOfGuests + 1, {
-            shouldValidate: true,
-          });
-        }
-      }
-    } else if (movement === 1) {
-      if (direction === 0) {
-        if (additionalNumberOfGuests > 0) {
-          setValue("additionalNumberOfGuests", additionalNumberOfGuests - 1, {
-            shouldValidate: true,
-          });
-        }
-      } else {
-        if (additionalNumberOfGuests < courtData.pricing.additional_guests) {
-          setValue("additionalNumberOfGuests", additionalNumberOfGuests + 1, {
-            shouldValidate: true,
-          });
-        }
-      }
-    }
-  };
 
   return (
     <div>
@@ -196,7 +165,14 @@ const AdminDetailsComponent = ({
                   <div className="qty-item text-center">
                     <Link
                       onClick={() => {
-                        updateGuestCount(0, 0);
+                        updateGuestCount(
+                          0,
+                          0,
+                          numberOfGuests,
+                          additionalNumberOfGuests,
+                          courtData,
+                          setValue
+                        );
                       }}
                       to="#"
                       className="dec d-flex justify-content-center align-items-center"
@@ -214,8 +190,8 @@ const AdminDetailsComponent = ({
                           message: "At least 1 guest is required",
                         },
                         max: {
-                          value: courtData.pricing.max_guests,
-                          message: `Max guests of ${courtData.pricing.max_guests} allowed`,
+                          value: courtData.venueprice.max_guests,
+                          message: `Max guests of ${courtData.venueprice.max_guests} allowed`,
                         },
                       })}
                       name="qty"
@@ -224,7 +200,14 @@ const AdminDetailsComponent = ({
                     <Link
                       to="#"
                       onClick={() => {
-                        updateGuestCount(0, 1);
+                        updateGuestCount(
+                          0,
+                          1,
+                          numberOfGuests,
+                          additionalNumberOfGuests,
+                          courtData,
+                          setValue
+                        );
                       }}
                       className="inc d-flex justify-content-center align-items-center"
                     >
@@ -244,7 +227,14 @@ const AdminDetailsComponent = ({
                     <Link
                       to="#"
                       onClick={() => {
-                        updateGuestCount(1, 0);
+                        updateGuestCount(
+                          1,
+                          0,
+                          numberOfGuests,
+                          additionalNumberOfGuests,
+                          courtData,
+                          setValue
+                        );
                       }}
                       className="dec d-flex justify-content-center align-items-center"
                     >
@@ -260,8 +250,8 @@ const AdminDetailsComponent = ({
                           message: "",
                         },
                         max: {
-                          value: courtData.pricing.additional_guests,
-                          message: `Max additional guests of ${courtData.pricing.additional_guests} allowed`,
+                          value: courtData.venueprice.additional_guests,
+                          message: `Max additional guests of ${courtData.venueprice.additional_guests} allowed`,
                         },
                       })}
                       name="qty"
@@ -270,7 +260,14 @@ const AdminDetailsComponent = ({
                     <Link
                       to="#"
                       onClick={() => {
-                        updateGuestCount(1, 1);
+                        updateGuestCount(
+                          1,
+                          1,
+                          numberOfGuests,
+                          additionalNumberOfGuests,
+                          courtData,
+                          setValue
+                        );
                       }}
                       className="inc d-flex justify-content-center align-items-center"
                     >

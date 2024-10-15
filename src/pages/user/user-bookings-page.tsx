@@ -17,6 +17,7 @@ import GridCard from "../../components/common/courts-list/grid-card";
 import { decimalNumber } from "../../utils/decimalNumber";
 import { getIconBySport } from "../../components/common/courts-list/list-card";
 import { getSlotDurationInHrs } from "../../utils/slotDuration";
+import { userBookingsSliderOptions } from "../../utils/slidersData";
 
 const UserBookingsPage = () => {
   const routes = all_routes;
@@ -142,47 +143,6 @@ const UserBookingsPage = () => {
     fetchImages();
   }, [upcomingBooking]);
 
-  const sliderOptions = {
-    infinite: true,
-    arrows: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 2, // Scroll one slide at a time for smoother experience
-    responsive: [
-      {
-        breakpoint: 1200, // For larger screens
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 2,
-          infinite: true,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 992, // For medium screens
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 768, // For tablets
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-      {
-        breakpoint: 480, // For small mobile screens
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          arrows: false, // Disable arrows on smaller screens
-        },
-      },
-    ],
-  };
-
   return (
     <div>
       {/* Dashboard Menu */}
@@ -203,7 +163,10 @@ const UserBookingsPage = () => {
                           Effortlessly track and manage your upcoming bookings
                         </p>
                       </div>
-                      <Slider {...sliderOptions} className="venue-space">
+                      <Slider
+                        {...userBookingsSliderOptions}
+                        className="venue-space"
+                      >
                         {upcomingBooking?.map(
                           (booking: BookingData, idx: number) => {
                             return (

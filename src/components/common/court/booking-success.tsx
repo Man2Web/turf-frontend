@@ -274,11 +274,9 @@ const BookingSuccess = () => {
                           <p className="color-green">
                             ₹
                             {decimalNumber(
-                              bookingData?.booking[0].amount_paid
-                            ) +
-                              decimalNumber(
-                                bookingData?.booking[0].pay_required
-                              )}
+                              Number(bookingData?.booking[0].amount_paid) +
+                                Number(bookingData?.booking[0].pay_required)
+                            )}
                           </p>
                         </li>
                         <li>

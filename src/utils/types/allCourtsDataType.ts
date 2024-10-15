@@ -32,6 +32,7 @@ interface CourtDurationData {
 
 interface CourtsData {
   id: number;
+  court_id: string;
   user_id: number;
   court_name: string;
   court_type: string;

@@ -27,7 +27,7 @@ const ListingList = () => {
   const [courtsData, setCourtsData] = useState<CourtsData[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [selectedSort, setSelectedSort] = useState<any>(sortOptions[0].name);
-  const [userWishlist, setUserWishlist] = useState<number[]>([]);
+  const [userWishlist, setUserWishlist] = useState<string[]>([]);
   const [limit, setLimit] = useState<number>(18);
   const [offset, setOffset] = useState<number>(0);
   const [lastPage, setLastPage] = useState<number>(0);
@@ -79,32 +79,6 @@ const ListingList = () => {
       return sortedData;
     });
   }, [selectedSort]);
-
-  const handleItemClick = (courtId: number) => {
-    console.log(userWishlist?.includes(Number(courtId)));
-
-    if (!userWishlist || userWishlist.length === 0) {
-      // If userWishlist is null, undefined, or an empty array
-      setUserWishlist([Number(courtId)]);
-      updateWishList([Number(courtId)]);
-    } else {
-      if (userWishlist.includes(Number(courtId))) {
-        // Remove the item if it already exists in the wishlist
-        setUserWishlist((prevData) => {
-          const localWishList = prevData.filter((id) => id !== Number(courtId));
-          updateWishList(localWishList);
-          return localWishList;
-        });
-      } else {
-        // Add the item to the wishlist
-        setUserWishlist((prevData) => {
-          const localWishList = [...prevData, Number(courtId)];
-          updateWishList(localWishList);
-          return localWishList;
-        });
-      }
-    }
-  };
 
   const SubmitHandler = async () => {
     // const userLocationInContext = localStorage.getItem("userLocationInContext");
@@ -351,10 +325,11 @@ const ListingList = () => {
                             showFilters={showFilters}
                             key={idx}
                             court={court}
-                            userWishlist={userWishlist}
-                            handleItemClick={handleItemClick}
                             images={images}
                             idx={idx}
+                            userWishlist={userWishlist}
+                            setUserWishlist={setUserWishlist}
+                            updateWishList={updateWishList}
                           />
                         ))}
 
@@ -365,10 +340,11 @@ const ListingList = () => {
                           <ListCard
                             key={idx}
                             court={court}
-                            userWishlist={userWishlist}
-                            handleItemClick={handleItemClick}
                             images={images}
                             idx={idx}
+                            userWishlist={userWishlist}
+                            setUserWishlist={setUserWishlist}
+                            updateWishList={updateWishList}
                           />
                         ))}
 

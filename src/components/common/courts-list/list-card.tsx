@@ -13,6 +13,7 @@ import {
   CricketBatIcon,
 } from "../../../utils/icons";
 import { formatTime } from "../../../utils/formatTime";
+import { handleWishListUpdate } from "../../../utils/handleWishlistUpdate";
 
 export const getIconBySport = (sport: string) => {
   switch (sport) {
@@ -34,24 +35,25 @@ export const getIconBySport = (sport: string) => {
 const ListCard = ({
   court,
   images,
-  userWishlist,
-  handleItemClick,
   idx,
+  userWishlist,
+  setUserWishlist,
+  updateWishList,
 }: {
   court: CourtsData;
   images: string[] | undefined;
-  userWishlist: number[] | undefined;
-  handleItemClick: any;
   idx: number;
+  userWishlist: string[];
+  setUserWishlist: any;
+  updateWishList: any;
 }) => {
   const routes = all_routes;
-
   return (
     <div key={idx} className="col-lg-12 col-md-12 mb-2">
       <div className="featured-venues-item venue-list-item">
         <div className="listing-item listing-item-grid">
           <div className="listing-img">
-            <Link to={`${routes.courtDetailsLink}/${court.id}`}>
+            <Link to={`${routes.courtDetailsLink}/${court.court_id}`}>
               <img
                 style={{
                   height: "225px",
@@ -71,13 +73,24 @@ const ListCard = ({
           <div className="listing-content">
             <div className="d-flex justify-content-between align-items-center">
               <h5 className="listing-title m-0">
-                <Link to={`${routes.courtDetailsLink}/${court.id}`}>
+                <Link to={`${routes.courtDetailsLink}/${court.court_id}`}>
                   {court.court_name}
                 </Link>
               </h5>
               <div className="list-reviews">
-                <Link to="#" key={1} onClick={() => handleItemClick(court.id)}>
-                  {userWishlist?.includes(Number(court.id)) ? (
+                <Link
+                  to="#"
+                  key={1}
+                  onClick={() =>
+                    handleWishListUpdate(
+                      court.court_id,
+                      userWishlist,
+                      setUserWishlist,
+                      updateWishList
+                    )
+                  }
+                >
+                  {userWishlist?.includes(court.court_id) ? (
                     <HeartFilledIcon />
                   ) : (
                     <HeartIcon />
@@ -116,7 +129,7 @@ const ListCard = ({
             <div className="listing-button">
               <div className="listing-venue-owner d-flex align-items-center"></div>
               <Link
-                to={`${routes.courtDetailsLink}/${court.id}/booking`}
+                to={`${routes.courtDetailsLink}/${court.court_id}/booking`}
                 className="user-book-now btn btn-primary text-white"
               >
                 <span>

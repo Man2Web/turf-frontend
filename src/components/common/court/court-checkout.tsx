@@ -12,6 +12,8 @@ import BookingConfirmModal from "../../admin/booking-confirm";
 
 interface CheckoutForm {
   policy: boolean;
+  adminDetailsForm: any;
+  userDetailsForm: any;
 }
 
 const CourtCheckout = ({
@@ -49,17 +51,12 @@ const CourtCheckout = ({
   const [isCourtAdmin, setIsCourtAdmin] = useState<boolean>(false);
   const policy = watch("policy");
 
-  // const month = monthNames[selectedDate.getMonth()];
-  // const date = selectedDate.getDate();
-  // const year = selectedDate.getFullYear();
-  // const isAdmin = localStorage.getItem("adminId");
-  const serviceCharge = Number(process.env.REACT_APP_SERVICE_CHARGE) || 0;
   const gstCharge = Number(process.env.REACT_APP_GST_CHARGE) || 0; // Assume this is a percentage like 18 for 18%
   const baseFee = Number(process.env.REACT_APP_BASE_FEE);
   const additionalUserCharge =
     (Number(userDetails?.additionalNumberOfGuests) || 0) *
-    (Number(courtData?.pricing?.price_of_additional_guests) || 0);
-  const startingPrice = Number(courtData.pricing.starting_price) || 0;
+    (Number(courtData?.venueprice?.price_of_additional_guests) || 0);
+  const startingPrice = Number(courtData.venueprice.starting_price) || 0;
   const selectedSlotCount = selectedSlots.length || 0;
 
   const checkIfCourtIsAdminCourt = async (adminId: string) => {
@@ -92,12 +89,12 @@ const CourtCheckout = ({
   // base fee
   const baseAmount = (baseFee / 100) * startingPrice * selectedSlotCount;
 
-  const totalPrice = totalPriceWithoutGST + gstAmount;
+  const totalPrice = totalPriceWithoutGST + gstAmount + baseAmount;
 
   // const advanceAmountAdmin = Number(courtData.pricing.advance_pay);
 
   const advanceAmount =
-    (Number(courtData.pricing.advance_pay) / 100) * totalPrice;
+    (Number(courtData.venueprice.advance_pay) / 100) * totalPrice;
 
   // Function to handle API call for default payment method
   const onlinePay = async () => {
@@ -111,13 +108,12 @@ const CourtCheckout = ({
       userDetails,
       selectedDate,
       selectedSlots,
-      courtId: Number(courtId),
+      courtId,
       user_id:
         localStorage.getItem("adminId") ||
         localStorage.getItem("userId") ||
         null,
     };
-
     if (policy && isValid) {
       try {
         setLoading(true);
@@ -180,8 +176,8 @@ const CourtCheckout = ({
       }
     }
   };
-  console.log("policy", policy);
-  console.log("valid", isValid);
+  // console.log("policy", policy);
+  // console.log("valid", isValid);
   // const disableCheck = policy && Object.keys(errors).length === 0 && isValid;
   // const disableCheck = isValid;
   return (
@@ -221,7 +217,7 @@ const CourtCheckout = ({
                         <h5>
                           ₹
                           {decimalNumber(
-                            courtData.pricing.starting_price *
+                            courtData.venueprice.starting_price *
                               selectedSlots.length
                           )}
                         </h5>
@@ -281,7 +277,7 @@ const CourtCheckout = ({
                                           {userDetails.additionalNumberOfGuests}{" "}
                                           *{" "}
                                           {
-                                            courtData.pricing
+                                            courtData.venueprice
                                               .price_of_additional_guests
                                           }{" "}
                                           )
@@ -309,7 +305,7 @@ const CourtCheckout = ({
                       {/* Total */}
                       <div className="order-total d-flex justify-content-between align-items-center">
                         {!isCourtAdmin &&
-                        Number(courtData.pricing.advance_pay) !== 100 ? (
+                        Number(courtData.venueprice.advance_pay) !== 100 ? (
                           <>
                             <div>
                               <h5 className="text-primary pb-2">

@@ -31,10 +31,13 @@ const CourtBooking = () => {
 
         // const fetchedImages = [];
         const fetchedImages = await Promise.all(
-          fetchedCourtData.images.map(async (imageUrl: string) => {
-            const imageBlob = await axios.get(imageUrl, {
-              responseType: "blob",
-            });
+          fetchedCourtData.images.map(async (image: { image_url: string }) => {
+            const imageBlob = await axios.get(
+              `${process.env.REACT_APP_BACKEND_URL}court/uploads/${fetchedCourtData?.user_id}/${fetchedCourtData?.id}/${image.image_url}`,
+              {
+                responseType: "blob",
+              }
+            );
             const objectUrl = URL.createObjectURL(imageBlob.data);
             return { url: objectUrl };
           })
@@ -58,7 +61,8 @@ const CourtBooking = () => {
 
       // Find the time slot for the selected day
       const matchedSlot = courtData.time_Slots.find(
-        (slot) => slot.day_of_week.toLowerCase() === dayOfWeek
+        (slot: { day_of_week: string }) =>
+          slot.day_of_week.toLowerCase() === dayOfWeek
       );
 
       if (matchedSlot) {

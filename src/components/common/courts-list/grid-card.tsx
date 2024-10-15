@@ -5,21 +5,24 @@ import { decimalNumber } from "../../../utils/decimalNumber";
 import { HeartFilledIcon, HeartIcon, ThreeDots } from "../../../utils/icons";
 import { getIconBySport } from "./list-card";
 import { formatTime } from "../../../utils/formatTime";
+import { handleWishListUpdate } from "../../../utils/handleWishlistUpdate";
 
 const GridCard = ({
   showFilters,
   court,
   images,
-  userWishlist,
-  handleItemClick,
   idx,
+  userWishlist,
+  setUserWishlist,
+  updateWishList,
 }: {
   showFilters: boolean;
   court: CourtsData;
   images: string[] | undefined;
-  userWishlist: number[] | undefined;
-  handleItemClick: any;
   idx: number;
+  userWishlist: string[];
+  setUserWishlist: any;
+  updateWishList: any;
 }) => {
   const routes = all_routes;
   return (
@@ -30,7 +33,7 @@ const GridCard = ({
       <div className="wrapper">
         <div className="listing-item listing-item-grid">
           <div className="listing-img">
-            <Link to={`${routes.courtDetailsLink}/${court.id}`}>
+            <Link to={`${routes.courtDetailsLink}/${court.court_id}`}>
               <img
                 style={{
                   height: "250px",
@@ -51,13 +54,24 @@ const GridCard = ({
             <div className="list-reviews d-flex justify-content-between align-items-center">
               <div className="d-flex align-items-center">
                 <h5 className="listing-title d-flex align-items-center m-0">
-                  <Link to={`${routes.courtDetailsLink}/${court.id}`}>
+                  <Link to={`${routes.courtDetailsLink}/${court.court_id}`}>
                     {court.court_name}
                   </Link>
                 </h5>
               </div>
-              <Link to="#" key={1} onClick={() => handleItemClick(court.id)}>
-                {userWishlist?.includes(Number(court.id)) ? (
+              <Link
+                to="#"
+                key={1}
+                onClick={() =>
+                  handleWishListUpdate(
+                    court.court_id,
+                    userWishlist,
+                    setUserWishlist,
+                    updateWishList
+                  )
+                }
+              >
+                {userWishlist?.includes(court.court_id) ? (
                   <HeartFilledIcon />
                 ) : (
                   <HeartIcon />
@@ -91,7 +105,7 @@ const GridCard = ({
             </div>
             <div className="listing-button">
               <Link
-                to={`${routes.courtDetailsLink}/${court.id}/booking`}
+                to={`${routes.courtDetailsLink}/${court.court_id}/booking`}
                 className="user-book-now btn btn-primary text-white w-100 justify-content-center"
               >
                 <span>

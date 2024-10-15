@@ -9,7 +9,6 @@ import { all_routes } from "../../router/all_routes";
 import { decimalNumber } from "../../utils/decimalNumber";
 import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../components/common/Loader";
-import { formatTime } from "../../utils/formatTime";
 import { weekNames } from "../../utils/weekNames";
 import BulkBookingModal from "../../components/admin/bulk-booking-modal";
 import { getTimeSlotDuration } from "../../utils/getOperationalHours";
@@ -21,7 +20,7 @@ const CourtDetails = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [images, setImages] = useState<any>([]);
   const [courtData, setCourtData] = useState<CourtDataType>();
-  const [userWishlist, setUserWishlist] = useState<number[]>([]);
+  const [userWishlist, setUserWishlist] = useState<string[]>([]);
   console.log(courtData?.rules_of_venue);
 
   const userId = useMemo(
@@ -43,8 +42,12 @@ const CourtDetails = () => {
     return listArray;
   };
 
+  let listArray;
+
   // Get the array of <li> values
-  const listArray = convertLiToArray(courtData?.rules_of_venue);
+  if (courtData?.rules_of_venue) {
+    listArray = convertLiToArray(courtData?.rules_of_venue);
+  }
 
   // Fetch user wishlist when userId changes
   useEffect(() => {
@@ -73,12 +76,15 @@ const CourtDetails = () => {
           `${process.env.REACT_APP_BACKEND_URL}court/fetch/${courtId}`
         );
         const fetchedCourtData = response.data.court;
-
+        console.log(fetchedCourtData);
         const fetchedImages = await Promise.all(
-          fetchedCourtData.images.map(async (imageUrl: string) => {
-            const imageBlob = await axios.get(imageUrl, {
-              responseType: "blob",
-            });
+          fetchedCourtData.images.map(async (images: { image_url: string }) => {
+            const imageBlob = await axios.get(
+              `${process.env.REACT_APP_BACKEND_URL}court/uploads/${fetchedCourtData?.user_id}/${fetchedCourtData?.id}/${images.image_url}`,
+              {
+                responseType: "blob",
+              }
+            );
             const objectUrl = URL.createObjectURL(imageBlob.data);
             return { url: objectUrl };
           })
@@ -99,7 +105,7 @@ const CourtDetails = () => {
   }, [courtId]); // Run this effect only when courtId changes
 
   const updateWishList = useCallback(
-    async (wishList: number[]) => {
+    async (wishList: string[]) => {
       if (!userId) return;
 
       try {
@@ -115,25 +121,23 @@ const CourtDetails = () => {
     [userId]
   );
 
-  const handleItemClick = (courtId: number) => {
-    console.log(userWishlist?.includes(Number(courtId)));
-
+  const handleItemClick = (courtId: string) => {
     if (!userWishlist || userWishlist.length === 0) {
       // If userWishlist is null, undefined, or an empty array
-      setUserWishlist([Number(courtId)]);
-      updateWishList([Number(courtId)]);
+      setUserWishlist([courtId]);
+      updateWishList([courtId]);
     } else {
-      if (userWishlist.includes(Number(courtId))) {
+      if (userWishlist.includes(courtId)) {
         // Remove the item if it already exists in the wishlist
         setUserWishlist((prevData) => {
-          const localWishList = prevData.filter((id) => id !== Number(courtId));
+          const localWishList = prevData.filter((id) => id !== courtId);
           updateWishList(localWishList);
           return localWishList;
         });
       } else {
         // Add the item to the wishlist
         setUserWishlist((prevData) => {
-          const localWishList = [...prevData, Number(courtId)];
+          const localWishList = [...prevData, courtId];
           updateWishList(localWishList);
           return localWishList;
         });
@@ -158,7 +162,7 @@ const CourtDetails = () => {
       // Fallback: you can create custom URLs for social media sharing
       alert("Sharing is not supported in this browser.");
       // For example, redirect to a Twitter share URL:
-      // window.open(`https://twitter.com/share?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(shareData.text)}`);
+      // window.open(`https://twitter.com/share?url=${encodeURIComponent(window.locationdata.href)}&text=${encodeURIComponent(shareData.text)}`);
     }
   };
 
@@ -238,7 +242,7 @@ const CourtDetails = () => {
                       >
                         <i className="feather-map-pin" />
                         <p className="mb-0 ml-2 text-capitalize">
-                          {`${courtData?.location.city}, ${courtData?.location.country}`}
+                          {`${courtData?.locationdata.city}, ${courtData?.locationdata.country}`}
                         </p>{" "}
                         {/* Add margin to the paragraph */}
                       </a>
@@ -274,7 +278,7 @@ const CourtDetails = () => {
                     </li>
                     <li onClick={() => handleItemClick(courtData.court_id)}>
                       <Link to="#" className="favour-adds d-flex gap-1">
-                        {userWishlist?.includes(Number(courtData.court_id)) ? (
+                        {userWishlist?.includes(courtData.court_id) ? (
                           <HeartFilledIcon />
                         ) : (
                           <HeartIcon />
@@ -294,7 +298,7 @@ const CourtDetails = () => {
                   <div className="d-flex float-sm-end align-items-center">
                     <p className="d-inline-block me-2 mb-0">Starts From :</p>
                     <h3 className="primary-text mb-0 d-inline-block">
-                      ₹{decimalNumber(courtData?.pricing.starting_price)}
+                      ₹{decimalNumber(courtData?.venueprice.starting_price)}
                       <span>/ slot</span>
                     </h3>
                   </div>
@@ -326,7 +330,7 @@ const CourtDetails = () => {
                         <Link to="#gallery">Gallery</Link>
                       </li>
                       <li>
-                        <Link to="#location">Location</Link>
+                        <Link to="#locationdata">locationdata</Link>
                       </li>
                     </ul>
                   </div>
@@ -390,43 +394,43 @@ const CourtDetails = () => {
                       >
                         <div className="accordion-body">
                           <ul className="clearfix ">
-                            {courtData?.includes.badminton_racket && (
+                            {courtData?.courtincludes.badminton_racket && (
                               <li>
                                 <i className="feather-check-square" />
                                 Badminton Racket Unlimited
                               </li>
                             )}
-                            {courtData?.includes.bats && (
+                            {courtData?.courtincludes.bats && (
                               <li>
                                 <i className="feather-check-square" />
                                 Bats
                               </li>
                             )}
-                            {courtData?.includes.hitting_machines && (
+                            {courtData?.courtincludes.hitting_machines && (
                               <li>
                                 <i className="feather-check-square" />
                                 Hitting Machines
                               </li>
                             )}
-                            {courtData?.includes.multiple_courts && (
+                            {courtData?.courtincludes.multiple_courts && (
                               <li>
                                 <i className="feather-check-square" />
                                 Multiple Courts
                               </li>
                             )}
-                            {courtData?.includes.spare_players && (
+                            {courtData?.courtincludes.spare_players && (
                               <li>
                                 <i className="feather-check-square" />
                                 Spare Players
                               </li>
                             )}
-                            {courtData?.includes.instant_racket && (
+                            {courtData?.courtincludes.instant_racket && (
                               <li>
                                 <i className="feather-check-square" />
                                 Instant Racket
                               </li>
                             )}
-                            {courtData?.includes.green_turfs && (
+                            {courtData?.courtincludes.green_turfs && (
                               <li>
                                 <i className="feather-check-square" />
                                 Green Turfs
@@ -465,12 +469,12 @@ const CourtDetails = () => {
                               <i className="feather-alert-octagon text-danger" />
                               <p className="m-0">
                                 A maxium of{" "}
-                                {courtData.pricing.max_guests +
-                                  courtData.pricing.additional_guests}{" "}
+                                {courtData.venueprice.max_guests +
+                                  courtData.venueprice.additional_guests}{" "}
                                 players are allowed per booking
                               </p>
                             </div>
-                            {listArray.map((rule, index) => (
+                            {listArray?.map((rule, index) => (
                               <div
                                 key={index}
                                 className="d-flex gap-1 align-items-center"
@@ -667,27 +671,27 @@ const CourtDetails = () => {
                       </p>
                     </div>
                     {/* Operational Hours */}
-                    {/* Location Details */}
+                    {/* locationdata Details */}
                     <div className="white-bg book-court">
                       <div>
-                        <h4 className="border-bottom">Location Details</h4>
+                        <h4 className="border-bottom">locationdata Details</h4>
                       </div>
-                      <div className="accordion-item" id="location">
+                      <div className="accordion-item" id="locationdata">
                         <div
                           id="panelsStayOpen-collapseSeven"
                           className="accordion-collapse collapse show"
-                          aria-labelledby="panelsStayOpen-location"
+                          aria-labelledby="panelsStayOpen-locationdata"
                         >
                           <div className="accordion-body p-0">
                             <div
                               className="google-maps"
                               style={{ height: "300px", overflow: "hidden" }}
                             >
-                              {courtData?.location?.embed_link ? (
+                              {courtData?.locationdata?.embed_link ? (
                                 <div
                                   style={{ height: "100%" }} // Ensure the inner div takes the full height
                                   dangerouslySetInnerHTML={{
-                                    __html: courtData.location.embed_link,
+                                    __html: courtData.locationdata.embed_link,
                                   }}
                                 ></div>
                               ) : (
@@ -698,7 +702,7 @@ const CourtDetails = () => {
                               className="dull-bg d-flex justify-content-start align-items-center mt-3 p-2 rounded"
                               target="_blank"
                               rel="noreferrer"
-                              href={courtData.location.location_link}
+                              href={courtData.locationdata.location_link}
                             >
                               <div
                                 style={{ padding: "14px" }}
@@ -706,19 +710,19 @@ const CourtDetails = () => {
                               >
                                 <i
                                   style={{ fontSize: "24px" }}
-                                  className="fas fa-location-arrow text-success"
+                                  className="fas fa-locationdata-arrow text-success"
                                 />
                               </div>
                               <div>
-                                <h6>Our Venue Location</h6>
-                                <p className="text-capitalize">{`${courtData?.location.city}, ${courtData?.location.country}`}</p>
+                                <h6>Our Venue locationdata</h6>
+                                <p className="text-capitalize">{`${courtData?.locationdata.city}, ${courtData?.locationdata.country}`}</p>
                               </div>
                             </a>
                           </div>
                         </div>
                       </div>
                     </div>
-                    {/* Location Details */}
+                    {/* locationdata Details */}
                     {/* Share Details */}
                     <div className="white-bg book-court">
                       <h4 className="border-bottom">Share Venue</h4>

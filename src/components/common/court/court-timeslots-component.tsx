@@ -1,64 +1,14 @@
 import React, { useEffect, useState } from "react";
-import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
-import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import { all_routes } from "../../../router/all_routes";
-import CourtDetailsComponent from "./court-details-component";
 import axios from "axios";
 import { ToastContainer } from "react-bootstrap";
-import { toast } from "react-toastify";
 import Loader from "../Loader";
 import CourtBookingSummaryComponent from "./court-booking-summary-component";
 import { formatTime } from "../../../utils/formatTime";
 import { formatEndTime } from "../../../utils/formatEndTime";
 import { dayNames, monthNames } from "../../../utils/calenderData";
-
-const timeSlotsContent = {
-  title: "Time & Date",
-  description:
-    "Book your training session at a time and date that suits your needs.",
-};
-
-const featuredVenuesSlider = {
-  dots: false,
-  autoplay: false,
-  slidesToShow: 4,
-  margin: 20,
-  speed: 100,
-  responsive: [
-    {
-      breakpoint: 992,
-      settings: {
-        slidesToShow: 3,
-      },
-    },
-    {
-      breakpoint: 800,
-      settings: {
-        slidesToShow: 3,
-      },
-    },
-    {
-      breakpoint: 776,
-      settings: {
-        slidesToShow: 2,
-      },
-    },
-    {
-      breakpoint: 567,
-      settings: {
-        slidesToShow: 1,
-      },
-    },
-  ],
-};
-interface TimeSlotInterface {
-  day: string; // Represents the day of the week
-  time: string; // The time slot in a string format
-  isChecked: boolean; // Whether the time slot is selected or not
-  isActive: boolean; // Whether the time slot is available/active
-  isBooked?: boolean; // Optional - Whether the time slot is already booked
-}
+import { featuredVenuesSlider } from "../../../utils/slidersData";
 
 const CourtTimeSlotsComponent = ({
   progress,
@@ -81,10 +31,7 @@ const CourtTimeSlotsComponent = ({
   setSetselectedSlots: any;
   courtDuration: string;
 }) => {
-  const routes = all_routes;
-  //   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [timeSlots, setTimeSlots] = useState<TimeSlotInterface[]>([]);
-  //   const [selectedSlots, setSetselectedSlots] = useState<any>([]);
   const [slotsLoading, setSlotsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -389,7 +336,7 @@ const CourtTimeSlotsComponent = ({
             <CourtBookingSummaryComponent
               date={selectedDate}
               totalPrice={
-                courtData.pricing.starting_price * selectedSlots.length
+                courtData.venueprice.starting_price * selectedSlots.length
               }
               slots={selectedSlots}
               courtDuration={courtDuration}

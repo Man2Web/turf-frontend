@@ -69,11 +69,12 @@ const BookingHeader = ({
                   <Link
                     target="_blank"
                     rel="noopener noreferrer"
-                    to={courtData.location.location_link}
+                    to={courtData.locationdata.location_link}
                   >
                     <p className="mb-1 flex-shrink-0 text-capitalize">
                       <i className="feather-map-pin me-2 fw-bold" />
-                      {courtData.location.city}, {courtData.location.country}
+                      {courtData.locationdata.city},{" "}
+                      {courtData.locationdata.country}
                     </p>
                   </Link>
                   <p className="mb-1 flex-shrink-0">

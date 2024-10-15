@@ -1,6 +1,6 @@
-interface Location {
-  country: string;
+interface LocationData {
   city: string;
+  country: string;
   location_link: string;
   embed_link: string;
 }
@@ -13,48 +13,53 @@ interface TimeSlot {
 }
 
 interface Amenities {
-  id: number;
-  court_id: number;
+  shower: boolean;
   parking: boolean;
-  drinking_water: boolean;
   first_aid: boolean;
   change_room: boolean;
-  shower: boolean;
+  drinking_water: boolean;
 }
 
-interface Includes {
-  id: number;
-  court_id: number;
-  badminton_racket: boolean;
+interface CourtIncludes {
   bats: boolean;
-  hitting_machines: boolean;
-  multiple_courts: boolean;
+  green_turfs: boolean;
   spare_players: boolean;
   instant_racket: boolean;
-  green_turfs: boolean;
+  multiple_courts: boolean;
+  badminton_racket: boolean;
+  hitting_machines: boolean;
 }
 
-interface Pricing {
-  starting_price: number;
+interface VenuePrice {
   max_guests: number;
+  advance_pay: number;
+  starting_price: number;
   additional_guests: number;
-  price_of_additional_guests: string;
-  advance_pay: string;
+  price_of_additional_guests: number;
+}
+
+interface Image {
+  id: string;
+  court_id: string;
+  image_url: string;
 }
 
 interface CourtDataType {
-  court_id: number;
-  phone_number: string;
-  m_name?: string;
-  email: string;
+  id: string;
+  court_id: string;
+  user_id: string;
   court_name: string;
   court_type: string;
-  venue_overview: any;
-  rules_of_venue: any;
-  location: Location;
-  time_Slots: TimeSlot[];
+  venue_overview: string;
+  rules_of_venue: string;
+  featured: boolean;
+  phone_number: string;
+  email: string;
+  approved: boolean;
+  locationdata: LocationData;
+  venueprice: VenuePrice;
   amenities: Amenities;
-  includes: Includes;
-  pricing: Pricing;
-  images: string[];
+  courtincludes: CourtIncludes;
+  time_Slots: TimeSlot[];
+  images: Image[];
 }
