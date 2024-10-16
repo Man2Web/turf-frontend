@@ -50,6 +50,8 @@ const CourtCheckout = ({
   const [adminLoading, setAdminLoading] = useState<boolean>(false);
   const [toggleModal, setToggleModal] = useState<boolean>(false);
   const [isCourtAdmin, setIsCourtAdmin] = useState<boolean>(false);
+  const [adminBookingData, setAdminBookingData] =
+    useState<SuccessBookingData>();
   const policy = watch("policy");
 
   const gstCharge = Number(process.env.REACT_APP_GST_CHARGE) || 0; // Assume this is a percentage like 18 for 18%
@@ -97,8 +99,11 @@ const CourtCheckout = ({
   const advanceAmount =
     (Number(courtData.venueprice.advance_pay) / 100) * totalPrice;
 
+  console.log(isValid, policy);
+
   // Function to handle API call for default payment method
   const onlinePay = async () => {
+    console.log("Trig");
     // if (isValid) {
     const updatedData = {
       amount: advanceAmount,
@@ -150,7 +155,7 @@ const CourtCheckout = ({
       userDetails,
       selectedDate,
       selectedSlots,
-      courtId: Number(courtId),
+      courtId,
       user_id:
         localStorage.getItem("adminId") ||
         localStorage.getItem("userId") ||
@@ -165,6 +170,18 @@ const CourtCheckout = ({
           cashData
         );
         if (response.status === 200) {
+          console.log(response.data.transaction_id);
+          const transaction_id = response.data.transaction_id;
+
+          try {
+            const response = await axios.get(
+              `${process.env.REACT_APP_BACKEND_URL}booking/get/${transaction_id}`
+            );
+            console.log(response.data);
+            setAdminBookingData(response.data);
+          } catch (error) {
+            console.error(error);
+          }
           setToggleModal(true);
         } else {
           toast.error("Error processing cash booking.");
@@ -178,11 +195,15 @@ const CourtCheckout = ({
     }
   };
 
-  console.log(isCourtAdmin);
   return (
     <div>
       <ToastContainer />
-      {toggleModal && <BookingConfirmModal toggleModal={toggleModal} />}
+      {toggleModal && (
+        <BookingConfirmModal
+          toggleModal={toggleModal}
+          bookingData={adminBookingData}
+        />
+      )}
       <div className="content pt-0">
         <div className="container">
           <section>
@@ -381,8 +402,9 @@ const CourtCheckout = ({
                         <div className="d-grid btn-block">
                           {isCourtAdmin && (
                             <button
+                              type="submit"
                               onClick={() => {
-                                !policy && trigger("policy");
+                                !policy ? trigger("policy") : onCashPayment();
                               }}
                               form="admin-form"
                               className="mb-2 btn btn-primary"
@@ -396,8 +418,9 @@ const CourtCheckout = ({
                           )}
                           {!isCourtAdmin && (
                             <button
+                              type="submit"
                               onClick={() => {
-                                !policy && trigger("policy");
+                                !policy ? trigger("policy") : onlinePay();
                               }}
                               form="user-form"
                               className="mb-2 btn btn-primary"
