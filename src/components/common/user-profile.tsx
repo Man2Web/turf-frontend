@@ -17,9 +17,9 @@ export const UserProfileHeader = () => {
   const { setUserLocationInContext } = context;
 
   const logout = () => {
+    navigate(routes.home);
     localStorage.clear();
     setUserLocationInContext(null);
-    navigate(routes.home);
   };
 
   const profilePage = () => {

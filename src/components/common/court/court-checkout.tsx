@@ -38,6 +38,7 @@ const CourtCheckout = ({
   const {
     register,
     handleSubmit,
+    trigger,
     watch,
     formState: { errors },
   } = useForm<CheckoutForm>({
@@ -176,10 +177,8 @@ const CourtCheckout = ({
       }
     }
   };
-  // console.log("policy", policy);
-  // console.log("valid", isValid);
-  // const disableCheck = policy && Object.keys(errors).length === 0 && isValid;
-  // const disableCheck = isValid;
+
+  console.log(isCourtAdmin);
   return (
     <div>
       <ToastContainer />
@@ -345,6 +344,7 @@ const CourtCheckout = ({
                         )}
                       </div>
                       <form
+                        id="terms-and-cond-form"
                         onSubmit={handleSubmit(
                           isCourtAdmin ? onCashPayment : onlinePay
                         )}
@@ -380,7 +380,13 @@ const CourtCheckout = ({
 
                         <div className="d-grid btn-block">
                           {isCourtAdmin && (
-                            <button className="mb-2 btn btn-primary">
+                            <button
+                              onClick={() => {
+                                !policy && trigger("policy");
+                              }}
+                              form="admin-form"
+                              className="mb-2 btn btn-primary"
+                            >
                               {adminLoading ? (
                                 <ButtonLoader />
                               ) : (
@@ -389,7 +395,13 @@ const CourtCheckout = ({
                             </button>
                           )}
                           {!isCourtAdmin && (
-                            <button className="mb-2 btn btn-primary">
+                            <button
+                              onClick={() => {
+                                !policy && trigger("policy");
+                              }}
+                              form="user-form"
+                              className="mb-2 btn btn-primary"
+                            >
                               {loading ? <ButtonLoader /> : "Reserve Now"}
                             </button>
                           )}

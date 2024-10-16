@@ -21,6 +21,7 @@ const UserDetailsComponent = ({
   const {
     register,
     trigger,
+    handleSubmit,
     setValue,
     watch,
     control,
@@ -92,7 +93,13 @@ const UserDetailsComponent = ({
               </p>
             </div>
             {/* Form with react-hook-form */}
-            <form autoComplete="false">
+            <form
+              id="user-form"
+              autoComplete="false"
+              onSubmit={handleSubmit(() => {
+                trigger();
+              })}
+            >
               {/* Names */}
               <div className="d-flex gap-2">
                 <div className="my-3 col-lg-6 col-md-12">
@@ -261,6 +268,7 @@ const UserDetailsComponent = ({
                   </label>
                   <Controller
                     name="state"
+                    rules={{ required: "State is required" }}
                     control={control}
                     render={({ field }) => (
                       <Dropdown
@@ -275,7 +283,7 @@ const UserDetailsComponent = ({
                     )}
                   />
                   {errors.pincode && (
-                    <p className="text-danger">{errors.pincode.message}</p>
+                    <p className="text-danger">{errors.state?.message}</p>
                   )}
                 </div>
 

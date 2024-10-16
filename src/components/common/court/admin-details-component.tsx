@@ -20,6 +20,7 @@ const AdminDetailsComponent = ({
     register,
     trigger,
     setValue,
+    handleSubmit,
     watch,
     formState: { isValid, errors },
   } = useForm<AdminDetailsFormData>({
@@ -74,7 +75,13 @@ const AdminDetailsComponent = ({
               </p>
             </div>
             {/* Form with react-hook-form */}
-            <form>
+            <form
+              autoComplete="false"
+              id="admin-form"
+              onSubmit={handleSubmit(() => {
+                trigger();
+              })}
+            >
               {/* Names */}
               <div className="d-flex gap-2">
                 <div className="my-3 col-lg-6 col-md-12">
