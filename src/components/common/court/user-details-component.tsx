@@ -95,7 +95,7 @@ const UserDetailsComponent = ({
             {/* Form with react-hook-form */}
             <form
               id="user-form"
-              autoComplete="false"
+              autoComplete="off"
               onSubmit={handleSubmit(() => {
                 trigger();
               })}
@@ -295,7 +295,6 @@ const UserDetailsComponent = ({
                   <Controller
                     name="country"
                     control={control}
-                    defaultValue="{countriesList[103]}"
                     render={({ field }) => (
                       <Dropdown
                         value={countriesList[102]}

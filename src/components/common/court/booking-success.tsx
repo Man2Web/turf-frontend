@@ -1,19 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
-import jsPDF from "jspdf";
 import { Link, useParams } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
+import { saveAs } from "file-saver";
 import axios from "axios";
 import { dateFormat } from "../../../utils/dateFormat";
 import { formatTime } from "../../../utils/formatTime";
 import { decimalNumber } from "../../../utils/decimalNumber";
 import { formatEndTime } from "../../../utils/formatEndTime";
 import Loader from "../Loader";
+import ButtonLoader from "../button-loader";
 
 const BookingSuccess = () => {
   const routes = all_routes;
   const { t_id } = useParams();
   const [bookingData, setBookingData] = useState<SuccessBookingData>();
+  const [buttonLoader, setButtonLoader] = useState(false);
 
   const pdfRef = useRef<HTMLDivElement>(null);
 
@@ -45,17 +47,21 @@ const BookingSuccess = () => {
     }
   };
 
-  const generatePdf = () => {
-    const doc = new jsPDF({
-      format: "a4",
-      unit: "px",
-    });
-    if (pdfRef.current) {
-      doc.html(pdfRef.current, {
-        async callback(doc) {
-          await doc.save("document");
-        },
-      });
+  const getPdf = async (transaction_id: string) => {
+    try {
+      setButtonLoader(true);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}booking/download/${transaction_id}`,
+        {
+          responseType: "blob", // Important to handle the response as binary
+        }
+      );
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      saveAs(blob, `booking-confirmation-${transaction_id}.pdf`);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setButtonLoader(false);
     }
   };
 
@@ -292,12 +298,18 @@ const BookingSuccess = () => {
               <div className="d-flex justify-content-center my-4 gap-2">
                 <button
                   onClick={() => {
-                    generatePdf();
+                    getPdf(bookingData.booking[0].transaction_id);
                   }}
                   className="btn btn-primary btn-icon"
                 >
-                  <i className="feather-mail me-1" />
-                  Download PDF
+                  {buttonLoader ? (
+                    <ButtonLoader />
+                  ) : (
+                    <>
+                      <i className="feather-mail me-1" />
+                      Download PDF
+                    </>
+                  )}
                 </button>
                 <Link to={redirectUrl()} className="btn btn-primary btn-icon">
                   <i className="feather-arrow-left-circle me-1" />

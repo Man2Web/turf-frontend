@@ -18,6 +18,7 @@
     "bootstrap": "^5.3.3",
     "depcheck": "^1.4.7",
     "feather-icons-react": "^0.6.2",
+    "file-saver": "^2.0.5",
     "google-map-react": "^2.2.1",
     "jspdf": "^2.5.2",
     "lightbox.js-react": "^1.0.0",
