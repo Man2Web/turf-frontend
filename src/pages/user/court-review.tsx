@@ -97,12 +97,16 @@ const CourtReview = () => {
         `${process.env.REACT_APP_BACKEND_URL}court/fetch/${courtId}`
       );
       const fetchedCourtData = response.data.court;
-
-      const fetchedImages = fetchedCourtData.images.map((imageUrl: string) => {
-        return imageUrl;
-      });
-
-      setImages(fetchedImages);
+      console.log(fetchedCourtData);
+      const imageUrl = fetchedCourtData.images[0].image_url;
+      const imageData = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}court/uploads/${fetchedCourtData.user_id}/${fetchedCourtData.id}/${imageUrl}`,
+        {
+          responseType: "blob",
+        }
+      );
+      const imageBlobUrl = URL.createObjectURL(imageData.data);
+      setImages(imageBlobUrl);
       setCourtData(fetchedCourtData);
     } catch (error) {
       console.error("Error fetching court info", error);
@@ -148,14 +152,14 @@ const CourtReview = () => {
           {/* Court Data Display */}
           <div className="featured-venues-item venue-list-item">
             <div className="listing-item listing-item-grid">
-              <div className="listing-img">
+              <div className="listing-img d-none d-md-block">
                 <Link to={`${routes.courtDetailsLink}/${courtData.court_id}`}>
                   <img
                     style={{
                       height: "225px",
                       width: "400px",
                     }}
-                    src={images[0]}
+                    src={images}
                     alt="court img"
                   />
                 </Link>

@@ -1,49 +1,56 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { all_routes } from "../../router/all_routes";
 import { Modal } from "react-bootstrap";
 import { dateFormat } from "../../utils/dateFormat";
 import { formatTime } from "../../utils/formatTime";
 import { formatEndTime } from "../../utils/formatEndTime";
 import { decimalNumber } from "../../utils/decimalNumber";
-import jsPDF from "jspdf";
+import axios from "axios";
+import { saveAs } from "file-saver";
+import ButtonLoader from "../common/button-loader";
 
 const BookingConfirmModal = ({
   toggleModal,
   bookingData,
+  setToggleModal,
 }: {
   toggleModal: boolean;
   bookingData: SuccessBookingData | undefined;
+  setToggleModal?: any;
 }) => {
+  const [buttonLoader, setButtonLoader] = useState<boolean>(false);
   const routes = all_routes;
-  const pdfRef = useRef(null);
-  const generatePdf = () => {
-    const doc = new jsPDF({
-      format: "a4",
-      unit: "px",
-    });
-    if (pdfRef.current) {
-      doc.html(pdfRef.current, {
-        async callback(doc) {
-          await doc.save("document");
-        },
-      });
+  const getPdf = async (transaction_id: string) => {
+    try {
+      setButtonLoader(true);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}booking/download/${transaction_id}`,
+        {
+          responseType: "blob", // Important to handle the response as binary
+        }
+      );
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      saveAs(blob, `booking-confirmation-${transaction_id}.pdf`);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setButtonLoader(false);
     }
   };
   return (
     <Modal
       show={toggleModal}
       onHide={() => {
-        return;
+        setToggleModal(false);
       }}
       backdrop="static"
       keyboard={false}
       centered
-      className="modal fade w-100 modal-lg"
+      className="modal fade w-100 modal-xl"
       id="bookingconfirmModal"
     >
-      <div ref={pdfRef} className="modal-content w-100">
+      <div className="modal-content w-100">
         <div className="modal-header d-flex justify-content-between">
           <div className="form-header modal-header-title">
             <h4 className="">
@@ -51,10 +58,20 @@ const BookingConfirmModal = ({
               <span
                 className="badge ms-2"
                 style={{ backgroundColor: "grey", color: "white" }}
-              >{`ID: ${bookingData?.booking[0].transaction_id}`}</span>
+              >{`ID: ${bookingData?.booking.transaction_id}`}</span>
               <span className="badge bg-success ms-2">Paid</span>
             </h4>
           </div>
+          {setToggleModal && (
+            <button
+              onClick={() => {
+                setToggleModal(false);
+              }}
+              className="btn btn-red"
+            >
+              X
+            </button>
+          )}
         </div>
 
         <div className="modal-body">
@@ -145,7 +162,7 @@ const BookingConfirmModal = ({
                 <div className="card-header">
                   <h4>Booking Information</h4>
                 </div>
-                {bookingData?.booking.map((data, index) => (
+                {bookingData?.booking?.booking_time?.map((time, index) => (
                   <div
                     key={index}
                     className="appointment-info appoin-border double-row"
@@ -153,19 +170,21 @@ const BookingConfirmModal = ({
                     <ul className="appointmentset">
                       <li>
                         <h6>Booking Date</h6>
-                        <p>{dateFormat(data.booking_date)}</p>
+                        <p>{dateFormat(bookingData.booking.booking_date)}</p>
                       </li>
                       <li>
                         <h6>Booking Start Time</h6>
-                        <p>{formatTime(data.booking_time)}</p>
+                        <p>{formatTime(time)}</p>
                       </li>
                       <li>
                         <h6>Booking End Time</h6>
-                        <p>{formatEndTime(data.booking_time, data.duration)}</p>
+                        <p>
+                          {formatEndTime(time, bookingData.booking.duration)}
+                        </p>
                       </li>
                       <li>
                         <h6>Booked On</h6>
-                        <p>{dateFormat(data.booked_on)}</p>
+                        <p>{dateFormat(bookingData.booking.booked_on)}</p>
                       </li>
                     </ul>
                   </div>
@@ -183,8 +202,8 @@ const BookingConfirmModal = ({
                       <p className="color-green">
                         ₹
                         {decimalNumber(
-                          Number(bookingData?.booking[0].amount_paid) +
-                            Number(bookingData?.booking[0].pay_required)
+                          Number(bookingData?.booking.amount_paid) +
+                            Number(bookingData?.booking.pay_required)
                         )}
                       </p>
                     </li>
@@ -193,7 +212,7 @@ const BookingConfirmModal = ({
                       <p className="color-green">
                         ₹
                         {decimalNumber(
-                          Number(bookingData?.booking[0].amount_paid)
+                          Number(bookingData?.booking.amount_paid)
                         )}
                       </p>
                     </li>
@@ -202,7 +221,7 @@ const BookingConfirmModal = ({
                       <p className="color-green">
                         ₹
                         {decimalNumber(
-                          Number(bookingData?.booking[0].pay_required)
+                          Number(bookingData?.booking.pay_required)
                         )}
                       </p>
                     </li>
@@ -212,7 +231,7 @@ const BookingConfirmModal = ({
                   <ul className="appointmentset">
                     <li>
                       <h6>Transaction ID</h6>
-                      <p>{bookingData?.booking[0].transaction_id}</p>
+                      <p>{bookingData?.booking.transaction_id}</p>
                     </li>
                     {bookingData?.bookingDetails.pg_tid && (
                       <li>
@@ -226,13 +245,13 @@ const BookingConfirmModal = ({
                   <ul className="appointmentsetview">
                     <li>
                       <h6>Payment type</h6>
-                      {bookingData?.booking[0].payment_mode ? (
+                      {bookingData?.booking.payment_mode ? (
                         <p>Online</p>
                       ) : (
                         <p>Offline</p>
                       )}
                     </li>
-                    {!bookingData?.booking[0].payment_mode && (
+                    {!bookingData?.booking.payment_mode && (
                       <li>
                         <h6>Payment Mode</h6>
                         <p>Cash</p>
@@ -267,12 +286,19 @@ const BookingConfirmModal = ({
           <div className="d-flex justify-content-center my-4 gap-2">
             <button
               onClick={() => {
-                generatePdf();
+                bookingData?.booking.transaction_id &&
+                  getPdf(bookingData?.booking.transaction_id);
               }}
               className="btn btn-primary btn-icon"
             >
-              <i className="feather-mail me-1" />
-              Download PDF
+              {buttonLoader ? (
+                <ButtonLoader />
+              ) : (
+                <>
+                  <i className="feather-mail me-1" />
+                  Download PDF
+                </>
+              )}
             </button>
             <Link
               to={routes.adminDashboard}
@@ -281,6 +307,22 @@ const BookingConfirmModal = ({
               <i className="feather-arrow-left-circle me-1" />
               Back to Dashboard
             </Link>
+            {bookingData?.reviewDetails !== undefined ? (
+              <Link
+                target="_blank"
+                to={`/user/court/${bookingData?.courtDetails.court_id}/${bookingData?.booking.transaction_id}/${bookingData?.bookingDetails.id}`}
+                className="btn btn-primary"
+              >
+                {bookingData?.reviewDetails === null
+                  ? "Add Review"
+                  : "Update Review"}
+              </Link>
+            ) : (
+              <Link target="_blank" to="#" className="btn btn-red">
+                <i className="feather-x me-1" />
+                Cancel
+              </Link>
+            )}
           </div>
         </div>
       </div>

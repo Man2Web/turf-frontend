@@ -1,57 +1,166 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
-import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
-// import { bookingCompletedData } from "../../../core/data/json/booking_completed";
-import { bookingCompletedData } from "../../core/data/json/booking_completed";
-import { Dropdown } from "primereact/dropdown";
-import { all_routes } from "../../router/all_routes";
 import AdminMenuComponent from "../../components/admin/adminMenu";
 import axios from "axios";
 import Loader from "../../components/common/Loader";
 import { dateFormat } from "../../utils/dateFormat";
-import AdminBookingDetails from "../../components/admin/admin-booking-details";
 import { formatTime } from "../../utils/formatTime";
 import { formatEndTime } from "../../utils/formatEndTime";
+import BookingConfirmModal from "../../components/admin/booking-confirm";
+
+interface countData {
+  todaysBookingsCount: string;
+  previousBookingsCount: string;
+  upcomingBookingsCount: string;
+}
 
 const BookingCompleted = () => {
-  const routes = all_routes;
   const adminId = localStorage.getItem("adminId");
-  const [todaysBooking, setTodaysBooking] = useState<BookingData[]>([]);
-  const [previousBooking, setPreviousBooking] = useState<BookingData[]>([]);
-  const [upcomingBooking, setUpcomingBooking] = useState<BookingData[]>([]);
-  const [currentData, setCurrentData] = useState<BookingData[]>([]);
+  const [todaysBooking, setTodaysBooking] = useState<SuccessBookingData[]>([]);
+  const [previousBooking, setPreviousBooking] = useState<SuccessBookingData[]>(
+    []
+  );
+  const [upcomingBooking, setUpcomingBooking] = useState<SuccessBookingData[]>(
+    []
+  );
+  const [currentData, setCurrentData] = useState<SuccessBookingData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
   const [dataToggle, setDataToggle] = useState<number>(1);
-  const [adminSelected, setAdminSelected] = useState<BookingData>();
+  const [adminSelected, setAdminSelected] = useState<SuccessBookingData>();
+  const [bookingDataOffsets, setBookingDataOffsets] = useState({
+    previousBookingSettings: 0,
+    todayBookingSettings: 0,
+    upcomingBookingSettings: 0,
+  });
+  const [countData, setCountData] = useState<countData>();
   const [searchInput, setSearchInput] = useState("");
-  const [selectedTimeframe, setSelectedTimeframe] = useState();
-  const timeframeOptions = [{ name: "This Week" }, { name: "One Day" }];
 
-  const getBookingData = async () => {
+  const limit = 18;
+
+  const loadMoreRef = useRef(null);
+
+  const checkOffset = () => {
+    if (dataToggle === 0) {
+      return previousBooking.length < Number(countData?.previousBookingsCount);
+    } else if (dataToggle === 1) {
+      return todaysBooking.length < Number(countData?.todaysBookingsCount);
+    } else {
+      return upcomingBooking.length < Number(countData?.upcomingBookingsCount);
+    }
+  };
+
+  const setOffset = () => {
+    if (dataToggle === 0) {
+      setBookingDataOffsets((prevData) => ({
+        ...prevData,
+        previousBookingSettings: prevData.previousBookingSettings + limit,
+      }));
+    } else if (dataToggle === 1) {
+      setBookingDataOffsets((prevData) => ({
+        ...prevData,
+        todayBookingSettings: prevData.todayBookingSettings + limit,
+      }));
+    } else {
+      setBookingDataOffsets((prevData) => ({
+        ...prevData,
+        upcomingBookingSettings: prevData.upcomingBookingSettings + limit,
+      }));
+    }
+  };
+
+  const handleObserver = useCallback(
+    (entries: any[]) => {
+      const target = entries[0];
+      if (target.isIntersecting && checkOffset()) {
+        setOffset();
+      }
+    },
+    [bookingDataOffsets, countData, dataToggle]
+  );
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, {
+      root: null,
+      rootMargin: "200px",
+      threshold: 1.0,
+    });
+    const currentLoadMoreRef = loadMoreRef.current;
+
+    if (currentLoadMoreRef) {
+      observer.observe(currentLoadMoreRef);
+    }
+    return () => {
+      if (currentLoadMoreRef) {
+        observer.unobserve(currentLoadMoreRef);
+      }
+    };
+  }, [handleObserver, dataToggle]);
+
+  const getBookingData = useCallback(async () => {
+    const data = {
+      todayBookingSettings: bookingDataOffsets.todayBookingSettings,
+      upcomingBookingSettings: bookingDataOffsets.upcomingBookingSettings,
+      previousBookingSettings: bookingDataOffsets.previousBookingSettings,
+      limit,
+    };
     try {
       setLoading(true);
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}admin/booking/${adminId}`
+        `${process.env.REACT_APP_BACKEND_URL}admin/booking/${adminId}`,
+        { params: data }
       );
+      console.log(response.data);
+      const filterNewBookings = (
+        prevData: SuccessBookingData[],
+        newData: SuccessBookingData[]
+      ) => {
+        return newData.filter(
+          (newBooking) =>
+            !prevData.some(
+              (prevBooking) =>
+                prevBooking.booking.transaction_id ===
+                newBooking.booking.transaction_id
+            )
+        );
+      };
+
       if (dataToggle === 1) {
-        setCurrentData(response.data.todaysBookings);
+        setCurrentData((prevData) => [
+          ...prevData,
+          ...filterNewBookings(prevData, response.data.todaysBookings),
+        ]);
       }
-      setTodaysBooking(response.data.todaysBookings);
-      setPreviousBooking(response.data.previousBookings);
-      setUpcomingBooking(response.data.upcomingBookings);
+      setCountData(response.data.countData);
+
+      setTodaysBooking((prevData) => [
+        ...prevData,
+        ...filterNewBookings(prevData, response.data.todaysBookings),
+      ]);
+
+      setPreviousBooking((prevData) => [
+        ...prevData,
+        ...filterNewBookings(prevData, response.data.previousBookings),
+      ]);
+
+      setUpcomingBooking((prevData) => [
+        ...prevData,
+        ...filterNewBookings(prevData, response.data.upcomingBookings),
+      ]);
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [adminId, bookingDataOffsets, limit, dataToggle]);
 
   useEffect(() => {
     getBookingData();
+  }, [bookingDataOffsets]);
 
+  useEffect(() => {
     if (dataToggle === 0) {
       setCurrentData(previousBooking);
     } else if (dataToggle === 1) {
@@ -59,8 +168,8 @@ const BookingCompleted = () => {
     } else if (dataToggle === 2) {
       setCurrentData(upcomingBooking);
     }
-  }, [dataToggle]);
-  console.log(adminSelected);
+  }, [dataToggle, todaysBooking, previousBooking, upcomingBooking]);
+
   return (
     <div>
       <>
@@ -183,16 +292,12 @@ const BookingCompleted = () => {
                               <DataTable
                                 value={currentData}
                                 className="table table-borderless datatable"
-                                paginator
-                                rows={10}
-                                rowsPerPageOptions={[10, 25, 50]}
-                                currentPageReportTemplate="{first}"
                               >
                                 <Column
                                   sortable
                                   field="courtName"
                                   header="CourtName"
-                                  body={(rowData: BookingData) => (
+                                  body={(rowData: SuccessBookingData) => (
                                     <td>
                                       <h2 className="table-avatar">
                                         {/* <Link
@@ -222,7 +327,7 @@ const BookingCompleted = () => {
                                   sortable
                                   field="playerName"
                                   header="PlayerName"
-                                  body={(rowData: BookingData) => (
+                                  body={(rowData: SuccessBookingData) => (
                                     <td>
                                       <h2 className="table-avatar">
                                         <span className="table-head-name table-name-user flex-grow-1">
@@ -238,7 +343,7 @@ const BookingCompleted = () => {
                                   sortable
                                   field="playerPhoneNumber"
                                   header="PlayerPhone"
-                                  body={(rowData: BookingData) => (
+                                  body={(rowData: SuccessBookingData) => (
                                     <td>
                                       <h2 className="table-avatar">
                                         <span className="table-head-name table-name-user flex-grow-1">
@@ -257,10 +362,12 @@ const BookingCompleted = () => {
                                   sortable
                                   field="date"
                                   header="Date"
-                                  body={(rowData: BookingData) => (
+                                  body={(rowData: SuccessBookingData) => (
                                     <td className="table-date-time">
                                       <h4>
-                                        {dateFormat(rowData.booking_date)}
+                                        {dateFormat(
+                                          rowData.booking.booking_date
+                                        )}
                                       </h4>
                                     </td>
                                   )}
@@ -269,11 +376,13 @@ const BookingCompleted = () => {
                                   sortable
                                   field="sTime"
                                   header="Start Time"
-                                  body={(rowData: BookingData) => (
+                                  body={(rowData: SuccessBookingData) => (
                                     <td className="table-date-time">
                                       <h4>
                                         <span>
-                                          {formatTime(rowData.booking_time)}
+                                          {formatTime(
+                                            rowData.booking.booking_time[0]
+                                          )}
                                         </span>
                                       </h4>
                                     </td>
@@ -283,13 +392,16 @@ const BookingCompleted = () => {
                                   sortable
                                   field="eTime"
                                   header="End Time"
-                                  body={(rowData: BookingData) => (
+                                  body={(rowData: SuccessBookingData) => (
                                     <td className="table-date-time">
                                       <h4>
                                         <span>
                                           {formatEndTime(
-                                            rowData.booking_time,
-                                            rowData.duration.toString()
+                                            rowData.booking.booking_time[
+                                              rowData.booking.booking_time
+                                                .length - 1
+                                            ],
+                                            rowData.booking.duration
                                           )}
                                         </span>
                                       </h4>
@@ -300,9 +412,9 @@ const BookingCompleted = () => {
                                   sortable
                                   field="payment"
                                   header="Payment"
-                                  body={(rowData: BookingData) => (
+                                  body={(rowData: SuccessBookingData) => (
                                     <>
-                                      {rowData.payment_mode ? (
+                                      {rowData.booking.payment_mode ? (
                                         <td className="table-date-time">
                                           <h4 className="text-success">
                                             Online
@@ -320,9 +432,25 @@ const BookingCompleted = () => {
                                 />
                                 <Column
                                   sortable
+                                  field="transaction_id"
+                                  header="Transaction ID"
+                                  body={(rowData: SuccessBookingData) => (
+                                    <td>
+                                      <h2 className="table-avatar">
+                                        <span className="table-head-name table-name-user flex-grow-1">
+                                          <Link to="#">
+                                            {rowData.booking.transaction_id}
+                                          </Link>
+                                        </span>
+                                      </h2>
+                                    </td>
+                                  )}
+                                ></Column>
+                                <Column
+                                  sortable
                                   field="details"
                                   header="Details"
-                                  body={(rowData: BookingData) => (
+                                  body={(rowData: SuccessBookingData) => (
                                     <td className="text-pink view-detail-pink">
                                       <Link
                                         onClick={() => {
@@ -344,7 +472,8 @@ const BookingCompleted = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="tab-footer">
+                  <div ref={loadMoreRef}></div>
+                  {/* <div className="tab-footer">
                     <div className="row">
                       <div className="col-md-6">
                         <div id="tablelength" />
@@ -353,7 +482,7 @@ const BookingCompleted = () => {
                         <div id="tablepage" />
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -364,10 +493,10 @@ const BookingCompleted = () => {
         <>
           {/* complete Modal */}
           {toggle && (
-            <AdminBookingDetails
+            <BookingConfirmModal
+              toggleModal={toggle}
               bookingData={adminSelected}
-              setToggle={setToggle}
-              toggle={toggle}
+              setToggleModal={setToggle}
             />
           )}
           {/* /complete Modal */}

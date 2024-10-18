@@ -2,7 +2,7 @@ interface Booking {
   id: string;
   court_id: string;
   booking_date: string; // ISO 8601 date string
-  booking_time: string; // HH:mm:ss format
+  booking_time: string[]; // HH:mm:ss format
   user_id: string;
   booking_detail_id: string;
   admin_id: string;
@@ -25,6 +25,7 @@ interface CourtDetails {
   phone_number: string;
   email: string;
   approved: boolean;
+  court_id: string;
 }
 
 interface SuccessBookingDetails {
@@ -46,6 +47,26 @@ interface SuccessBookingDetails {
   state: string | null; // Assuming state can be null
 }
 
+interface ImagesData {
+  id: string;
+  court_id: string;
+  image_url: string;
+}
+
+interface ReviewDetails {
+  id: number;
+  court_id: number;
+  user_id: number;
+  title: string;
+  description: string;
+  rating: number;
+  created_at: string; // or Date if you want to parse it into a Date object
+  updated_at: string; // or Date if parsed
+  status: boolean;
+  booking_details_id: number;
+  transaction_id: string;
+}
+
 interface LocationDetails {
   id: number;
   country: string;
@@ -56,8 +77,10 @@ interface LocationDetails {
 }
 
 interface SuccessBookingData {
-  booking: Booking[];
+  booking: Booking;
   courtDetails: CourtDetails;
   bookingDetails: SuccessBookingDetails;
   locationDetails: LocationDetails;
+  imagesData?: ImagesData;
+  reviewDetails?: ReviewDetails;
 }

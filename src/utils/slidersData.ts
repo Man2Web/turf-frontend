@@ -45,7 +45,6 @@ export const userBookingsSliderOptions = {
         slidesToShow: 3,
         slidesToScroll: 2,
         infinite: true,
-        dots: true,
       },
     },
     {

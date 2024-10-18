@@ -205,6 +205,8 @@ const CourtTimeSlotsComponent = ({
 
       const bookedTimeSlots = response.data.bookedTimeSlots;
 
+      console.log(bookedTimeSlots);
+
       // Find the time slot for the selected day in `courtData`
       const timeSlotsForDay = courtData.time_Slots.find(
         (slot) => slot.day_of_week === dayName
@@ -217,12 +219,12 @@ const CourtTimeSlotsComponent = ({
 
         // Compare the available time slots with the booked time slots and mark them
         const updatedTimeSlots = availableTimeSlots.map((slot) => {
+          console.log(slot);
           const isBooked =
             Array.isArray(bookedTimeSlots) &&
             bookedTimeSlots.some(
-              (bookedSlot: { booking_time: string }) =>
-                bookedSlot.booking_time.split(":").slice(0, 2).join(":") ===
-                slot.time
+              (time: string) =>
+                time.split(":").slice(0, 2).join(":") === slot.time
             );
 
           // Check if this slot is already in selectedSlots for the selectedDate

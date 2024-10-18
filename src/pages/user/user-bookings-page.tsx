@@ -7,7 +7,7 @@ import { all_routes } from "../../router/all_routes";
 import axios from "axios";
 import Loader from "../../components/common/Loader";
 import { dateFormat } from "../../utils/dateFormat";
-import AdminBookingDetails from "../../components/admin/admin-booking-details";
+// import AdminBookingDetails from "../../dump/admin-booking-details";
 import UserMenuComponent from "../../components/user/userMenu";
 import { formatTime } from "../../utils/formatTime";
 import { formatEndTime } from "../../utils/formatEndTime";
@@ -15,32 +15,51 @@ import ButtonLoader from "../../components/common/button-loader";
 import Slider from "react-slick";
 import GridCard from "../../components/common/courts-list/grid-card";
 import { decimalNumber } from "../../utils/decimalNumber";
-import { getIconBySport } from "../../components/common/courts-list/list-card";
+import ListCard, {
+  getIconBySport,
+} from "../../components/common/courts-list/list-card";
 import { getSlotDurationInHrs } from "../../utils/slotDuration";
 import { userBookingsSliderOptions } from "../../utils/slidersData";
+import BookingConfirmModal from "../../components/admin/booking-confirm";
 
 const UserBookingsPage = () => {
   const routes = all_routes;
   const userId = localStorage.getItem("userId");
-  const [todaysBooking, setTodaysBooking] = useState<BookingData[]>([]);
-  const [previousBooking, setPreviousBooking] = useState<BookingData[]>([]);
-  const [upcomingBooking, setUpcomingBooking] = useState<BookingData[]>([]);
+  const [previousBooking, setPreviousBooking] = useState<SuccessBookingData[]>(
+    []
+  );
+  const [upcomingBooking, setUpcomingBooking] = useState<SuccessBookingData[]>(
+    []
+  );
   const [images, setImages] = useState<any>();
-  const [currentData, setCurrentData] = useState<BookingData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [infiniteLoading, setInfiniteLoading] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
   const [dataToggle, setDataToggle] = useState<number>(1);
-  const [adminSelected, setAdminSelected] = useState<BookingData>();
+  const [adminSelected, setAdminSelected] = useState<SuccessBookingData>();
   const [searchInput, setSearchInput] = useState("");
   const [totalPrevCount, setTotalPrevCount] = useState<number>(0);
   const [limit, setLimit] = useState<number>(20);
   const [offset, setOffset] = useState<number>(0);
+  const [prevBookingImages, setPrevBookingImages] = useState<string[]>([]);
 
   // Reference for the element that will trigger the loading when it appears in view
   const loadMoreRef = useRef(null);
 
   const getBookingData = async () => {
+    const filterNewBookings = (
+      prevData: SuccessBookingData[],
+      newData: SuccessBookingData[]
+    ) => {
+      return newData.filter(
+        (newBooking) =>
+          !prevData.some(
+            (prevBooking) =>
+              prevBooking.booking.transaction_id ===
+              newBooking.booking.transaction_id
+          )
+      );
+    };
     try {
       setInfiniteLoading(true);
       const response = await axios.get(
@@ -57,17 +76,10 @@ const UserBookingsPage = () => {
         setUpcomingBooking(response.data.upcomingBookings);
       }
       if (response.data.previousBookings) {
-        setPreviousBooking((prev) => {
-          const mergedBookings = [...prev, ...response.data.previousBookings];
-
-          // Create a Map to filter duplicates based on the booking.id
-          const uniqueBookings = new Map(
-            mergedBookings.map((booking) => [booking.id, booking])
-          );
-
-          return Array.from(uniqueBookings.values());
-        });
-
+        setPreviousBooking((prevData) => [
+          ...prevData,
+          ...filterNewBookings(prevData, response.data.previousBookings),
+        ]);
         setTotalPrevCount(Number(response.data.totalCount)); // Convert totalCount to number
       }
     } catch (error) {
@@ -123,7 +135,7 @@ const UserBookingsPage = () => {
   const fetchImages = async () => {
     const imagesData = upcomingBooking.map(async (bookingData) => {
       try {
-        const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${bookingData.courtDetails.user_id}/${bookingData.courtDetails.id}/${bookingData.imagesData.image_url}`;
+        const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${bookingData.courtDetails.user_id}/${bookingData.courtDetails.id}/${bookingData.imagesData?.image_url}`;
         const response = await axios.get(imageUrl, {
           responseType: "arraybuffer",
         });
@@ -140,9 +152,28 @@ const UserBookingsPage = () => {
   };
 
   useEffect(() => {
+    const objectUrls: string[] = [];
+
+    previousBooking.forEach(async (booking: SuccessBookingData) => {
+      const imageUrl = booking.imagesData?.image_url;
+      if (imageUrl) {
+        const imageData = await axios.get(
+          `${process.env.REACT_APP_BACKEND_URL}court/uploads/${booking.booking.admin_id}/${booking.courtDetails.id}/${imageUrl}`,
+          {
+            responseType: "blob",
+          }
+        );
+        const localImageUrl = URL.createObjectURL(imageData.data);
+        objectUrls.push(localImageUrl); // Store the object URL for cleanup
+      }
+    });
+    setPrevBookingImages(objectUrls);
+  }, [previousBooking]);
+
+  useEffect(() => {
     fetchImages();
   }, [upcomingBooking]);
-
+  console.log(prevBookingImages);
   return (
     <div>
       {/* Dashboard Menu */}
@@ -168,14 +199,14 @@ const UserBookingsPage = () => {
                         className="venue-space"
                       >
                         {upcomingBooking?.map(
-                          (booking: BookingData, idx: number) => {
+                          (booking: SuccessBookingData, idx: number) => {
                             return (
                               <div key={idx} className="h-6 mb-4 px-2">
                                 <div className="wrapper">
                                   <div className="listing-item listing-item-grid">
                                     <div className="listing-img">
                                       <Link
-                                        to={`${routes.courtDetailsLink}/${booking.courtDetails.id}`}
+                                        to={`${routes.courtDetailsLink}/${booking.courtDetails.court_id}`}
                                       >
                                         <img
                                           className="card-img-top"
@@ -199,7 +230,7 @@ const UserBookingsPage = () => {
                                         <div className="d-flex align-items-center">
                                           <h5 className="listing-title d-flex align-items-center m-0">
                                             <Link
-                                              to={`${routes.courtDetailsLink}/${booking.courtDetails.id}`}
+                                              to={`${routes.courtDetailsLink}/${booking.courtDetails.court_id}`}
                                             >
                                               {booking.courtDetails.court_name}
                                             </Link>
@@ -223,36 +254,36 @@ const UserBookingsPage = () => {
                                             </span>
                                             <span>
                                               <i className="feather-clock" />
-                                              {`${dateFormat(booking.booking_date)}`}
+                                              {`${dateFormat(booking.booking.booking_date)}`}
                                             </span>
                                             <span>
                                               <i className="feather-sun" />
-                                              {`${formatTime(booking.booking_time)} - ${formatTime(getSlotDurationInHrs(booking.booking_time, booking.duration))}`}
+                                              {`${formatTime(booking.booking.booking_time[0])} - ${formatTime(getSlotDurationInHrs(booking.booking.booking_time[booking.booking.booking_time.length - 1], Number(booking.booking.duration)))}`}
                                             </span>
                                           </li>
                                         </ul>
                                       </div>
-                                      <div className="listing-button d-flex gap-2">
+                                      <div className="listing-button d-flex flex-column gap-2">
                                         <Link
                                           to={`${routes.courtDetailsLink}/${booking.courtDetails.id}/booking`}
-                                          className="user-book-now btn btn-primary text-white w-100 justify-content-center"
+                                          className="user-book-now btn btn-primary text-white justify-content-center w-100"
                                         >
                                           <span>
                                             <i className="feather-calendar me-2 text-white" />
                                           </span>
                                           Reschedule
                                         </Link>
-                                        <Link
-                                          to={`${routes.courtDetailsLink}/${booking.courtDetails.id}/booking`}
-                                          className="user-book-now btn btn-red text-white w-100 justify-content-center"
+                                        <button
+                                          onClick={() => {
+                                            setAdminSelected(booking);
+                                            setToggle(true);
+                                          }}
+                                          className="user-book-now btn btn-secondary text-white justify-content-center w-100"
                                         >
-                                          <span>
-                                            <i className="feather-x me-2 text-white" />
-                                          </span>
-                                          Cancel
-                                        </Link>
+                                          <i className="feather-search me-2 text-white" />
+                                          View Details
+                                        </button>
                                       </div>
-                                      <div className="listing-button"></div>
                                     </div>
                                   </div>
                                 </div>
@@ -300,24 +331,6 @@ const UserBookingsPage = () => {
                                 />
                               </label>
                             </div>
-                            <div className="card-header-btns">
-                              <nav>
-                                <div className="nav nav-tabs" role="tablist">
-                                  <button
-                                    className="nav-link active"
-                                    id="nav-Recent-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#nav-Recent"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="nav-Recent"
-                                    aria-selected="true"
-                                  >
-                                    Court
-                                  </button>
-                                </div>
-                              </nav>
-                            </div>
                           </div>
                         </div>
                       </div>
@@ -333,151 +346,114 @@ const UserBookingsPage = () => {
                         <div className="table-responsive">
                           {loading && <Loader />}
                           {!loading && previousBooking.length !== 0 ? (
-                            <DataTable
-                              value={previousBooking}
-                              className="table table-borderless datatable"
-                            >
-                              <Column
-                                sortable
-                                field="courtName"
-                                header="CourtName"
-                                body={(rowData: BookingData) => (
-                                  <td>
-                                    <h2 className="table-avatar">
-                                      {/* <Link
-                                        to="#"
-                                        className="avatar avatar-sm flex-shrink-0"
-                                      >
-                                        <ImageWithBasePath
-                                          className="avatar-img"
-                                          src={rowData.img1}
-                                          alt="User"
-                                        />
-                                      </Link> */}
-                                      <span className="table-head-name flex-grow-1">
-                                        <Link to="#">{}</Link>
-                                        <span>
-                                          {rowData.courtDetails.court_name}
-                                          {/* <span className="book-on-date">
-                                            {rowData.bookingTime}
-                                          </span> */}
-                                        </span>
-                                      </span>
-                                    </h2>
-                                  </td>
-                                )}
-                              ></Column>
-                              <Column
-                                sortable
-                                field="playerName"
-                                header="PlayerName"
-                                body={(rowData: BookingData) => (
-                                  <td>
-                                    <h2 className="table-avatar">
-                                      <span className="table-head-name table-name-user flex-grow-1">
-                                        <Link to={"routes.myProfile"}>
-                                          {`${rowData.bookingDetails.fname} ${rowData.bookingDetails.lname}`}
+                            previousBooking.map(
+                              (bookingData: SuccessBookingData, index) => (
+                                <div
+                                  key={index}
+                                  className="col-lg-12 col-md-12 mb-2"
+                                >
+                                  <div className="featured-venues-item venue-list-item">
+                                    <div className="listing-item listing-item-grid">
+                                      <div className="listing-img d-none d-md-block">
+                                        <Link
+                                          to={`${routes.courtDetailsLink}/${bookingData.booking.court_id}`}
+                                        >
+                                          <img
+                                            style={{
+                                              height: "200px",
+                                              width: "360px",
+                                            }}
+                                            src={
+                                              prevBookingImages &&
+                                              prevBookingImages[index]
+                                            }
+                                            alt="court img"
+                                          />
                                         </Link>
-                                      </span>
-                                    </h2>
-                                  </td>
-                                )}
-                              ></Column>
-                              <Column
-                                sortable
-                                field="playerPhoneNumber"
-                                header="PlayerPhone"
-                                body={(rowData: BookingData) => (
-                                  <td>
-                                    <h2 className="table-avatar">
-                                      <span className="table-head-name table-name-user flex-grow-1">
-                                        <Link to={"routes.myProfile"}>
-                                          {rowData.bookingDetails.phone_number}
-                                        </Link>
-                                      </span>
-                                    </h2>
-                                  </td>
-                                )}
-                              ></Column>
-                              <Column
-                                sortable
-                                field="date"
-                                header="Date"
-                                body={(rowData: BookingData) => (
-                                  <td className="table-date-time">
-                                    <h4>{dateFormat(rowData.booking_date)}</h4>
-                                  </td>
-                                )}
-                              />
-                              <Column
-                                sortable
-                                field="sTime"
-                                header="Start Time"
-                                body={(rowData: BookingData) => (
-                                  <td className="table-date-time">
-                                    <h4>
-                                      <span>
-                                        {formatTime(rowData.booking_time)}
-                                      </span>
-                                    </h4>
-                                  </td>
-                                )}
-                              />
-                              <Column
-                                sortable
-                                field="eTime"
-                                header="End Time"
-                                body={(rowData: BookingData) => (
-                                  <td className="table-date-time">
-                                    <h4>
-                                      <span>
-                                        {formatEndTime(
-                                          rowData.booking_time,
-                                          rowData.duration.toString()
-                                        )}
-                                      </span>
-                                    </h4>
-                                  </td>
-                                )}
-                              />
-                              <Column
-                                sortable
-                                field="payment"
-                                header="Payment"
-                                body={(rowData: BookingData) => (
-                                  <>
-                                    {rowData.payment_mode ? (
-                                      <td className="table-date-time">
-                                        <h4 className="text-success">Online</h4>
-                                      </td>
-                                    ) : (
-                                      <td className="table-date-time">
-                                        <h4 className="text-danger">Offline</h4>
-                                      </td>
-                                    )}
-                                  </>
-                                )}
-                              />
-                              <Column
-                                sortable
-                                field="details"
-                                header="Details"
-                                body={(rowData: BookingData) => (
-                                  <td className="text-pink view-detail-pink">
-                                    <Link
-                                      onClick={() => {
-                                        setAdminSelected(rowData);
-                                        setToggle(true);
-                                      }}
-                                      to="#"
-                                    >
-                                      <i className="feather-eye"></i>View
-                                      Details
-                                    </Link>
-                                  </td>
-                                )}
-                              />
-                            </DataTable>
+                                        <div className="fav-item-venues">
+                                          {bookingData.courtDetails
+                                            .featured && (
+                                            <span className="tag tag-blue">
+                                              Featured
+                                            </span>
+                                          )}
+                                          <h5 className="tag tag-primary">
+                                            ₹
+                                            {decimalNumber(
+                                              bookingData.booking.amount_paid
+                                            )}
+                                          </h5>
+                                        </div>
+                                      </div>
+                                      <div className="listing-content">
+                                        <div className="d-flex justify-content-between align-items-center">
+                                          <h5 className="listing-title m-0">
+                                            <Link
+                                              to={`${routes.courtDetailsLink}/${bookingData.booking.court_id}`}
+                                            >
+                                              {
+                                                bookingData.courtDetails
+                                                  .court_name
+                                              }
+                                            </Link>
+                                          </h5>
+                                          <div className="list-reviews"></div>
+                                        </div>
+                                        <div
+                                          style={{ fontWeight: "200" }}
+                                          className="listing-details-group"
+                                        >
+                                          <ul
+                                            style={{ fontWeight: "200" }}
+                                            className="listing-details-info"
+                                          >
+                                            <li className="mb-2">
+                                              <span>
+                                                <i>
+                                                  {getIconBySport(
+                                                    bookingData.courtDetails
+                                                      .court_type
+                                                  )}
+                                                </i>
+                                                {`${bookingData.courtDetails.court_type}`}
+                                              </span>
+                                              <span>
+                                                <i className="feather-clock" />
+                                                {`${dateFormat(bookingData.booking.booked_on)}`}
+                                              </span>
+                                            </li>
+                                          </ul>
+                                        </div>
+                                        <div className="listing-button justify-content-end gap-2">
+                                          <Link
+                                            to={`${routes.courtDetailsLink}/${bookingData.courtDetails.court_id}/booking`}
+                                            className="user-book-now btn btn-primary text-white"
+                                          >
+                                            <span>
+                                              <i className="feather-calendar me-2 text-white" />
+                                            </span>
+                                            Book Again
+                                          </Link>
+                                          <Link
+                                            to="#"
+                                            onClick={() => {
+                                              setAdminSelected(bookingData);
+                                              setToggle(true);
+                                            }}
+                                            className="user-book-now btn btn-secondary text-white"
+                                          >
+                                            <span>
+                                              <i className="feather-search me-2 text-white" />
+                                            </span>
+                                            View Details
+                                          </Link>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              )
+                            )
                           ) : (
                             <div className="d-flex justify-content-between align-items-center">
                               <h3 className="mb-0">No Bookings found</h3>
@@ -497,13 +473,6 @@ const UserBookingsPage = () => {
                     {infiniteLoading && <p>Loading more bookings...</p>}
                   </div>
                 </div>
-                <div className="tab-footer">
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div id="tablelength" />
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -513,11 +482,10 @@ const UserBookingsPage = () => {
 
       {/* complete Modal */}
       {adminSelected && (
-        <AdminBookingDetails
-          dataToggle={dataToggle}
+        <BookingConfirmModal
+          toggleModal={toggle}
           bookingData={adminSelected}
-          setToggle={setToggle}
-          toggle={toggle}
+          setToggleModal={setToggle}
         />
       )}
       {/* /complete Modal */}

@@ -207,7 +207,7 @@ const AllCourt = () => {
     <div>
       <ToastContainer />
       {/* Dashboard Menu */}
-      <div className="dashboard-section coach-dash-section">
+      <div className="dashboard-section coach-dash-section mb-10">
         <div className="container">
           <div className="row">
             <AdminMenuComponent />
@@ -244,7 +244,7 @@ const AllCourt = () => {
               {loading ? (
                 <Loader />
               ) : (
-                <DataTable value={filteredData} paginator rows={10}>
+                <DataTable value={filteredData}>
                   {columns.map((col) => (
                     <Column
                       key={col.field}

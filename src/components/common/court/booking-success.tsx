@@ -10,6 +10,7 @@ import { decimalNumber } from "../../../utils/decimalNumber";
 import { formatEndTime } from "../../../utils/formatEndTime";
 import Loader from "../Loader";
 import ButtonLoader from "../button-loader";
+import { toast, ToastContainer } from "react-toastify";
 
 const BookingSuccess = () => {
   const routes = all_routes;
@@ -23,8 +24,9 @@ const BookingSuccess = () => {
     const response = await axios.get(
       `${process.env.REACT_APP_BACKEND_URL}booking/get/${id}`
     );
-    console.log(response.data);
-    setBookingData(response.data);
+    response.status === 200
+      ? setBookingData(response.data)
+      : toast.error("Error fetching data");
   };
 
   useEffect(() => {
@@ -67,6 +69,7 @@ const BookingSuccess = () => {
 
   return (
     <>
+      <ToastContainer />
       {!bookingData && <Loader />}
       {bookingData && (
         <div
@@ -82,7 +85,7 @@ const BookingSuccess = () => {
                   <span
                     className="badge ms-2"
                     style={{ backgroundColor: "grey", color: "white" }}
-                  >{`ID: ${bookingData.booking[0].transaction_id}`}</span>
+                  >{`ID: ${bookingData.booking.transaction_id}`}</span>
                   <span className="badge bg-success ms-2">Paid</span>
                 </h4>
               </div>
@@ -176,7 +179,7 @@ const BookingSuccess = () => {
                     <div className="card-header">
                       <h4>Booking Information</h4>
                     </div>
-                    {bookingData.booking.map((data, index) => (
+                    {bookingData?.booking?.booking_time?.map((time, index) => (
                       <div
                         key={index}
                         className="appointment-info appoin-border double-row"
@@ -184,21 +187,28 @@ const BookingSuccess = () => {
                         <ul className="appointmentset">
                           <li>
                             <h6>Booking Date</h6>
-                            <p>{dateFormat(data.booking_date)}</p>
+                            <p>
+                              {dateFormat(bookingData.booking.booking_date)}
+                            </p>
                           </li>
                           <li>
                             <h6>Booking Start Time</h6>
-                            <p>{formatTime(data.booking_time)}</p>
+                            <p>{formatTime(time)}</p>
                           </li>
                           <li>
                             <h6>Booking End Time</h6>
                             <p>
-                              {formatEndTime(data.booking_time, data.duration)}
+                              {formatEndTime(
+                                time,
+                                bookingData.booking.duration
+                              )}
                             </p>
                           </li>
                           <li>
                             <h6>Booked On</h6>
-                            <p>{dateFormat(data.booked_on)}</p>
+                            <p>
+                              {dateFormat(bookingData.booking.booking_date)}
+                            </p>
                           </li>
                         </ul>
                       </div>
@@ -216,8 +226,8 @@ const BookingSuccess = () => {
                           <p className="color-green">
                             ₹
                             {decimalNumber(
-                              Number(bookingData?.booking[0].amount_paid) +
-                                Number(bookingData?.booking[0].pay_required)
+                              Number(bookingData?.booking.amount_paid) +
+                                Number(bookingData?.booking.pay_required)
                             )}
                           </p>
                         </li>
@@ -225,7 +235,9 @@ const BookingSuccess = () => {
                           <h6>Total Amount Paid</h6>
                           <p className="color-green">
                             ₹
-                            {decimalNumber(bookingData?.booking[0].amount_paid)}
+                            {decimalNumber(
+                              Number(bookingData?.booking.amount_paid)
+                            )}
                           </p>
                         </li>
                         <li>
@@ -233,7 +245,7 @@ const BookingSuccess = () => {
                           <p className="color-green">
                             ₹
                             {decimalNumber(
-                              bookingData?.booking[0].pay_required
+                              Number(bookingData?.booking.pay_required)
                             )}
                           </p>
                         </li>
@@ -243,7 +255,7 @@ const BookingSuccess = () => {
                       <ul className="appointmentset">
                         <li>
                           <h6>Transaction ID</h6>
-                          <p>{bookingData?.booking[0].transaction_id}</p>
+                          <p>{bookingData?.booking.transaction_id}</p>
                         </li>
                         {bookingData?.bookingDetails.pg_tid && (
                           <li>
@@ -257,25 +269,25 @@ const BookingSuccess = () => {
                       <ul className="appointmentsetview">
                         <li>
                           <h6>Payment type</h6>
-                          {bookingData?.booking[0].payment_mode ? (
+                          {bookingData?.booking.payment_mode ? (
                             <p>Online</p>
                           ) : (
                             <p>Offline</p>
                           )}
                         </li>
-                        {!bookingData?.booking[0].payment_mode && (
+                        {!bookingData?.booking.payment_mode && (
                           <li>
                             <h6>Payment Mode</h6>
                             <p>Cash</p>
                           </li>
                         )}
-                        {bookingData.bookingDetails.payment_type && (
+                        {bookingData?.bookingDetails.payment_type && (
                           <li>
                             <h6>Payment Type</h6>
                             <p>{bookingData?.bookingDetails?.payment_type}</p>
                           </li>
                         )}
-                        {bookingData.bookingDetails.card_type && (
+                        {bookingData?.bookingDetails.card_type && (
                           <li>
                             <h6>Card Type</h6>
                             <p>
@@ -283,7 +295,7 @@ const BookingSuccess = () => {
                             </p>
                           </li>
                         )}
-                        {bookingData.bookingDetails.bank_id && (
+                        {bookingData?.bookingDetails.bank_id && (
                           <li>
                             <h6>Bank ID</h6>
                             <p>{bookingData?.bookingDetails?.bank_id}</p>
@@ -298,7 +310,7 @@ const BookingSuccess = () => {
               <div className="d-flex justify-content-center my-4 gap-2">
                 <button
                   onClick={() => {
-                    getPdf(bookingData.booking[0].transaction_id);
+                    getPdf(bookingData.booking.transaction_id);
                   }}
                   className="btn btn-primary btn-icon"
                 >
