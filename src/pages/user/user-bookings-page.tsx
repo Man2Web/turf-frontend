@@ -1,25 +1,16 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
-import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable";
-// import { bookingCompletedData } from "../../../core/data/json/booking_completed";
 import { all_routes } from "../../router/all_routes";
 import axios from "axios";
 import Loader from "../../components/common/Loader";
 import { dateFormat } from "../../utils/dateFormat";
-// import AdminBookingDetails from "../../dump/admin-booking-details";
 import UserMenuComponent from "../../components/user/userMenu";
 import { formatTime } from "../../utils/formatTime";
-import { formatEndTime } from "../../utils/formatEndTime";
-import ButtonLoader from "../../components/common/button-loader";
 import Slider from "react-slick";
-import GridCard from "../../components/common/courts-list/grid-card";
 import { decimalNumber } from "../../utils/decimalNumber";
-import ListCard, {
-  getIconBySport,
-} from "../../components/common/courts-list/list-card";
+import { getIconBySport } from "../../components/common/courts-list/list-card";
 import { getSlotDurationInHrs } from "../../utils/slotDuration";
-import { userBookingsSliderOptions } from "../../utils/slidersData";
+import { getUserBookingSliderData } from "../../utils/slidersData";
 import BookingConfirmModal from "../../components/admin/booking-confirm";
 
 const UserBookingsPage = () => {
@@ -35,7 +26,6 @@ const UserBookingsPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [infiniteLoading, setInfiniteLoading] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
-  const [dataToggle, setDataToggle] = useState<number>(1);
   const [adminSelected, setAdminSelected] = useState<SuccessBookingData>();
   const [searchInput, setSearchInput] = useState("");
   const [totalPrevCount, setTotalPrevCount] = useState<number>(0);
@@ -49,16 +39,26 @@ const UserBookingsPage = () => {
   const getBookingData = async () => {
     const filterNewBookings = (
       prevData: SuccessBookingData[],
-      newData: SuccessBookingData[]
+      newData: SuccessBookingData[],
+      upcoming: boolean
     ) => {
-      return newData.filter(
-        (newBooking) =>
-          !prevData.some(
-            (prevBooking) =>
-              prevBooking.booking.transaction_id ===
-              newBooking.booking.transaction_id
-          )
-      );
+      if (!upcoming) {
+        return newData.filter(
+          (newBooking) =>
+            !prevData.some(
+              (prevBooking) =>
+                prevBooking.transaction_id === newBooking.transaction_id
+            )
+        );
+      } else {
+        return newData.filter(
+          (newBooking) =>
+            !prevData.some(
+              (prevBooking) =>
+                prevBooking.transaction_id === newBooking.transaction_id
+            )
+        );
+      }
     };
     try {
       setInfiniteLoading(true);
@@ -78,7 +78,7 @@ const UserBookingsPage = () => {
       if (response.data.previousBookings) {
         setPreviousBooking((prevData) => [
           ...prevData,
-          ...filterNewBookings(prevData, response.data.previousBookings),
+          ...filterNewBookings(prevData, response.data.previousBookings, false),
         ]);
         setTotalPrevCount(Number(response.data.totalCount)); // Convert totalCount to number
       }
@@ -133,47 +133,40 @@ const UserBookingsPage = () => {
   }, [handleObserver]);
 
   const fetchImages = async () => {
-    const imagesData = upcomingBooking.map(async (bookingData) => {
-      try {
-        const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${bookingData.courtDetails.user_id}/${bookingData.courtDetails.id}/${bookingData.imagesData?.image_url}`;
-        const response = await axios.get(imageUrl, {
-          responseType: "arraybuffer",
-        });
-        const blob = new Blob([response.data], { type: "image/webp" });
-        const imgSrc = URL.createObjectURL(blob);
-        return imgSrc;
-      } catch (error) {
-        console.error(error);
-        return null;
-      }
-    });
-    const resolvedImages = await Promise.all(imagesData);
-    setImages(resolvedImages);
+    try {
+      const imageUrls = upcomingBooking.map((bookingData) => {
+        return `${process.env.REACT_APP_BACKEND_URL}court/uploads/${bookingData.court_info.admin_id}/${bookingData.court_info.court_id}/${bookingData.court_details.images[0]}`;
+      });
+
+      setImages(imageUrls); // Just set the image URLs, no need to fetch the data as blobs
+    } catch (error) {
+      console.error("Error fetching image URLs", error);
+    }
   };
 
   useEffect(() => {
-    const objectUrls: string[] = [];
-
-    previousBooking.forEach(async (booking: SuccessBookingData) => {
-      const imageUrl = booking.imagesData?.image_url;
-      if (imageUrl) {
-        const imageData = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}court/uploads/${booking.booking.admin_id}/${booking.courtDetails.id}/${imageUrl}`,
-          {
-            responseType: "blob",
+    if (previousBooking.length > 0) {
+      const imageUrls = previousBooking
+        .map((booking: SuccessBookingData) => {
+          const imageUrl = booking.court_details.images[0]; // Get the first image
+          if (imageUrl) {
+            return `${process.env.REACT_APP_BACKEND_URL}court/uploads/${booking.court_info.admin_id}/${booking.court_info.court_id}/${imageUrl}`;
           }
-        );
-        const localImageUrl = URL.createObjectURL(imageData.data);
-        objectUrls.push(localImageUrl); // Store the object URL for cleanup
-      }
-    });
-    setPrevBookingImages(objectUrls);
+          return null; // Return null if there's no image
+        })
+        .filter(Boolean); // Remove any null values from the array
+
+      setPrevBookingImages(imageUrls as string[]); // Set the image URLs directly
+    }
   }, [previousBooking]);
 
   useEffect(() => {
     fetchImages();
   }, [upcomingBooking]);
-  console.log(prevBookingImages);
+  const userBookingsSliderData = getUserBookingSliderData(
+    upcomingBooking.length
+  );
+  console.log(upcomingBooking);
   return (
     <div>
       {/* Dashboard Menu */}
@@ -195,7 +188,7 @@ const UserBookingsPage = () => {
                         </p>
                       </div>
                       <Slider
-                        {...userBookingsSliderOptions}
+                        {...userBookingsSliderData}
                         className="venue-space"
                       >
                         {upcomingBooking?.map(
@@ -206,7 +199,7 @@ const UserBookingsPage = () => {
                                   <div className="listing-item listing-item-grid">
                                     <div className="listing-img">
                                       <Link
-                                        to={`${routes.courtDetailsLink}/${booking.courtDetails.court_id}`}
+                                        to={`${routes.courtDetailsLink}/${booking.court_info.court_id}`}
                                       >
                                         <img
                                           className="card-img-top"
@@ -215,7 +208,7 @@ const UserBookingsPage = () => {
                                         />
                                       </Link>
                                       <div className="fav-item-venues">
-                                        {booking.courtDetails.featured && (
+                                        {booking.court_info.featured && (
                                           <span className="tag tag-blue">
                                             Featured
                                           </span>
@@ -230,9 +223,9 @@ const UserBookingsPage = () => {
                                         <div className="d-flex align-items-center">
                                           <h5 className="listing-title d-flex align-items-center m-0">
                                             <Link
-                                              to={`${routes.courtDetailsLink}/${booking.courtDetails.court_id}`}
+                                              to={`${routes.courtDetailsLink}/${booking.court_info.court_id}`}
                                             >
-                                              {booking.courtDetails.court_name}
+                                              {booking.court_info.court_name}
                                             </Link>
                                           </h5>
                                         </div>
@@ -246,26 +239,25 @@ const UserBookingsPage = () => {
                                             <span>
                                               <i>
                                                 {getIconBySport(
-                                                  booking.courtDetails
-                                                    .court_type
+                                                  booking.court_info.court_type
                                                 )}
                                               </i>
-                                              {`${booking.courtDetails.court_type}`}
+                                              {`${booking.court_info.court_type}`}
                                             </span>
                                             <span>
                                               <i className="feather-clock" />
-                                              {`${dateFormat(booking.booking.booking_date)}`}
+                                              {`${dateFormat(booking.booking_date)}`}
                                             </span>
                                             <span>
                                               <i className="feather-sun" />
-                                              {`${formatTime(booking.booking.booking_time[0])} - ${formatTime(getSlotDurationInHrs(booking.booking.booking_time[booking.booking.booking_time.length - 1], Number(booking.booking.duration)))}`}
+                                              {`${formatTime(booking.booking_time[0])} - ${formatTime(getSlotDurationInHrs(booking.booking_time[booking.booking_time.length - 1], Number(booking.duration)))}`}
                                             </span>
                                           </li>
                                         </ul>
                                       </div>
                                       <div className="listing-button d-flex flex-column gap-2">
                                         <Link
-                                          to={`${routes.courtDetailsLink}/${booking.courtDetails.id}/booking`}
+                                          to={`${routes.courtDetailsLink}/${booking.court_info.court_id}/booking`}
                                           className="user-book-now btn btn-primary text-white justify-content-center w-100"
                                         >
                                           <span>
@@ -316,23 +308,6 @@ const UserBookingsPage = () => {
                             </p>
                           </div>
                         </div>
-                        <div className="col-lg-6">
-                          <div className="coach-active-blk">
-                            <div className="dataTables_filter">
-                              <label>
-                                <input
-                                  type="text"
-                                  value={searchInput}
-                                  onChange={(e) =>
-                                    setSearchInput(e.target.value)
-                                  }
-                                  placeholder="Search"
-                                  className="form-control"
-                                />
-                              </label>
-                            </div>
-                          </div>
-                        </div>
                       </div>
                     </div>
                     <div className="tab-content">
@@ -356,7 +331,7 @@ const UserBookingsPage = () => {
                                     <div className="listing-item listing-item-grid">
                                       <div className="listing-img d-none d-md-block">
                                         <Link
-                                          to={`${routes.courtDetailsLink}/${bookingData.booking.court_id}`}
+                                          to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}`}
                                         >
                                           <img
                                             style={{
@@ -371,8 +346,7 @@ const UserBookingsPage = () => {
                                           />
                                         </Link>
                                         <div className="fav-item-venues">
-                                          {bookingData.courtDetails
-                                            .featured && (
+                                          {bookingData.court_info.featured && (
                                             <span className="tag tag-blue">
                                               Featured
                                             </span>
@@ -380,7 +354,7 @@ const UserBookingsPage = () => {
                                           <h5 className="tag tag-primary">
                                             ₹
                                             {decimalNumber(
-                                              bookingData.booking.amount_paid
+                                              bookingData.amount_paid
                                             )}
                                           </h5>
                                         </div>
@@ -389,10 +363,10 @@ const UserBookingsPage = () => {
                                         <div className="d-flex justify-content-between align-items-center">
                                           <h5 className="listing-title m-0">
                                             <Link
-                                              to={`${routes.courtDetailsLink}/${bookingData.booking.court_id}`}
+                                              to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}`}
                                             >
                                               {
-                                                bookingData.courtDetails
+                                                bookingData.court_info
                                                   .court_name
                                               }
                                             </Link>
@@ -411,22 +385,25 @@ const UserBookingsPage = () => {
                                               <span>
                                                 <i>
                                                   {getIconBySport(
-                                                    bookingData.courtDetails
+                                                    bookingData.court_info
                                                       .court_type
                                                   )}
                                                 </i>
-                                                {`${bookingData.courtDetails.court_type}`}
+                                                {`${
+                                                  bookingData.court_info
+                                                    .court_type
+                                                }`}
                                               </span>
                                               <span>
                                                 <i className="feather-clock" />
-                                                {`${dateFormat(bookingData.booking.booked_on)}`}
+                                                {`${dateFormat(bookingData.booked_on)}`}
                                               </span>
                                             </li>
                                           </ul>
                                         </div>
-                                        <div className="listing-button justify-content-end gap-2">
+                                        <div className="d-flex justify-content-end gap-2 flex-column flex-lg-row">
                                           <Link
-                                            to={`${routes.courtDetailsLink}/${bookingData.courtDetails.court_id}/booking`}
+                                            to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}/booking`}
                                             className="user-book-now btn btn-primary text-white"
                                           >
                                             <span>

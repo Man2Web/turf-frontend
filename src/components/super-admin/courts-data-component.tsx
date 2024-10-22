@@ -10,6 +10,7 @@ import { Button } from "primereact/button";
 
 type Court = {
   id: number;
+  court_id: string;
   user_id: number;
   court_name: string;
   court_type: string;
@@ -81,7 +82,7 @@ const CourtsDataComponent = () => {
       console.log(error);
     }
   };
-
+  console.log(currentData);
   return (
     <div>
       <ToastContainer />
@@ -190,11 +191,8 @@ const CourtsDataComponent = () => {
                             <DataTable
                               value={currentData}
                               className="table table-borderless datatable"
-                              paginator
                               stripedRows
                               sortMode="multiple"
-                              rows={20}
-                              rowsPerPageOptions={[20, 40, 60]}
                             >
                               <Column
                                 sortable
@@ -285,7 +283,7 @@ const CourtsDataComponent = () => {
                                 body={(rowData: Court) => (
                                   <td className="table-accept-btn text-end">
                                     <Link
-                                      to={`/super-admin/court/${rowData.id}`}
+                                      to={`/super-admin/court/${rowData.court_id}`}
                                       className="btn accept-btn"
                                     >
                                       <i className="feather-eye"></i>

@@ -150,7 +150,7 @@ const LocationDetails = ({
                 />
               </div>
               <p className="text-danger">
-                {errors.location?.locationLink?.message as string}
+                {errors.location?.embedLink?.message as string}
               </p>
             </div>
           </div>

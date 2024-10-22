@@ -14,14 +14,15 @@ import { weekNames } from "../../utils/weekNames";
 import BulkBookingModal from "../../components/admin/bulk-booking-modal";
 import { getTimeSlotDuration } from "../../utils/getOperationalHours";
 import { HeartFilledIcon, HeartIcon } from "../../utils/icons";
+import { getCourtDuration } from "../../utils/getCourtDuration";
 
 const ViewCourt = () => {
   const routes = all_routes;
   const { courtId } = useParams();
   const [loading, setLoading] = useState<boolean>(false);
   const [images, setImages] = useState<any>([]);
-  const [courtData, setCourtData] = useState<CourtDataType>();
-  const [userWishlist, setUserWishlist] = useState<number[]>([]);
+  const [courtData, setCourtData] = useState<CourtsData>();
+  const [userWishlist, setUserWishlist] = useState<string[]>([]);
 
   const userId = useMemo(
     () =>
@@ -57,20 +58,15 @@ const ViewCourt = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}superAdmin/fetch/${courtId}`
         );
-        const fetchedCourtData = response.data.court;
+        const fetchedCourtData = response.data.courtData;
 
-        const fetchedImages = await Promise.all(
-          fetchedCourtData.images.map(async (imageUrl: string) => {
-            const imageBlob = await axios.get(imageUrl, {
-              responseType: "blob",
-            });
-            const objectUrl = URL.createObjectURL(imageBlob.data);
-            return { url: objectUrl };
-          })
-        );
-
-        setImages(fetchedImages);
-        setCourtData(fetchedCourtData);
+        if (fetchedCourtData) {
+          const fetchedImages = fetchedCourtData.images.map((image: string) => {
+            return `${process.env.REACT_APP_BACKEND_URL}court/uploads/${fetchedCourtData?.admin_id}/${fetchedCourtData?.court_id}/${image}`;
+          });
+          setImages(fetchedImages);
+          setCourtData(fetchedCourtData);
+        }
       } catch (error) {
         console.error("Error fetching court info", error);
       } finally {
@@ -84,7 +80,7 @@ const ViewCourt = () => {
   }, [courtId]); // Run this effect only when courtId changes
 
   const updateWishList = useCallback(
-    async (wishList: number[]) => {
+    async (wishList: string[]) => {
       if (!userId) return;
 
       try {
@@ -100,7 +96,7 @@ const ViewCourt = () => {
     [userId]
   );
 
-  const handleItemClick = (courtId: number) => {
+  const handleItemClick = (courtId: string) => {
     setUserWishlist((prevData) => {
       const updatedWishlist = prevData.includes(courtId)
         ? prevData.filter((id) => id !== courtId)
@@ -149,9 +145,8 @@ const ViewCourt = () => {
     slidesToScroll: 1,
   };
 
-  const d = new Date();
-  const currentDay = weekNames[d.getDay()];
-  const operationalHours = getTimeSlotDuration(currentDay, courtData);
+  const courtDurationData = getCourtDuration(courtData?.availability || []);
+  console.log(images);
 
   return (
     <div>
@@ -164,23 +159,20 @@ const ViewCourt = () => {
           <div className="bannergallery-section">
             <div className="main-gallery-slider owl-carousel owl-theme">
               <Slider {...imagesData} className="venue-space">
-                {images?.map(
-                  (img: { url: string }, idx: React.Key | null | undefined) => {
-                    console.log(img);
-                    return (
-                      <div key={idx} className="gallery-widget-item">
-                        <Link to="#" data-fancybox="gallery1">
-                          <img
-                            style={{ height: "400px", width: "798px" }}
-                            className="img-fluid"
-                            alt="Image"
-                            src={img.url}
-                          />
-                        </Link>
-                      </div>
-                    );
-                  }
-                )}
+                {images?.map((img: string, index: number) => {
+                  return (
+                    <div key={index} className="gallery-widget-item">
+                      <Link to="#" data-fancybox="gallery1">
+                        <img
+                          style={{ height: "400px", width: "798px" }}
+                          className="img-fluid"
+                          alt="Image"
+                          src={img}
+                        />
+                      </Link>
+                    </div>
+                  );
+                })}
               </Slider>
             </div>
             <div className="showphotos corner-radius-10">
@@ -196,9 +188,6 @@ const ViewCourt = () => {
                 <div className="col-12 col-sm-12 col-md-12 col-lg-6">
                   <h1 className="d-flex align-items-center justify-content-start">
                     {courtData?.court_name}
-                    <span className="d-flex justify-content-center align-items-center">
-                      <i className="fas fa-check-double" />
-                    </span>
                   </h1>
                   <ul className="d-sm-flex justify-content-start align-items-center">
                     <li>
@@ -268,10 +257,6 @@ const ViewCourt = () => {
                             alt="Icon"
                           />
                         </Link>
-                      </div>
-                      <div className="ms-2">
-                        <p>Venue Type</p>
-                        <h6 className="mb-0">Indoor</h6>
                       </div>
                     </li>
                     <li>
@@ -388,48 +373,12 @@ const ViewCourt = () => {
                       >
                         <div className="accordion-body">
                           <ul className="clearfix ">
-                            {courtData?.includes.badminton_racket && (
-                              <li>
+                            {courtData.includes.map((item, index) => (
+                              <li key={index}>
                                 <i className="feather-check-square" />
-                                Badminton Racket Unlimited
+                                {item}
                               </li>
-                            )}
-                            {courtData?.includes.bats && (
-                              <li>
-                                <i className="feather-check-square" />
-                                Bats
-                              </li>
-                            )}
-                            {courtData?.includes.hitting_machines && (
-                              <li>
-                                <i className="feather-check-square" />
-                                Hitting Machines
-                              </li>
-                            )}
-                            {courtData?.includes.multiple_courts && (
-                              <li>
-                                <i className="feather-check-square" />
-                                Multiple Courts
-                              </li>
-                            )}
-                            {courtData?.includes.spare_players && (
-                              <li>
-                                <i className="feather-check-square" />
-                                Spare Players
-                              </li>
-                            )}
-                            {courtData?.includes.instant_racket && (
-                              <li>
-                                <i className="feather-check-square" />
-                                Instant Racket
-                              </li>
-                            )}
-                            {courtData?.includes.green_turfs && (
-                              <li>
-                                <i className="feather-check-square" />
-                                Green Turfs
-                              </li>
-                            )}
+                            ))}
                           </ul>
                         </div>
                       </div>
@@ -457,11 +406,26 @@ const ViewCourt = () => {
                       >
                         <div className="accordion-body">
                           <div className="text show-more-height">
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: courtData?.rules_of_venue,
-                              }}
-                            />
+                            <div className="d-flex gap-1 align-items-center">
+                              <i className="feather-alert-octagon text-danger" />
+                              <p className="m-0">
+                                A maxium of{" "}
+                                {Number(courtData.pricing.guests) +
+                                  Number(
+                                    courtData.pricing.additional_guests
+                                  )}{" "}
+                                players are allowed per booking
+                              </p>
+                            </div>
+                            {courtData.rules_of_venue?.map((rule, index) => (
+                              <div
+                                key={index}
+                                className="d-flex gap-1 align-items-center"
+                              >
+                                <i className="feather-alert-octagon text-danger" />
+                                <p className="m-0">{rule}</p>
+                              </div>
+                            ))}
                           </div>
                         </div>
                       </div>
@@ -489,51 +453,15 @@ const ViewCourt = () => {
                       >
                         <div className="accordion-body">
                           <ul className="d-md-flex justify-content-between align-items-center">
-                            {courtData?.amenities.parking && (
-                              <li>
+                            {courtData?.amenities.map((item, index) => (
+                              <li key={index}>
                                 <i
                                   className="fa fa-check-circle"
                                   aria-hidden="true"
                                 />
-                                Parking
+                                {item}
                               </li>
-                            )}
-                            {courtData?.amenities.drinking_water && (
-                              <li>
-                                <i
-                                  className="fa fa-check-circle"
-                                  aria-hidden="true"
-                                />
-                                Drinking Water
-                              </li>
-                            )}
-                            {courtData?.amenities.first_aid && (
-                              <li>
-                                <i
-                                  className="fa fa-check-circle"
-                                  aria-hidden="true"
-                                />
-                                First Aid
-                              </li>
-                            )}
-                            {courtData?.amenities.change_room && (
-                              <li>
-                                <i
-                                  className="fa fa-check-circle"
-                                  aria-hidden="true"
-                                />
-                                Change Room
-                              </li>
-                            )}
-                            {courtData?.amenities.shower && (
-                              <li>
-                                <i
-                                  className="fa fa-check-circle"
-                                  aria-hidden="true"
-                                />
-                                Shower
-                              </li>
-                            )}
+                            ))}
                           </ul>
                         </div>
                       </div>
@@ -562,32 +490,27 @@ const ViewCourt = () => {
                         <div className="accordion-body">
                           <div className="owl-carousel gallery-slider owl-theme">
                             <Slider {...settings}>
-                              {images?.map(
-                                (
-                                  img: { url: string },
-                                  idx: React.Key | null | undefined
-                                ) => {
-                                  return (
-                                    <div
-                                      key={idx}
-                                      className="gallery-widget-item"
+                              {images?.map((img: string, index: number) => {
+                                return (
+                                  <div
+                                    key={index}
+                                    className="gallery-widget-item"
+                                  >
+                                    <Link
+                                      key={index}
+                                      className="corner-radius-10"
+                                      to="#"
+                                      data-fancybox="gallery3"
                                     >
-                                      <Link
-                                        key={idx}
-                                        className="corner-radius-10"
-                                        to="#"
-                                        data-fancybox="gallery3"
-                                      >
-                                        <img
-                                          className="img-fluid corner-radius-10"
-                                          alt="Image"
-                                          src={img.url}
-                                        />
-                                      </Link>
-                                    </div>
-                                  );
-                                }
-                              )}
+                                      <img
+                                        className="img-fluid corner-radius-10"
+                                        alt="Image"
+                                        src={img}
+                                      />
+                                    </Link>
+                                  </div>
+                                );
+                              })}
                             </Slider>
                           </div>
                         </div>
@@ -598,46 +521,7 @@ const ViewCourt = () => {
                 </div>
                 <aside className="col-12 col-sm-12 col-md-12 col-lg-4 theiaStickySidebar">
                   <div className="stickybar">
-                    {/* Booking Buttons */}
-                    {/* <div className="d-grid btn-block mt-3 px-4">
-                      <Link
-                        to={`${routes.courtDetailsLink}/${courtId}/booking`}
-                        className="btn btn-secondary d-inline-flex justify-content-center align-items-center"
-                      >
-                        <i className="feather-calendar" />
-                        Book Now
-                      </Link>
-                    </div> */}
                     <div className="white-bg book-court">
-                      {/* <h4 className="border-bottom">Book A Court</h4> */}
-                      {/* <ul className="d-sm-flex align-items-center justify-content-evenly">
-                        <li className="d-flex justify-content-between">
-                          <h3 className="d-inline-block primary-text">
-                            Starting From: ₹
-                            {decimalNumber(courtData?.pricing.starting_price)}
-                          </h3>
-                          <p>
-                            up to {decimalNumber(courtData?.pricing.max_guests)}{" "}
-                            guests
-                          </p>
-                        </li>
-                        <li>
-                          <h4 className="d-inline-block primary-text">
-                            ₹
-                            {decimalNumber(
-                              courtData?.pricing.price_of_additional_guests
-                            )}
-                          </h4>
-                          <p>
-                            each additional guest <br />
-                            up to{" "}
-                            {decimalNumber(
-                              courtData?.pricing.additional_guests
-                            )}{" "}
-                            guests max
-                          </p>
-                        </li>
-                      </ul> */}
                       <div className="d-grid btn-block mt-3">
                         <Link
                           to={`${routes.courtDetailsLink}/${courtId}/booking`}
@@ -646,77 +530,7 @@ const ViewCourt = () => {
                           <i className="feather-calendar" />
                           Book Now
                         </Link>
-                        {/* <div className="py-4 d-flex justify-content-between gap-2">
-                          <Link
-                            className="btn btn-primary d-inline-flex justify-content-center align-items-center w-50"
-                            to="#"
-                            onClick={() => handleShare()}
-                          >
-                            <i className="feather-share-2" />
-                            Share
-                          </Link>
-                          <Link
-                            data-bs-toggle="modal"
-                            data-bs-target="#bulkBookingModal"
-                            className="btn btn-primary d-inline-flex justify-content-center align-items-center w-100"
-                            to="#"
-                            style={{ fontSize: "12px" }}
-                          >
-                            Bulk/Corporate Enquiry
-                          </Link>
-                        </div> */}
                       </div>
-
-                      {/* Bulk Enquiry */}
-                      {/* <div className="py-2">
-                        <h4 className="border-bottom">
-                          Corporate / Bulk Enquiry
-                        </h4>
-                        <a
-                          data-bs-toggle="modal"
-                          data-bs-target="#bulkBookingModal"
-                          className="white-bg d-flex justify-content-start align-items-center availability pe-auto"
-                        >
-                          <div>
-                            <span className="icon-bg">
-                              <ImageWithBasePath
-                                className="img-fluid"
-                                alt="Icon"
-                                src="assets/img/icons/head-calendar.svg"
-                              />
-                            </span>
-                          </div>
-                          <div>
-                            <h4>Bulk / Corporate Booking</h4>
-                            <p className="mb-0">Contact to book in bulk.</p>
-                          </div>
-                        </a>
-                      </div> */}
-                      {/* Maps Link */}
-
-                      {/* <div>
-                        <h4 className="border-bottom py-4">Share Venue</h4>
-                        <ul
-                          style={{ backgroundColor: "white", padding: "0px" }}
-                          className="social-medias d-flex"
-                        >
-                          <li className="facebook">
-                            <Link to="#">
-                              <i className="fa-brands fa-facebook-f m-0" />
-                            </Link>
-                          </li>
-                          <li className="instagram">
-                            <Link to="#">
-                              <i className="fa-brands fa-instagram m-0" />
-                            </Link>
-                          </li>
-                          <li className="twitter">
-                            <Link to="#">
-                              <i className="fa-brands fa-twitter m-0" />
-                            </Link>
-                          </li>
-                        </ul>
-                      </div> */}
                     </div>
                     {/* Booking Buttons */}
                     {/* Enquiry */}
@@ -746,10 +560,12 @@ const ViewCourt = () => {
                     <div className="white-bg book-court py-2">
                       <h4 className="border-bottom">Operational Hours</h4>
                       <p
-                        style={{ fontWeight: "bold" }}
+                        style={{ fontWeight: "semibold" }}
                         className="d-inline-block"
                       >
-                        {operationalHours && operationalHours}
+                        {Number(courtDurationData?.duration) !== 0
+                          ? `${formatTime(courtDurationData?.start_time)} - ${formatTime(courtDurationData?.end_time)}`
+                          : "Not Operating today"}
                       </p>
                     </div>
                     {/* Operational Hours */}
@@ -769,11 +585,11 @@ const ViewCourt = () => {
                               className="google-maps"
                               style={{ height: "300px", overflow: "hidden" }}
                             >
-                              {courtData?.location?.embed_link ? (
+                              {courtData?.location?.embedded_link ? (
                                 <div
                                   style={{ height: "100%" }} // Ensure the inner div takes the full height
                                   dangerouslySetInnerHTML={{
-                                    __html: courtData.location.embed_link,
+                                    __html: courtData.location.embedded_link,
                                   }}
                                 ></div>
                               ) : (

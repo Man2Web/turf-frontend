@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,39 +9,10 @@ import Loader from "../../components/common/Loader";
 import AdminMenuComponent from "../../components/admin/adminMenu";
 import { Badge } from "primereact/badge";
 
-interface Location {
-  country: string;
-  city: string;
-  location_link: string;
-}
-
-interface Pricing {
-  starting_price: string;
-  max_guests: number;
-  additional_guests: number;
-  price_of_additional_guests: string;
-}
-
-interface Court {
-  court_name: string;
-  court_type: string;
-  location: Location;
-  pricing: Pricing;
-  venue_overview: string;
-  status: string;
-  court_id: string;
-  approved: boolean;
-  images: string[];
-}
-
-interface CourtResponse {
-  courts: Court[];
-}
-
 const AllCourt = () => {
   const routes = all_routes;
   const navigate = useNavigate();
-  const [courtsData, setCourtsData] = useState<Court[]>([]);
+  const [courtsData, setCourtsData] = useState<CourtsData[]>([]);
   const [searchInput, setSearchInput] = useState("");
   const [loading, setLoading] = useState(true);
   const adminId = localStorage.getItem("adminId");
@@ -50,10 +20,10 @@ const AllCourt = () => {
   useEffect(() => {
     const apiCall = async () => {
       try {
-        const response = await axios.get<CourtResponse>(
+        const response = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}admin/court/fetch/${adminId}`
         );
-        setCourtsData(response.data.courts);
+        setCourtsData(response.data.courtsData);
       } catch (error) {
         console.error("Error fetching courts data:", error);
         toast.error("Failed to load courts data.");
@@ -77,7 +47,7 @@ const AllCourt = () => {
             court_name,
             location?.city,
             pricing?.starting_price,
-            pricing?.max_guests,
+            pricing?.guests,
             pricing?.additional_guests,
             venue_overview,
             status,
@@ -89,7 +59,7 @@ const AllCourt = () => {
     : [];
 
   // Helper functions
-  const renderCourtName = ({ images, court_name, court_id }: Court) => (
+  const renderCourtName = ({ images, court_name, court_id }: CourtsData) => (
     <h2 className="table-avatar">
       <Link to="#" className="avatar avatar-sm flex-shrink-0">
         {/* <ImageWithBasePath
@@ -110,7 +80,7 @@ const AllCourt = () => {
     </h2>
   );
 
-  const renderActions = ({ court_id }: Court) => (
+  const renderActions = ({ court_id }: CourtsData) => (
     <div className="dropdown dropdown-action table-drop-action">
       <Link
         to="#"
@@ -143,7 +113,7 @@ const AllCourt = () => {
     </div>
   );
 
-  const renderStatus = ({ approved }: Court) => {
+  const renderStatus = ({ approved }: CourtsData) => {
     console.log(approved);
     return (
       <div className="interset-btn">
@@ -156,7 +126,9 @@ const AllCourt = () => {
     );
   };
 
-  const renderCourtType = ({ court_type }: Court) => <span>{court_type}</span>;
+  const renderCourtType = ({ court_type }: CourtsData) => (
+    <span>{court_type}</span>
+  );
 
   const columns = [
     {
@@ -173,7 +145,7 @@ const AllCourt = () => {
     },
     { field: "location.city", header: "City", sortable: true },
     { field: "pricing.starting_price", header: "Amount", sortable: true },
-    { field: "pricing.max_guests", header: "Max Guest", sortable: true },
+    { field: "pricing.guests", header: "Max Guest", sortable: true },
     {
       field: "pricing.additional_guests",
       header: "Additional Guests",

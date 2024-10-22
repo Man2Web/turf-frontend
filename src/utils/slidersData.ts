@@ -32,42 +32,50 @@ export const featuredVenuesSlider = {
   ],
 };
 
-export const userBookingsSliderOptions = {
-  infinite: true,
-  arrows: true,
-  speed: 500,
-  slidesToShow: 4,
-  slidesToScroll: 2, // Scroll one slide at a time for smoother experience
-  responsive: [
-    {
-      breakpoint: 1200, // For larger screens
-      settings: {
-        slidesToShow: 3,
-        slidesToScroll: 2,
-        infinite: true,
-      },
+export const getUserBookingSliderData = (upcomingBookingsCount: number) => {
+  console.log(upcomingBookingsCount);
+  return {
+    settings: {
+      adaptiveHeight: false,
+      slidesToShow: upcomingBookingsCount > 3 ? 3 : upcomingBookingsCount, // Default: up to 3 slides
+      slidesToScroll: upcomingBookingsCount > 2 ? 2 : upcomingBookingsCount,
+      infinite: false,
     },
-    {
-      breakpoint: 992, // For medium screens
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 2,
+    responsive: [
+      {
+        breakpoint: 3000, // Screens between 992px and 1200px will show 2 slides
+        settings: {
+          slidesToShow: upcomingBookingsCount >= 3 ? 3 : upcomingBookingsCount,
+          slidesToScroll:
+            upcomingBookingsCount >= 2 ? 2 : upcomingBookingsCount,
+          infinite: false,
+        },
       },
-    },
-    {
-      breakpoint: 768, // For tablets
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1,
+      {
+        breakpoint: 992, // For medium screens
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          infinite: false,
+        },
       },
-    },
-    {
-      breakpoint: 480, // For small mobile screens
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        arrows: false, // Disable arrows on smaller screens
+      {
+        breakpoint: 768, // For tablets
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: false,
+        },
       },
-    },
-  ],
+      {
+        breakpoint: 480, // For small mobile screens
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: false,
+          arrows: false, // Disable arrows on smaller screens
+        },
+      },
+    ],
+  };
 };

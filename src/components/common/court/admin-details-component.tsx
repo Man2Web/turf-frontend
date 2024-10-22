@@ -12,7 +12,7 @@ const AdminDetailsComponent = ({
   setErrors,
 }: {
   setUserDetails: (data: AdminDetailsFormData) => void;
-  courtData: CourtDataType;
+  courtData: CourtsData;
   setIsValid: any;
   setErrors: any;
 }) => {
@@ -26,7 +26,7 @@ const AdminDetailsComponent = ({
   } = useForm<AdminDetailsFormData>({
     mode: "onTouched",
     defaultValues: {
-      numberOfGuests: courtData.venueprice.max_guests,
+      numberOfGuests: Number(courtData.pricing.guests),
       additionalNumberOfGuests: 0,
     },
   }); // Validation on field touch
@@ -197,8 +197,8 @@ const AdminDetailsComponent = ({
                           message: "At least 1 guest is required",
                         },
                         max: {
-                          value: courtData.venueprice.max_guests,
-                          message: `Max guests of ${courtData.venueprice.max_guests} allowed`,
+                          value: courtData.pricing.guests,
+                          message: `Max guests of ${courtData.pricing.guests} allowed`,
                         },
                       })}
                       name="qty"
@@ -257,8 +257,8 @@ const AdminDetailsComponent = ({
                           message: "",
                         },
                         max: {
-                          value: courtData.venueprice.additional_guests,
-                          message: `Max additional guests of ${courtData.venueprice.additional_guests} allowed`,
+                          value: courtData.pricing.additional_guests,
+                          message: `Max additional guests of ${courtData.pricing.additional_guests} allowed`,
                         },
                       })}
                       name="qty"

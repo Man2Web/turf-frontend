@@ -1,86 +1,64 @@
-interface Booking {
+interface SuccessBookingData {
   id: string;
   court_id: string;
-  booking_date: string; // ISO 8601 date string
-  booking_time: string[]; // HH:mm:ss format
+  booking_date: string; // Date string in ISO format
   user_id: string;
   booking_detail_id: string;
   admin_id: string;
   payment_mode: boolean;
-  amount_paid: string; // You may want to use number if this is always numeric
+  amount_paid: string; // Assuming it's a string due to quotes, could also be number
   transaction_id: string;
-  booked_on: string; // ISO 8601 date string
-  duration: string; // You may want to use number if this is always numeric
-  pay_required: string; // You may want to use number if this is always numeric
-}
-
-interface CourtDetails {
-  id: number;
-  user_id: number;
-  court_name: string;
-  court_type: string;
-  venue_overview: string; // HTML string
-  rules_of_venue: string; // HTML string
-  featured: boolean;
-  phone_number: string;
-  email: string;
-  approved: boolean;
-  court_id: string;
-}
-
-interface SuccessBookingDetails {
-  id: string;
-  email: string;
-  phone_number: string;
-  location: string | null; // Assuming location can be null
-  fname: string;
-  lname: string;
-  city: string | null; // Assuming city can be null
-  country: string | null; // Assuming country can be null
-  pincode: string | null; // Assuming pincode can be null
-  guests: string; // You may want to use number if this is always numeric
-  add_guests: string; // You may want to use number if this is always numeric
-  payment_type: string | null; // Assuming payment_type can be null
-  pg_tid: string | null; // Assuming pg_tid can be null
-  card_type: string | null; // Assuming card_type can be null
-  bank_id: string | null; // Assuming bank_id can be null
-  state: string | null; // Assuming state can be null
-}
-
-interface ImagesData {
-  id: string;
-  court_id: string;
-  image_url: string;
+  booked_on: string; // Date string in ISO format
+  duration: string;
+  pay_required: string;
+  booking_time: string[]; // Array of time strings
+  court_info: CourtInfo;
+  booking_info: BookingInfo;
+  court_details: CourtDetails;
+  review_details: ReviewDetails;
+  total_count: string; // Assuming it's a string due to quotes, could also be number
 }
 
 interface ReviewDetails {
-  id: number;
-  court_id: number;
-  user_id: number;
-  title: string;
-  description: string;
-  rating: number;
-  created_at: string; // or Date if you want to parse it into a Date object
-  updated_at: string; // or Date if parsed
-  status: boolean;
-  booking_details_id: number;
-  transaction_id: string;
+  status: boolean | null;
 }
 
-interface LocationDetails {
-  id: number;
-  country: string;
+interface CourtInfo {
+  court_id: number;
+  admin_id: number;
+  court_name: string;
+  court_type: string;
+  featured: boolean;
+}
+
+interface BookingInfo {
+  email: string;
+  phone_number: string;
+  location: string | null;
+  fname: string;
+  lname: string;
+  city: string | null;
+  pincode: string | null;
+  guests: number;
+  add_guests: number;
+  payment_type: string | null;
+  pg_type: string | null;
+  bank_id: string | null;
+  state: string | null;
+  pg_tid: string | null;
+  card_type: string | null;
+  country: string | null;
+}
+
+interface CourtDetails {
   city: string;
-  location_link: string; // URL
-  court_id: number;
-  embed_link: string; // HTML string for embedding a map
-}
-
-interface SuccessBookingData {
-  booking: Booking;
-  courtDetails: CourtDetails;
-  bookingDetails: SuccessBookingDetails;
-  locationDetails: LocationDetails;
-  imagesData?: ImagesData;
-  reviewDetails?: ReviewDetails;
+  location_link: string;
+  price: number;
+  add_price: number;
+  guests: number;
+  add_guests: number;
+  email: string;
+  phone_number: number;
+  advance_pay: number;
+  images: string[];
 }

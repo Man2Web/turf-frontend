@@ -63,13 +63,13 @@ const ListingList = () => {
       if (sortOption === "Price Low - High") {
         sortedData.sort(
           (a: CourtsData, b: CourtsData) =>
-            a.courtPriceData.starting_price - b.courtPriceData.starting_price
+            Number(a.pricing.starting_price) - Number(b.pricing.starting_price)
         );
         // (sortedData);
       } else if (sortOption === "Price High - Low") {
         sortedData.sort(
           (a: CourtsData, b: CourtsData) =>
-            b.courtPriceData.starting_price - a.courtPriceData.starting_price
+            Number(b.pricing.starting_price) - Number(a.pricing.starting_price)
         );
       } else if (sortOption === "Featured") {
         sortedData.sort((a: CourtsData, b: CourtsData) =>
@@ -81,8 +81,6 @@ const ListingList = () => {
   }, [selectedSort]);
 
   const SubmitHandler = async () => {
-    // const userLocationInContext = localStorage.getItem("userLocationInContext");
-    // const { userLocationInContext } = data;
     userLocationInContext && setUserLocationInContext(userLocationInContext);
 
     try {
@@ -98,13 +96,12 @@ const ListingList = () => {
           },
         }
       );
-      console.log(response.data);
       setCourtsData((prevData) => {
-        const combinedData = [...prevData, ...response.data.courtsData];
+        const combinedData = [...prevData, ...response.data.updatedCourtsData];
 
         // Create a map to store courts by their unique `id`
         const courtsMap = new Map();
-        combinedData.forEach((court) => courtsMap.set(court.id, court));
+        combinedData.forEach((court) => courtsMap.set(court.court_id, court));
 
         // Return only unique courts based on their `id`
         return Array.from(courtsMap.values());
@@ -114,11 +111,10 @@ const ListingList = () => {
       setLastPage(response.data.pagination.totalCount / limit);
 
       // Filter the courtsData to remove duplicates based on court.id
-      const uniqueCourtsData = response.data.courtsData.filter(
+      const uniqueCourtsData = response.data.updatedCourtsData.filter(
         (court: any, index: number, self: any[]) =>
           index === self.findIndex((c) => c.id === court.id) // Keep only the first occurrence of each court.id
       );
-      console.log("UNQC:", uniqueCourtsData);
       setuniqueCourtsData(uniqueCourtsData);
     } catch (error) {
       console.error(error);
@@ -127,14 +123,14 @@ const ListingList = () => {
       setPageLoading(false);
     }
   };
-  // console.log("CourtsData:", courtsData);
-  // console.log("uniQC:", uniqueCourtsData);
+
   useEffect(() => {
     const fetchImages = async () => {
-      const imagePromises = courtsData.map(async (court: any) => {
+      const imagePromises = courtsData.map(async (court: CourtsData) => {
         try {
-          const image = court.courtImagesData[0];
-          const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${court.user_id}/${court.id}/${image.image_url}`;
+          const image = court.images[0];
+          console.log(image);
+          const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${court.admin_id}/${court.court_id}/${image}`;
           const getImage = await axios.get(imageUrl, {
             responseType: "arraybuffer",
           });
@@ -158,8 +154,6 @@ const ListingList = () => {
 
     fetchImages();
   }, [courtsData]);
-
-  // console.log("images:", images);
 
   const updateWishList = async (wishList: number[]) => {
     if (userId) {

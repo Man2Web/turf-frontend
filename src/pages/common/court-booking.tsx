@@ -8,12 +8,13 @@ import CourtTimeSlotsComponent from "../../components/common/court/court-timeslo
 import CourtCheckout from "../../components/common/court/court-checkout";
 import { UserDetailsFormData } from "../../utils/types/userDetailsBookingForm";
 import BookingHeader from "../../components/common/booking-header";
+import { getCourtDuration } from "../../utils/getCourtDuration";
 
 const CourtBooking = () => {
   const { courtId } = useParams();
   const [loading, setLoading] = useState(false);
-  const [courtData, setCourtData] = useState<CourtDataType>();
-  const [images, setImages] = useState<any>();
+  const [courtData, setCourtData] = useState<CourtsData>();
+  // const [images, setImages] = useState<any>();
   const [progress, setProgress] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedSlots, setSetselectedSlots] = useState<any>([]);
@@ -27,22 +28,7 @@ const CourtBooking = () => {
         const response = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}court/fetch/${courtId}`
         );
-        const fetchedCourtData = response.data.court;
-
-        // const fetchedImages = [];
-        const fetchedImages = await Promise.all(
-          fetchedCourtData.images.map(async (image: { image_url: string }) => {
-            const imageBlob = await axios.get(
-              `${process.env.REACT_APP_BACKEND_URL}court/uploads/${fetchedCourtData?.user_id}/${fetchedCourtData?.id}/${image.image_url}`,
-              {
-                responseType: "blob",
-              }
-            );
-            const objectUrl = URL.createObjectURL(imageBlob.data);
-            return { url: objectUrl };
-          })
-        );
-        setImages(fetchedImages);
+        const fetchedCourtData = response.data.courtData;
         setCourtData(fetchedCourtData);
       };
       getCourtInfo();
@@ -54,19 +40,11 @@ const CourtBooking = () => {
   }, []);
 
   useEffect(() => {
-    if (courtData && courtData.time_Slots && selectedDate) {
-      const dayOfWeek = selectedDate
-        .toLocaleString("en-US", { weekday: "long" })
-        .toLowerCase();
-
-      // Find the time slot for the selected day
-      const matchedSlot = courtData.time_Slots.find(
-        (slot: { day_of_week: string }) =>
-          slot.day_of_week.toLowerCase() === dayOfWeek
-      );
+    if (courtData && courtData.availability && selectedDate) {
+      const matchedSlot = getCourtDuration(courtData.availability);
 
       if (matchedSlot) {
-        setCourtDuration(matchedSlot.duration.replace(" Hrs", "") || "N/A");
+        setCourtDuration(matchedSlot.duration || "N/A");
       } else {
         setCourtDuration("N/A");
       }
@@ -85,7 +63,6 @@ const CourtBooking = () => {
             setProgress={setProgress}
             courtDuration={courtDuration}
             courtData={courtData}
-            courtImage={images[0].url}
             selectedSlots={selectedSlots}
             selectedDate={selectedDate}
             userDetails={userDetails}
@@ -98,7 +75,6 @@ const CourtBooking = () => {
                   progress={progress}
                   setProgress={setProgress}
                   courtData={courtData}
-                  courtImage={images[0].url}
                   selectedDate={selectedDate}
                   setSelectedDate={setSelectedDate}
                   selectedSlots={selectedSlots}
@@ -110,7 +86,6 @@ const CourtBooking = () => {
                 <>
                   <CourtCheckout
                     courtData={courtData}
-                    courtImage={images[0].url}
                     userDetails={userDetails}
                     selectedDate={selectedDate}
                     selectedSlots={selectedSlots}

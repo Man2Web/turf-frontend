@@ -6,6 +6,7 @@ import { HeartFilledIcon, HeartIcon, ThreeDots } from "../../../utils/icons";
 import { getIconBySport } from "./list-card";
 import { formatTime } from "../../../utils/formatTime";
 import { handleWishListUpdate } from "../../../utils/handleWishlistUpdate";
+import { getCourtDuration } from "../../../utils/getCourtDuration";
 
 const GridCard = ({
   showFilters,
@@ -25,6 +26,7 @@ const GridCard = ({
   updateWishList: any;
 }) => {
   const routes = all_routes;
+  const courtDurationData = getCourtDuration(court.availability);
   return (
     <div
       key={idx}
@@ -46,7 +48,7 @@ const GridCard = ({
             <div className="fav-item-venues">
               {court.featured && <span className="tag tag-blue">Featured</span>}
               <h5 className="tag tag-primary">
-                ₹{decimalNumber(court.courtPriceData.starting_price)}
+                ₹{decimalNumber(court.pricing.starting_price)}
               </h5>
             </div>
           </div>
@@ -90,15 +92,15 @@ const GridCard = ({
                   </span>
                   <span>
                     <i className="feather-clock" />
-                    {`${court.courtAvailabilityData.duration}`}
+                    {`${courtDurationData && courtDurationData.duration} Hrs`}
                   </span>
                   <span>
                     <i className="feather-sun" />
-                    {`${formatTime(court.courtAvailabilityData.start_time)} - ${formatTime(court.courtAvailabilityData.end_time)}`}
+                    {`${formatTime(courtDurationData && courtDurationData.start_time)} - ${formatTime(courtDurationData && courtDurationData.end_time)}`}
                   </span>
                   <span className="text-capitalize">
                     <i className="feather-map-pin" />
-                    {`${court.locationData.city}, ${court.locationData.country}`}
+                    {`${court.location.city}, ${court.location.country}`}
                   </span>
                 </li>
               </ul>

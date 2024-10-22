@@ -102,25 +102,17 @@ export const FilterForm = ({
 
       console.log(response.data);
 
-      setCourtsData(response.data.courtsData);
+      setCourtsData(response.data.updatedCourtsData);
 
       // Fetch court images
-      const imagePromises = response.data.courtsData.map(
-        async (court: {
-          courtImagesData: any;
-          user_id: any;
-          id: any;
-          court_name: any;
-        }) => {
+      const imagePromises = response.data.updatedCourtsData.map(
+        async (court: CourtsData) => {
           try {
-            const image = court.courtImagesData[0];
-            const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${court.user_id}/${court.id}/${image.image_url}`;
-            console.log(imageUrl);
-
+            const image = court.images[0];
+            const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${court.admin_id}/${court.court_id}/${image}`;
             const getImage = await axios.get(imageUrl, {
               responseType: "arraybuffer", // Expect binary data
             });
-
             const blob = new Blob([getImage.data], { type: "image/webp" });
             const imgSrc = URL.createObjectURL(blob);
             return imgSrc; // Return the image source URL
@@ -144,6 +136,7 @@ export const FilterForm = ({
       setFiltersLoading(false);
     }
   };
+
   return (
     <div className="col-lg-4 theiaStickySidebar">
       <div className="stickybar">
@@ -394,80 +387,6 @@ export const FilterForm = ({
               </div>
             </div>
             {/* /Guests */}
-            {/* Amenities */}
-            {/* <div className="accordion" id="accordionMain8">
-              <div className="card-header-new" id="headingEight">
-                <h5 className="filter-title">
-                  <Link
-                    to="#"
-                    className="w-100 collapsed"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#collapseEight"
-                    aria-expanded="true"
-                    aria-controls="collapseEight"
-                  >
-                    Amenities
-                    <span className="accordion-arrow">
-                      <i className="fa-solid fa-chevron-down" />
-                    </span>
-                  </Link>
-                </h5>
-              </div>
-              <div
-                id="collapseEight"
-                className="collapse"
-                aria-labelledby="headingEight"
-                data-bs-parent="#accordionExample8"
-              >
-                <div className="card-body-chat">
-                  <div id="checkBoxes8">
-                    <div className="selectBox-cont">
-                      <label className="custom_check w-100">
-                        <input
-                          type="checkbox"
-                          {...register("amenities.parking")}
-                        />
-                        <span className="checkmark" />
-                        Parking
-                      </label>
-                      <label className="custom_check w-100">
-                        <input
-                          type="checkbox"
-                          {...register("amenities.drinkingWater")}
-                        />
-                        <span className="checkmark" />
-                        Drinking Water
-                      </label>
-                      <label className="custom_check w-100">
-                        <input
-                          type="checkbox"
-                          {...register("amenities.firstAid")}
-                        />
-                        <span className="checkmark" />
-                        First Aid
-                      </label>
-                      <label className="custom_check w-100">
-                        <input
-                          type="checkbox"
-                          {...register("amenities.changeRoom")}
-                        />
-                        <span className="checkmark" />
-                        Change Room
-                      </label>
-                      <label className="custom_check w-100">
-                        <input
-                          type="checkbox"
-                          {...register("amenities.shower")}
-                        />
-                        <span className="checkmark" />
-                        Shower
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
-            {/* /Amenities */}
             <button type="submit" className="search-btn btn w-100 btn-primary">
               <span>
                 <i className="feather-search me-2" />

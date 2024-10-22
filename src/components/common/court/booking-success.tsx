@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
 import { Link, useParams } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
 import { saveAs } from "file-saver";
@@ -85,7 +84,7 @@ const BookingSuccess = () => {
                   <span
                     className="badge ms-2"
                     style={{ backgroundColor: "grey", color: "white" }}
-                  >{`ID: ${bookingData.booking.transaction_id}`}</span>
+                  >{`ID: ${bookingData.transaction_id}`}</span>
                   <span className="badge bg-success ms-2">Paid</span>
                 </h4>
               </div>
@@ -104,11 +103,11 @@ const BookingSuccess = () => {
                       <ul className="appointmentset">
                         <li>
                           <h6>Court ID</h6>
-                          <p>{bookingData?.courtDetails.id}</p>
+                          <p>{bookingData?.court_info.court_id}</p>
                         </li>
                         <li>
                           <h6>Court Name</h6>
-                          <p>{bookingData?.courtDetails.court_name}</p>
+                          <p>{bookingData?.court_info.court_name}</p>
                         </li>
                       </ul>
                     </div>
@@ -118,18 +117,18 @@ const BookingSuccess = () => {
                           <h6>Court Email</h6>
                           <a
                             className="text-success"
-                            href={`mailto: ${bookingData.courtDetails.email}`}
+                            href={`mailto: ${bookingData.court_details.email}`}
                           >
-                            {`${bookingData.courtDetails.email}`}
+                            {`${bookingData.court_details.email}`}
                           </a>
                         </li>
                         <li>
                           <h6>Court Number</h6>
                           <a
                             className="text-success"
-                            href={`tel:+91${bookingData.courtDetails.phone_number}`}
+                            href={`tel:+91${bookingData.court_details.phone_number}`}
                           >
-                            {`+91${bookingData.courtDetails.phone_number}`}
+                            {`+91${bookingData.court_details.phone_number}`}
                           </a>
                         </li>
                         <li>
@@ -138,7 +137,7 @@ const BookingSuccess = () => {
                             className="text-success"
                             target="_blank"
                             rel="noreferrer"
-                            href={bookingData?.locationDetails?.location_link}
+                            href={bookingData?.court_details?.location_link}
                           >
                             Open in Maps
                           </a>
@@ -155,21 +154,21 @@ const BookingSuccess = () => {
                       <ul className="appointmentset">
                         <li>
                           <h6>Player Name</h6>
-                          <p>{`${bookingData.bookingDetails.fname} ${bookingData.bookingDetails.lname}`}</p>
+                          <p>{`${bookingData.booking_info.fname} ${bookingData.booking_info.lname}`}</p>
                         </li>
-                        {bookingData.bookingDetails.phone_number && (
+                        {bookingData.booking_info.phone_number && (
                           <li>
                             <h6>Phone Number</h6>
-                            <p>{bookingData.bookingDetails.phone_number}</p>
+                            <p>{bookingData.booking_info.phone_number}</p>
                           </li>
                         )}
                         <li>
                           <h6>Guests</h6>
-                          <p>{bookingData.bookingDetails.guests}</p>
+                          <p>{bookingData.booking_info.guests}</p>
                         </li>
                         <li>
                           <h6>Additional Guests</h6>
-                          <p>{bookingData.bookingDetails.add_guests}</p>
+                          <p>{bookingData.booking_info.add_guests}</p>
                         </li>
                       </ul>
                     </div>
@@ -179,7 +178,7 @@ const BookingSuccess = () => {
                     <div className="card-header">
                       <h4>Booking Information</h4>
                     </div>
-                    {bookingData?.booking?.booking_time?.map((time, index) => (
+                    {bookingData?.booking_time?.map((time, index) => (
                       <div
                         key={index}
                         className="appointment-info appoin-border double-row"
@@ -187,9 +186,7 @@ const BookingSuccess = () => {
                         <ul className="appointmentset">
                           <li>
                             <h6>Booking Date</h6>
-                            <p>
-                              {dateFormat(bookingData.booking.booking_date)}
-                            </p>
+                            <p>{dateFormat(bookingData.booking_date)}</p>
                           </li>
                           <li>
                             <h6>Booking Start Time</h6>
@@ -197,18 +194,11 @@ const BookingSuccess = () => {
                           </li>
                           <li>
                             <h6>Booking End Time</h6>
-                            <p>
-                              {formatEndTime(
-                                time,
-                                bookingData.booking.duration
-                              )}
-                            </p>
+                            <p>{formatEndTime(time, bookingData.duration)}</p>
                           </li>
                           <li>
                             <h6>Booked On</h6>
-                            <p>
-                              {dateFormat(bookingData.booking.booking_date)}
-                            </p>
+                            <p>{dateFormat(bookingData.booked_on)}</p>
                           </li>
                         </ul>
                       </div>
@@ -226,27 +216,21 @@ const BookingSuccess = () => {
                           <p className="color-green">
                             ₹
                             {decimalNumber(
-                              Number(bookingData?.booking.amount_paid) +
-                                Number(bookingData?.booking.pay_required)
+                              Number(bookingData?.amount_paid) +
+                                Number(bookingData?.pay_required)
                             )}
                           </p>
                         </li>
                         <li>
                           <h6>Total Amount Paid</h6>
                           <p className="color-green">
-                            ₹
-                            {decimalNumber(
-                              Number(bookingData?.booking.amount_paid)
-                            )}
+                            ₹{decimalNumber(Number(bookingData?.amount_paid))}
                           </p>
                         </li>
                         <li>
                           <h6>Need to pay at Venue</h6>
                           <p className="color-green">
-                            ₹
-                            {decimalNumber(
-                              Number(bookingData?.booking.pay_required)
-                            )}
+                            ₹{decimalNumber(Number(bookingData?.pay_required))}
                           </p>
                         </li>
                       </ul>
@@ -255,12 +239,12 @@ const BookingSuccess = () => {
                       <ul className="appointmentset">
                         <li>
                           <h6>Transaction ID</h6>
-                          <p>{bookingData?.booking.transaction_id}</p>
+                          <p>{bookingData?.transaction_id}</p>
                         </li>
-                        {bookingData?.bookingDetails.pg_tid && (
+                        {bookingData?.booking_info.pg_tid && (
                           <li>
                             <h6>PG Transaction ID</h6>
-                            <p>{bookingData?.bookingDetails.pg_tid}</p>
+                            <p>{bookingData?.booking_info.pg_tid}</p>
                           </li>
                         )}
                       </ul>
@@ -269,36 +253,36 @@ const BookingSuccess = () => {
                       <ul className="appointmentsetview">
                         <li>
                           <h6>Payment type</h6>
-                          {bookingData?.booking.payment_mode ? (
+                          {bookingData?.payment_mode ? (
                             <p>Online</p>
                           ) : (
                             <p>Offline</p>
                           )}
                         </li>
-                        {!bookingData?.booking.payment_mode && (
+                        {!bookingData?.payment_mode && (
                           <li>
                             <h6>Payment Mode</h6>
                             <p>Cash</p>
                           </li>
                         )}
-                        {bookingData?.bookingDetails.payment_type && (
+                        {bookingData?.booking_info.payment_type && (
                           <li>
                             <h6>Payment Type</h6>
-                            <p>{bookingData?.bookingDetails?.payment_type}</p>
+                            <p>{bookingData?.booking_info?.payment_type}</p>
                           </li>
                         )}
-                        {bookingData?.bookingDetails.card_type && (
+                        {bookingData?.booking_info.card_type && (
                           <li>
                             <h6>Card Type</h6>
                             <p>
-                              {bookingData?.bookingDetails?.card_type.toLocaleLowerCase()}
+                              {bookingData?.booking_info?.card_type.toLocaleLowerCase()}
                             </p>
                           </li>
                         )}
-                        {bookingData?.bookingDetails.bank_id && (
+                        {bookingData?.booking_info.bank_id && (
                           <li>
                             <h6>Bank ID</h6>
-                            <p>{bookingData?.bookingDetails?.bank_id}</p>
+                            <p>{bookingData?.booking_info?.bank_id}</p>
                           </li>
                         )}
                       </ul>
@@ -310,7 +294,7 @@ const BookingSuccess = () => {
               <div className="d-flex justify-content-center my-4 gap-2">
                 <button
                   onClick={() => {
-                    getPdf(bookingData.booking.transaction_id);
+                    getPdf(bookingData.transaction_id);
                   }}
                   className="btn btn-primary btn-icon"
                 >

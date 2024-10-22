@@ -10,10 +10,10 @@
   position: sticky;
 }
 
-.team-slider .slick-slider div.slick-slide>div,
-.testimonial-slide .slick-slider div.slick-slide>div,
-.gallery-slider .slick-slider div.slick-slide>div,
-.featured-slider-group .slick-slider div.slick-slide>div {
+.team-slider .slick-slider div.slick-slide > div,
+.testimonial-slide .slick-slider div.slick-slide > div,
+.gallery-slider .slick-slider div.slick-slide > div,
+.featured-slider-group .slick-slider div.slick-slide > div {
   margin-right: 20px;
 }
 
@@ -104,11 +104,17 @@ button.slick-prev:before {
   box-shadow: none;
 }
 
-.p-dropdown-panel .p-dropdown-items-wrapper .p-dropdown-items .p-dropdown-item.p-highlight {
+.p-dropdown-panel
+  .p-dropdown-items-wrapper
+  .p-dropdown-items
+  .p-dropdown-item.p-highlight {
   background: #ddd;
 }
 
-.p-dropdown-panel .p-dropdown-items-wrapper .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
+.p-dropdown-panel
+  .p-dropdown-items-wrapper
+  .p-dropdown-items
+  .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
   background-color: #192335;
   color: #fff;
 }
@@ -125,7 +131,9 @@ button.slick-prev:before {
   position: absolute;
 }
 
-div.p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled).p-focus {
+div.p-dropdown-panel
+  .p-dropdown-items
+  .p-dropdown-item:not(.p-highlight):not(.p-disabled).p-focus {
   background: none;
 }
 
@@ -155,7 +163,8 @@ div.p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p
   position: absolute;
 }
 
-.table.datatable div.p-dropdown.p-component.p-inputwrapper.p-inputwrapper-filled {
+.table.datatable
+  div.p-dropdown.p-component.p-inputwrapper.p-inputwrapper-filled {
   align-items: center;
   border: 1px solid #eaedf0;
   color: #1b2559;
@@ -237,7 +246,6 @@ div.select-bg.p-dropdown.p-component.p-inputwrapper.p-inputwrapper-filled {
   width: 12px;
 }
 
-
 .dropdown-designs .datepic {
   padding: 20px;
   border-radius: 10px;
@@ -291,7 +299,8 @@ div.select-bg.p-dropdown.p-component.p-inputwrapper.p-inputwrapper-filled {
 }
 
 .list-sidebar-select .p-dropdown-label.p-inputtext.p-placeholder,
-.list-sidebar-select.p-dropdown.p-component.p-inputwrapper .p-dropdown-label.p-inputtext {
+.list-sidebar-select.p-dropdown.p-component.p-inputwrapper
+  .p-dropdown-label.p-inputtext {
   padding-left: 20px;
 }
 
@@ -343,17 +352,20 @@ table.p-datepicker-calendar tr td {
   display: none;
 }
 
-div.p-datepicker table td.p-datepicker-today>span {
-  background: linear-gradient(93.86deg, #006177 -2.6%, #269089 67.39%, #7ABC82 110.84%);
+div.p-datepicker table td.p-datepicker-today > span {
+  background: linear-gradient(
+    93.86deg,
+    #006177 -2.6%,
+    #269089 67.39%,
+    #7abc82 110.84%
+  );
   color: #fff;
   border: none;
 }
 
-div.p-datepicker table td.p-datepicker-today>span:focus {
+div.p-datepicker table td.p-datepicker-today > span:focus {
   box-shadow: none;
 }
-
-
 
 .venue-coach-details .bannergallery-section .slick-slider {
   .slick-arrow.slick-prev {
@@ -369,7 +381,12 @@ div.p-datepicker table td.p-datepicker-today>span:focus {
   // }
 }
 
-.venue-coach-details .bannergallery-section .slick-slider .slick-list .slick-slide div {
+.venue-coach-details
+  .bannergallery-section
+  .slick-slider
+  .slick-list
+  .slick-slide
+  div {
   margin: 0 3px !important;
 }
 
@@ -393,7 +410,12 @@ div.p-datepicker table td.p-datepicker-today>span:focus {
   width: 100%;
 }
 
-.home-banner .section-search .search-box .search-input .form-group .select.custom-select-list.p-dropdown.p-component.p-inputwrapper {
+.home-banner
+  .section-search
+  .search-box
+  .search-input
+  .form-group
+  .select.custom-select-list.p-dropdown.p-component.p-inputwrapper {
   height: 31px;
   line-height: 43px;
   font-size: 15px;
@@ -412,7 +434,7 @@ div.p-datepicker table td.p-datepicker-today>span:focus {
 }
 
 .table-responsive.table-datatble .p-dropdown span.p-dropdown-label.p-inputtext {
-  font-size: .875rem;
+  font-size: 0.875rem;
 }
 
 .select.footer-select.p-dropdown {
@@ -436,7 +458,8 @@ div.p-datepicker table td.p-datepicker-today>span:focus {
   z-index: 1000;
 }
 
-.sorting-select .select.custom-select-list.week-select.p-dropdown.p-component.p-inputwrapper {
+.sorting-select
+  .select.custom-select-list.week-select.p-dropdown.p-component.p-inputwrapper {
   background-repeat: no-repeat;
   background-position: 10% 50%;
   background-image: url(../src/style/img/calendar-icon.svg);
@@ -447,3 +470,5 @@ div.p-datepicker table td.p-datepicker-today>span:focus {
   min-width: 100%;
   font-size: 14px;
 }
+
+// Custom CSS

@@ -18,7 +18,6 @@ interface CheckoutForm {
 
 const CourtCheckout = ({
   courtData,
-  courtImage,
   userDetails,
   selectedDate,
   selectedSlots,
@@ -26,8 +25,7 @@ const CourtCheckout = ({
   setUserDetails,
   courtDuration,
 }: {
-  courtData: CourtDataType;
-  courtImage: any;
+  courtData: CourtsData;
   userDetails: any;
   selectedDate: any;
   selectedSlots: any;
@@ -58,8 +56,8 @@ const CourtCheckout = ({
   const baseFee = Number(process.env.REACT_APP_BASE_FEE);
   const additionalUserCharge =
     (Number(userDetails?.additionalNumberOfGuests) || 0) *
-    (Number(courtData?.venueprice?.price_of_additional_guests) || 0);
-  const startingPrice = Number(courtData.venueprice.starting_price) || 0;
+    (Number(courtData?.pricing?.price_of_additional_guests) || 0);
+  const startingPrice = Number(courtData.pricing.starting_price) || 0;
   const selectedSlotCount = selectedSlots.length || 0;
 
   const checkIfCourtIsAdminCourt = async (adminId: string) => {
@@ -68,6 +66,7 @@ const CourtCheckout = ({
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}admin/court/fetch/${adminId}/${courtData.court_id}`
       );
+      console.log(response.data);
       response.status === 404 ? setIsCourtAdmin(false) : setIsCourtAdmin(true);
     } catch (error) {
       console.error(error);
@@ -97,9 +96,9 @@ const CourtCheckout = ({
   // const advanceAmountAdmin = Number(courtData.pricing.advance_pay);
 
   const advanceAmount =
-    (Number(courtData.venueprice.advance_pay) / 100) * totalPrice;
+    (Number(courtData.pricing.advance_pay) / 100) * totalPrice;
 
-  console.log(isValid, policy);
+  console.log(gstAmount, baseAmount, totalPrice, advanceAmount);
 
   // Function to handle API call for default payment method
   const onlinePay = async () => {
@@ -237,7 +236,7 @@ const CourtCheckout = ({
                         <h5>
                           ₹
                           {decimalNumber(
-                            courtData.venueprice.starting_price *
+                            Number(courtData.pricing.starting_price) *
                               selectedSlots.length
                           )}
                         </h5>
@@ -297,7 +296,7 @@ const CourtCheckout = ({
                                           {userDetails.additionalNumberOfGuests}{" "}
                                           *{" "}
                                           {
-                                            courtData.venueprice
+                                            courtData.pricing
                                               .price_of_additional_guests
                                           }{" "}
                                           )
@@ -325,7 +324,7 @@ const CourtCheckout = ({
                       {/* Total */}
                       <div className="order-total d-flex justify-content-between align-items-center">
                         {!isCourtAdmin &&
-                        Number(courtData.venueprice.advance_pay) !== 100 ? (
+                        Number(courtData.pricing.advance_pay) !== 100 ? (
                           <>
                             <div>
                               <h5 className="text-primary pb-2">

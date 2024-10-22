@@ -6,12 +6,39 @@ import { formatEndTime } from "../../utils/formatEndTime";
 import { monthNames } from "../../utils/monthNames";
 import { weekNames } from "../../utils/weekNames";
 import { getTimeSlotDuration } from "../../utils/getOperationalHours";
+import { getCourtDuration } from "../../utils/getCourtDuration";
+
+const getCourtSlotsForSelectedDate = (
+  data: string[][] | undefined,
+  selectedDate: Date
+) => {
+  if (!data) return null; // Handle undefined data
+
+  const dayOfWeek = selectedDate.getDay(); // Get day index from the selected date (0 for Sunday, 1 for Monday, etc.)
+
+  // Find the data for the selected day index
+  const dayData = data.find((slot: string[]) => {
+    const dayIndex = parseInt(slot[0], 10); // Convert the first element to number (day index)
+    return dayIndex === dayOfWeek; // Check if it matches the selected day's index
+  });
+
+  // If data for the selected day is found, return the corresponding slots
+  if (dayData) {
+    const day = dayData[0]; // Day of the week (e.g., 0 for Sunday)
+    const duration = dayData[1]; // Duration between slots (in hours)
+    const startTime = dayData[2]; // Start time for slots
+    const endTime = dayData[3]; // End time for slots
+
+    return { start_time: startTime, end_time: endTime, duration, day };
+  }
+
+  return null; // Return null if no data found for the selected day
+};
 
 const BookingHeader = ({
   progress,
   setProgress,
   courtData,
-  courtImage,
   selectedSlots,
   courtDuration,
   selectedDate,
@@ -19,8 +46,7 @@ const BookingHeader = ({
 }: {
   progress: number;
   setProgress: any;
-  courtData: CourtDataType;
-  courtImage: any;
+  courtData: CourtsData;
   selectedSlots: any;
   courtDuration: any;
   selectedDate: any;
@@ -31,7 +57,9 @@ const BookingHeader = ({
   const month = monthNames[selectedDate.getMonth()];
   const userSelectedDate = selectedDate.getDate();
   const currentDay = weekNames[selectedDate.getDay()];
-  const operationalHours = getTimeSlotDuration(currentDay, courtData);
+  // const operationalHours = getTimeSlotDuration(currentDay, courtData);
+  // const courtAvailabilityData = getCourtDuration(courtData.availability);
+  // const operationalHours = courtAvailabilityData?.duration;
 
   // console.log(courtData);
   // console.log(operationalHours);
@@ -44,6 +72,11 @@ const BookingHeader = ({
     background: location.pathname.includes(routes.home) ? "#ffffff" : "#ffffff",
     borderBottom: "solid 2px #097E52",
   };
+
+  const timeSlots = getCourtSlotsForSelectedDate(
+    courtData.availability,
+    selectedDate
+  );
 
   return (
     <header className={`header-sticky`} style={customStyle}>
@@ -69,17 +102,16 @@ const BookingHeader = ({
                   <Link
                     target="_blank"
                     rel="noopener noreferrer"
-                    to={courtData.locationdata.location_link}
+                    to={courtData.location.location_link}
                   >
                     <p className="mb-1 flex-shrink-0 text-capitalize">
                       <i className="feather-map-pin me-2 fw-bold" />
-                      {courtData.locationdata.city},{" "}
-                      {courtData.locationdata.country}
+                      {courtData.location.city}, {courtData.location.country}
                     </p>
                   </Link>
                   <p className="mb-1 flex-shrink-0">
                     <i className="feather-clock me-2 fw-bold" />
-                    {operationalHours}
+                    {`${formatTime(timeSlots?.start_time)} - ${formatTime(timeSlots?.end_time)} `}
                   </p>
                   <p className="mb-1 flex-shrink-0">
                     <i className="feather-calendar me-2 fw-bold" />
@@ -97,12 +129,12 @@ const BookingHeader = ({
                           />
                           {slotsToShow.map(
                             (
-                              slot: { slot: { time: string } },
+                              slot: { time: string },
                               index: React.Key | null | undefined
                             ) => (
                               <span key={index}>
-                                {`${formatTime(slot.slot.time)} - ${formatEndTime(
-                                  slot.slot.time,
+                                {`${formatTime(slot.time)} - ${formatEndTime(
+                                  slot.time,
                                   courtDuration
                                 )}`}
                                 {index !== slotsToShow.length - 1 && " | "}

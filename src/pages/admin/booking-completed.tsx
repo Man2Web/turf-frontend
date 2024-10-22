@@ -121,8 +121,7 @@ const BookingCompleted = () => {
           (newBooking) =>
             !prevData.some(
               (prevBooking) =>
-                prevBooking.booking.transaction_id ===
-                newBooking.booking.transaction_id
+                prevBooking.transaction_id === newBooking.transaction_id
             )
         );
       };
@@ -313,7 +312,7 @@ const BookingCompleted = () => {
                                         <span className="table-head-name flex-grow-1">
                                           <Link to="#">{}</Link>
                                           <span>
-                                            {rowData.courtDetails.court_name}
+                                            {rowData.court_info.court_name}
                                             {/* <span className="book-on-date">
                                               {rowData.bookingTime}
                                             </span> */}
@@ -332,7 +331,7 @@ const BookingCompleted = () => {
                                       <h2 className="table-avatar">
                                         <span className="table-head-name table-name-user flex-grow-1">
                                           <Link to={"routes.myProfile"}>
-                                            {`${rowData.bookingDetails.fname} ${rowData.bookingDetails.lname}`}
+                                            {`${rowData.booking_info.fname} ${rowData.booking_info.lname}`}
                                           </Link>
                                         </span>
                                       </h2>
@@ -348,10 +347,7 @@ const BookingCompleted = () => {
                                       <h2 className="table-avatar">
                                         <span className="table-head-name table-name-user flex-grow-1">
                                           <Link to={"routes.myProfile"}>
-                                            {
-                                              rowData.bookingDetails
-                                                .phone_number
-                                            }
+                                            {rowData.booking_info.phone_number}
                                           </Link>
                                         </span>
                                       </h2>
@@ -365,9 +361,7 @@ const BookingCompleted = () => {
                                   body={(rowData: SuccessBookingData) => (
                                     <td className="table-date-time">
                                       <h4>
-                                        {dateFormat(
-                                          rowData.booking.booking_date
-                                        )}
+                                        {dateFormat(rowData.booking_date)}
                                       </h4>
                                     </td>
                                   )}
@@ -380,9 +374,7 @@ const BookingCompleted = () => {
                                     <td className="table-date-time">
                                       <h4>
                                         <span>
-                                          {formatTime(
-                                            rowData.booking.booking_time[0]
-                                          )}
+                                          {formatTime(rowData.booking_time[0])}
                                         </span>
                                       </h4>
                                     </td>
@@ -397,11 +389,10 @@ const BookingCompleted = () => {
                                       <h4>
                                         <span>
                                           {formatEndTime(
-                                            rowData.booking.booking_time[
-                                              rowData.booking.booking_time
-                                                .length - 1
+                                            rowData.booking_time[
+                                              rowData.booking_time.length - 1
                                             ],
-                                            rowData.booking.duration
+                                            rowData.duration
                                           )}
                                         </span>
                                       </h4>
@@ -414,7 +405,7 @@ const BookingCompleted = () => {
                                   header="Payment"
                                   body={(rowData: SuccessBookingData) => (
                                     <>
-                                      {rowData.booking.payment_mode ? (
+                                      {rowData.payment_mode ? (
                                         <td className="table-date-time">
                                           <h4 className="text-success">
                                             Online
@@ -439,7 +430,7 @@ const BookingCompleted = () => {
                                       <h2 className="table-avatar">
                                         <span className="table-head-name table-name-user flex-grow-1">
                                           <Link to="#">
-                                            {rowData.booking.transaction_id}
+                                            {rowData.transaction_id}
                                           </Link>
                                         </span>
                                       </h2>

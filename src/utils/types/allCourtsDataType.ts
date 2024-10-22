@@ -1,24 +1,20 @@
 interface courtImagesData {
-  id: number;
-  court_id: number;
   image_url: string;
 }
 
 interface LocationData {
-  id: number;
   country: string;
   city: string;
   location_link: string;
-  court_id: number;
+  embedded_link: string;
 }
 
 interface CourtPriceData {
-  id: number;
-  court_id: number;
-  starting_price: number;
-  max_guests: number;
-  additional_guests: number;
+  starting_price: string;
+  guests: string;
+  additional_guests: string;
   price_of_additional_guests: string;
+  advance_pay: string;
 }
 
 interface CourtDurationData {
@@ -30,19 +26,29 @@ interface CourtDurationData {
   end_time: string;
 }
 
+interface Availability {
+  day: string;
+  duration: string;
+  start_time: string;
+  end_time: string;
+}
+
 interface CourtsData {
-  id: number;
   court_id: string;
-  user_id: number;
+  admin_id: string;
+  status: boolean;
+  phone_number: string;
+  email: string;
   court_name: string;
   court_type: string;
-  venue_overview: any;
-  rules_of_venue: string;
   featured: boolean;
-  email: string;
-  m_name: string;
-  locationData: LocationData;
-  courtPriceData: CourtPriceData;
-  courtImagesData: courtImagesData[];
-  courtAvailabilityData: CourtDurationData;
+  venue_overview: string; // Change from `any` to `string`
+  rules_of_venue: string[]; // Change to array of strings
+  approved: boolean; // Since the data has `approved` field instead of `featured`
+  location: LocationData; // Correct field name
+  pricing: CourtPriceData; // Correct field name and structure
+  availability: string[][];
+  includes: string[];
+  amenities: string[];
+  images: courtImagesData[]; // Use `courtImagesData[]`, but only image_url is needed
 }

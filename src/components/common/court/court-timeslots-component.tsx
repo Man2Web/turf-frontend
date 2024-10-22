@@ -9,12 +9,39 @@ import { formatTime } from "../../../utils/formatTime";
 import { formatEndTime } from "../../../utils/formatEndTime";
 import { dayNames, monthNames } from "../../../utils/calenderData";
 import { featuredVenuesSlider } from "../../../utils/slidersData";
+import { dateFormat, diffDateFormat } from "../../../utils/dateFormat";
+
+const getCourtSlotsForSelectedDate = (
+  data: string[][] | undefined,
+  selectedDate: Date
+) => {
+  if (!data) return null; // Handle undefined data
+
+  const dayOfWeek = selectedDate.getDay(); // Get day index from the selected date (0 for Sunday, 1 for Monday, etc.)
+
+  // Find the data for the selected day index
+  const dayData = data.find((slot: string[]) => {
+    const dayIndex = parseInt(slot[0], 10); // Convert the first element to number (day index)
+    return dayIndex === dayOfWeek; // Check if it matches the selected day's index
+  });
+
+  // If data for the selected day is found, return the corresponding slots
+  if (dayData) {
+    const day = dayData[0]; // Day of the week (e.g., 0 for Sunday)
+    const duration = dayData[1]; // Duration between slots (in hours)
+    const startTime = dayData[2]; // Start time for slots
+    const endTime = dayData[3]; // End time for slots
+
+    return { start_time: startTime, end_time: endTime, duration, day };
+  }
+
+  return null; // Return null if no data found for the selected day
+};
 
 const CourtTimeSlotsComponent = ({
   progress,
   setProgress,
   courtData,
-  courtImage,
   selectedDate,
   setSelectedDate,
   selectedSlots,
@@ -23,8 +50,7 @@ const CourtTimeSlotsComponent = ({
 }: {
   progress: number;
   setProgress: any;
-  courtData: CourtDataType;
-  courtImage: any;
+  courtData: CourtsData;
   selectedDate: any;
   setSelectedDate: any;
   selectedSlots: any;
@@ -32,227 +58,80 @@ const CourtTimeSlotsComponent = ({
   courtDuration: string;
 }) => {
   const [timeSlots, setTimeSlots] = useState<TimeSlotInterface[]>([]);
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
   const [slotsLoading, setSlotsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    // Create a function to compare two dates (ignoring time)
-    const isSameDate = (date1: Date, date2: Date) => {
-      return (
-        date1.getFullYear() === date2.getFullYear() &&
-        date1.getMonth() === date2.getMonth() &&
-        date1.getDate() === date2.getDate()
-      );
-    };
-
-    const today = new Date();
-
-    // Check if today and selectedDate are not the same
-    if (!isSameDate(today, selectedDate)) {
-      setSetselectedSlots([]); // Reset selectedSlots
-    }
-    const updatedTimeSlots = timeSlots.map((slot) => ({
-      ...slot,
-      isChecked: false, // Set isChecked to false for every slot
-    }));
-    console.log(updatedTimeSlots);
-    setTimeSlots(updatedTimeSlots);
+    generateTimeSlots();
+    setSetselectedSlots([]);
   }, [selectedDate]);
 
-  // Handle time slot click (toggles isChecked only if the slot is active)
-  const handleTimeSlotClick = (index: number) => {
-    const updatedTimeSlots = [...timeSlots];
-
-    // Only allow checking if the slot is active
-    if (!updatedTimeSlots[index].isActive) {
-      return;
+  useEffect(() => {
+    if (timeSlots.length > 0) {
+      checkBookedSlots();
     }
+  }, [timeSlots.length]); // Only trigger on length change
 
-    // Toggle the `isChecked` state
-    updatedTimeSlots[index].isChecked = !updatedTimeSlots[index].isChecked;
+  const generateTimeSlots = () => {
+    const timeSlots = getCourtSlotsForSelectedDate(
+      courtData.availability,
+      selectedDate
+    );
 
-    // If the slot is not booked, update the selected slots
-    if (!updatedTimeSlots[index].isBooked) {
-      setSetselectedSlots((prevData: any) => {
-        // Convert selectedDate to a comparable string (e.g., YYYY-MM-DD)
-        const formattedSelectedDate = selectedDate.toISOString().split("T")[0];
+    const generateTimeSlots = (
+      startTime: string,
+      endTime: string,
+      duration: number
+    ) => {
+      const allTimeSlots: {
+        time: string;
+        isChecked: boolean;
+        isActive: boolean;
+      }[] = [];
 
-        // Check if the slot already exists in selectedSlots to avoid duplicates
-        const slotExists = prevData.some(
-          (slotObj: any) =>
-            new Date(slotObj.date).toISOString().split("T")[0] ===
-              formattedSelectedDate &&
-            slotObj.slot.time === updatedTimeSlots[index].time &&
-            slotObj.slot.day === updatedTimeSlots[index].day
-        );
+      // Split the start and end time into hours and minutes
+      const [startHour, startMinute] = startTime.split(":").map(Number);
+      const [endHour, endMinute] = endTime.split(":").map(Number);
 
-        if (slotExists) {
-          // If the slot is unchecked, remove it from selected slots
-          const filteredSlots = prevData.filter(
-            (slotObj: any) =>
-              !(
-                new Date(slotObj.date).toISOString().split("T")[0] ===
-                  formattedSelectedDate &&
-                slotObj.slot.time === updatedTimeSlots[index].time &&
-                slotObj.slot.day === updatedTimeSlots[index].day
-              )
-          );
+      // Create Date objects for start and end times
+      const startDate = new Date();
+      startDate.setHours(startHour, startMinute, 0, 0);
 
-          // Also uncheck the slot in updatedTimeSlots
-          updatedTimeSlots[index].isChecked = false;
+      const endDate = new Date();
+      endDate.setHours(endHour, endMinute, 0, 0);
 
-          // Return the updated selected slots after removal
-          return filteredSlots;
-        } else {
-          // If the slot is checked, add it to selected slots
-          const newSelectedSlot = {
-            date: selectedDate,
-            slot: updatedTimeSlots[index],
-          };
+      // Set the duration in minutes
+      const durationInMinutes = duration * 60;
 
-          // Return the updated selected slots after addition
-          return [...prevData, newSelectedSlot];
-        }
-      });
-    }
-
-    // Update the time slots state after modifying the check status
-    setTimeSlots(updatedTimeSlots);
-
-    // Log the updated states for debugging
-    // console.log("Selected Slots:", selectedSlots);
-  };
-
-  // Generate time slots based on the provided data
-  const generateTimeSlots = (
-    timeSlotsData: {
-      day_of_week: any;
-      start_time: any;
-      end_time: any;
-      duration: any;
-    }[]
-  ) => {
-    const allTimeSlots: {
-      day: any;
-      time: string;
-      isChecked: boolean;
-      isActive: boolean;
-    }[] = [];
-    const today = selectedDate;
-
-    timeSlotsData.forEach(({ day_of_week, start_time, end_time, duration }) => {
-      if (start_time && end_time) {
-        const durationInMins = duration ? parseInt(duration) * 60 : 60; // Default to 60 mins if duration is empty
-        const startTimeParts = start_time.split(":");
-        const endTimeParts = end_time.split(":");
-        const startTime = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate(),
-          startTimeParts[0],
-          startTimeParts[1]
-        );
-        const endTime = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate(),
-          endTimeParts[0],
-          endTimeParts[1]
-        );
-
-        for (
-          let time = startTime;
-          time < endTime;
-          time.setMinutes(time.getMinutes() + durationInMins)
-        ) {
-          allTimeSlots.push({
-            day: day_of_week,
-            time: time.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: false, // Use 24-hour format here
-            }),
-            isChecked: false,
-            isActive: true,
-          });
-        }
-      } else {
-        // If start_time or end_time is null, set isActive to false for that day
+      // Loop through the time range and generate slots
+      for (
+        let currentTime = new Date(startDate);
+        currentTime < endDate;
+        currentTime.setMinutes(currentTime.getMinutes() + durationInMinutes)
+      ) {
         allTimeSlots.push({
-          day: day_of_week,
-          time: "No available slots",
+          time: currentTime.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          }),
           isChecked: false,
-          isActive: false,
+          isActive: true,
         });
       }
-    });
 
-    return allTimeSlots;
-  };
+      return allTimeSlots;
+    };
 
-  const updateTimeSlots = async () => {
-    const dayIndex = selectedDate.getDay();
-    const dayName = dayNames[dayIndex].toLowerCase(); // Get the corresponding day name in lowercase
-    const formattedDate = selectedDate.toISOString().split("T")[0]; // Format the selected date
-
-    console.log(formattedDate);
-    console.log(courtData);
-
-    try {
-      setSlotsLoading(true);
-      const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}court/availability/${courtData.court_id}/${formattedDate}`
+    if (timeSlots?.start_time && timeSlots?.end_time && timeSlots?.duration) {
+      const timeSlotsData = generateTimeSlots(
+        timeSlots.start_time,
+        timeSlots.end_time,
+        Number(timeSlots.duration)
       );
-
-      const bookedTimeSlots = response.data.bookedTimeSlots;
-
-      console.log(bookedTimeSlots);
-
-      // Find the time slot for the selected day in `courtData`
-      const timeSlotsForDay = courtData.time_Slots.find(
-        (slot) => slot.day_of_week === dayName
-      );
-
-      // Check if timeSlotsForDay is defined
-      if (timeSlotsForDay) {
-        // Generate available time slots
-        const availableTimeSlots = generateTimeSlots([timeSlotsForDay]);
-
-        // Compare the available time slots with the booked time slots and mark them
-        const updatedTimeSlots = availableTimeSlots.map((slot) => {
-          console.log(slot);
-          const isBooked =
-            Array.isArray(bookedTimeSlots) &&
-            bookedTimeSlots.some(
-              (time: string) =>
-                time.split(":").slice(0, 2).join(":") === slot.time
-            );
-
-          // Check if this slot is already in selectedSlots for the selectedDate
-          const isChecked = selectedSlots.some(
-            (selectedSlot: any) =>
-              new Date(selectedSlot.date).toISOString().split("T")[0] ===
-                formattedDate &&
-              selectedSlot.slot.time === slot.time &&
-              selectedSlot.slot.day === slot.day
-          );
-
-          return {
-            ...slot,
-            isBooked, // Add an `isBooked` property to indicate if the time slot is already booked
-            isChecked, // Set isChecked based on whether the slot is in selectedSlots
-            isActive: !isBooked, // If booked, make it inactive
-          };
-        });
-
-        // Update the time slots state with the newly updated time slots
-        setTimeSlots(updatedTimeSlots);
-      } else {
-        setTimeSlots([]); // Set to empty if there are no slots for the selected day
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setSlotsLoading(false);
+      setTimeSlots(timeSlotsData);
+    } else {
+      console.error("Time slots data is missing or incomplete");
     }
   };
 
@@ -260,15 +139,61 @@ const CourtTimeSlotsComponent = ({
     const newDate = new Date();
     newDate.setDate(newDate.getDate() + idx);
     setSelectedDate(newDate);
-    updateTimeSlots();
   };
 
-  // Initial load or whenever courtData or selectedDate changes
-  useEffect(() => {
-    updateTimeSlots();
-  }, [courtData, selectedDate]);
+  const handleTimeSlotClick = (idx: number) => {
+    const updatedTimeSlots = [...timeSlots];
 
-  console.log(timeSlots);
+    if (!updatedTimeSlots[idx].isBooked && updatedTimeSlots[idx].isActive) {
+      updatedTimeSlots[idx].isChecked = !updatedTimeSlots[idx].isChecked;
+
+      setTimeSlots(updatedTimeSlots);
+
+      setSetselectedSlots((prevSelectedSlots: any) => {
+        if (updatedTimeSlots[idx].isChecked) {
+          return [...prevSelectedSlots, updatedTimeSlots[idx]];
+        }
+        return prevSelectedSlots.filter(
+          (slot: any) => slot.time !== updatedTimeSlots[idx].time
+        );
+      });
+    }
+  };
+
+  const checkBookedSlots = async () => {
+    try {
+      const date = diffDateFormat(selectedDate);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BACKEND_URL}court/availability/${courtData.court_id}/${date}`
+      );
+
+      const bookedTimeSlots = response.data.bookedTimeSlots;
+      console.log(response);
+
+      if (
+        bookedTimeSlots &&
+        response.data.message === "Fetched the booked slots"
+      ) {
+        // Update booked slots state instead of directly updating timeSlots
+        setBookedSlots(bookedTimeSlots);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Update timeSlots based on booked slots
+  useEffect(() => {
+    if (bookedSlots.length > 0) {
+      setTimeSlots((prevTimeSlots) =>
+        prevTimeSlots.map((slot) => ({
+          ...slot,
+          isActive: !bookedSlots.includes(`${slot.time}:00`),
+          isBooked: bookedSlots.includes(`${slot.time}:00`),
+        }))
+      );
+    }
+  }, [bookedSlots]);
 
   return (
     <div>
@@ -276,12 +201,6 @@ const CourtTimeSlotsComponent = ({
         <ToastContainer />
         {/* Page Content */}
         <div className="container pt-0">
-          {/* <CourtDetailsComponent
-            courtData={courtData}
-            courtImage={courtImage}
-            contentTitle={timeSlotsContent.title}
-            contentDescription={timeSlotsContent.description}
-          /> */}
           <div className="row text-center">
             <div className="col-12 col-sm-12 col-md-12 col-lg-8">
               <div className="card time-date-card">
@@ -338,7 +257,7 @@ const CourtTimeSlotsComponent = ({
             <CourtBookingSummaryComponent
               date={selectedDate}
               totalPrice={
-                courtData.venueprice.starting_price * selectedSlots.length
+                Number(courtData.pricing.starting_price) * selectedSlots.length
               }
               slots={selectedSlots}
               courtDuration={courtDuration}

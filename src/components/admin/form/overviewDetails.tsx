@@ -3,11 +3,11 @@ import { Controller } from "react-hook-form";
 import ReactQuill from "react-quill";
 
 const OverviewDetails = ({
+  register,
   errors,
-  control,
 }: {
+  register: any;
   errors: any;
-  control: any;
 }) => {
   return (
     <div className="accordion-item mb-4" id="overview">
@@ -31,38 +31,31 @@ const OverviewDetails = ({
         <div className="accordion-body">
           <div className="row">
             <div className="col-12">
-              <div className="">
-                <label htmlFor="venueOverview" className="form-label">
-                  Overview of Venue <span>*</span>
+              <div className="input-space mb-0">
+                <label htmlFor="court-name" className="form-label">
+                  Court Overview <span>*</span>
                 </label>
-                {/* Controller for ReactQuill */}
-                <Controller
-                  name="venueOverview"
-                  control={control}
-                  rules={{
-                    required: "Venue Overview is required",
-                  }}
-                  render={({ field }) => (
-                    <ReactQuill
-                      {...field}
-                      placeholder="Enter Overview"
-                      modules={{
-                        toolbar: [
-                          [{ header: [false] }],
-                          ["bold", "italic", "underline", "strike"],
-                        ],
-                      }}
-                      className="form-control"
-                    />
-                  )}
+                <textarea
+                  {...register("venueOverview", {
+                    required: "Court Overview is required",
+                    minLength: {
+                      value: 20,
+                      message: "Overview must be at least 20 characters long",
+                    },
+                    maxLength: {
+                      value: 500,
+                      message: "Overview cannot exceed 500 characters",
+                    },
+                  })}
+                  className="form-control"
+                  id="venue-overview"
+                  placeholder="Provide a brief overview of the court"
+                  rows={4} // Sets the visible height of the textarea
                 />
-                {/* Error message */}
-                {errors.venueOverview && (
-                  <p className="text-danger">
-                    {errors.venueOverview.message as string}
-                  </p>
-                )}
               </div>
+              <p className="text-danger">
+                {errors.venueOverview?.message as string}
+              </p>
             </div>
           </div>
         </div>

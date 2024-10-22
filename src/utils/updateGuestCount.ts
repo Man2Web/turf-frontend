@@ -3,7 +3,7 @@ export const updateGuestCount = (
   direction: number,
   numberOfGuests: number,
   additionalNumberOfGuests: number,
-  courtData: CourtDataType,
+  courtData: CourtsData,
   setValue: any
 ) => {
   if (movement === 0) {
@@ -14,7 +14,7 @@ export const updateGuestCount = (
         });
       }
     } else {
-      if (numberOfGuests < courtData.venueprice.max_guests) {
+      if (numberOfGuests < Number(courtData.pricing.guests)) {
         setValue("numberOfGuests", numberOfGuests + 1, {
           shouldValidate: true,
         });
@@ -28,7 +28,9 @@ export const updateGuestCount = (
         });
       }
     } else {
-      if (additionalNumberOfGuests < courtData.venueprice.additional_guests) {
+      if (
+        additionalNumberOfGuests < Number(courtData.pricing.additional_guests)
+      ) {
         setValue("additionalNumberOfGuests", additionalNumberOfGuests + 1, {
           shouldValidate: true,
         });

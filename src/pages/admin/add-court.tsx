@@ -3,9 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { all_routes } from "../../router/all_routes";
-import { useForm, SubmitHandler, Controller } from "react-hook-form";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../components/common/Loader";
@@ -23,11 +21,8 @@ const AddCourt = () => {
   const {
     register,
     handleSubmit,
-    control,
-    watch,
-    setError,
-    reset,
     setValue,
+    control,
     formState: { errors },
   } = useForm<CourtFormDataType>();
   const navigate = useNavigate();
@@ -35,14 +30,17 @@ const AddCourt = () => {
   const [loading, setLoading] = useState(false);
 
   const [images, setImages] = useState<any>([]);
+  const [rules, setRules] = useState<string[]>([]);
+  const [includes, setIncludes] = useState<string[]>([]);
+  const [amenities, setAmenities] = useState<string[]>([]);
   const [selectedHours, setSelectedHours] = useState<any>({
-    monday: { duration: "", startTime: null, endTime: null },
-    tuesday: { duration: "", startTime: null, endTime: null },
-    wednesday: { duration: "", startTime: null, endTime: null },
-    thursday: { duration: "", startTime: null, endTime: null },
-    friday: { duration: "", startTime: null, endTime: null },
-    saturday: { duration: "", startTime: null, endTime: null },
-    sunday: { duration: "", startTime: null, endTime: null },
+    monday: { duration: "0 hrs", startTime: null, endTime: null },
+    tuesday: { duration: "0 hrs", startTime: null, endTime: null },
+    wednesday: { duration: "0 hrs", startTime: null, endTime: null },
+    thursday: { duration: "0 hrs", startTime: null, endTime: null },
+    friday: { duration: "0 hrs", startTime: null, endTime: null },
+    saturday: { duration: "0 hrs", startTime: null, endTime: null },
+    sunday: { duration: "0 hrs", startTime: null, endTime: null },
   });
   // State to store calculated time slots for each day
   const [timeSlots, setTimeSlots] = useState<{ [key: string]: string[] }>({
@@ -56,9 +54,9 @@ const AddCourt = () => {
   });
 
   const onSubmit = async (data: CourtFormDataType) => {
-    console.log("Clicked");
+    // console.log("Clicked");
     const userId = localStorage.getItem("adminId");
-    setLoading(true);
+    // setLoading(true);
 
     if (data.location && data.location.city) {
       data.location.city = data.location.city.toLowerCase().trim();
@@ -78,9 +76,9 @@ const AddCourt = () => {
     formData.append("email", data.email);
     formData.append("venuePrice", JSON.stringify(data.venuePrice));
     formData.append("venueOverview", data.venueOverview);
-    formData.append("courtIncludes", JSON.stringify(data.courtIncludes));
-    formData.append("rulesOfVenue", data.rulesOfVenue);
-    formData.append("amenities", JSON.stringify(data.amenities));
+    formData.append("courtIncludes", JSON.stringify(includes));
+    formData.append("rulesOfVenue", JSON.stringify(rules));
+    formData.append("amenities", JSON.stringify(amenities));
     formData.append("location", JSON.stringify(data.location));
     formData.append("courtAvailability", JSON.stringify(selectedHours));
     if (userId) {
@@ -140,7 +138,6 @@ const AddCourt = () => {
 
     setImages((prevImages: any) => [...prevImages, ...newImages]);
   };
-
   // Function to remove an image
   const removeImg = (index: any) => {
     setImages(images.filter((_: any, i: number) => i !== index));
@@ -239,13 +236,26 @@ const AddCourt = () => {
                     setSelectedHours={setSelectedHours}
                   />
                   {/* overview */}
-                  <OverviewDetails errors={errors} control={control} />
+                  <OverviewDetails errors={errors} register={register} />
                   {/* includes */}
-                  <IncludesDetails register={register} />
+                  <IncludesDetails
+                    includes={includes}
+                    setIncludes={setIncludes}
+                    register={register}
+                  />
                   {/* Rules */}
-                  <RulesDetails errors={errors} control={control} />
+                  <RulesDetails
+                    errors={errors}
+                    control={control}
+                    rules={rules}
+                    setRules={setRules}
+                  />
                   {/* Amenities */}
-                  <AmenitiesDetails register={register} />
+                  <AmenitiesDetails
+                    register={register}
+                    amenities={amenities}
+                    setAmenities={setAmenities}
+                  />
                   {/* Gallery */}
                   <GalleryDetails
                     errors={errors}

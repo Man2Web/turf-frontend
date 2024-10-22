@@ -1,6 +1,55 @@
 import React from "react";
 
-const IncludesDetails = ({ register }: { register: any }) => {
+const IncludesDetails = ({
+  register,
+  includes,
+  setIncludes,
+}: {
+  register: any;
+  includes: any;
+  setIncludes: any;
+}) => {
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    item: string
+  ) => {
+    if (event.target.checked) {
+      // Add item to the array if it's checked
+      setIncludes((prevIncludes: any) => [...prevIncludes, item]);
+    } else {
+      // Remove item from the array if it's unchecked
+      setIncludes((prevIncludes: any[]) =>
+        prevIncludes.filter((i: string) => i !== item)
+      );
+    }
+  };
+
+  const includesData = [
+    {
+      key: "badmintonUnlimited",
+      label: "Badminton Racket Unlimited",
+      id: "includes1",
+    },
+    { key: "bats", label: "Bats", id: "includes2" },
+    {
+      key: "hittingMachines",
+      label: "Hitting Machines",
+      id: "includes3",
+    },
+    {
+      key: "multipleCourts",
+      label: "Multiple Courts",
+      id: "includes4",
+    },
+    { key: "sparePlayers", label: "Spare Players", id: "includes5" },
+    {
+      key: "instantRacket",
+      label: "Instant Racket",
+      id: "includes6",
+    },
+    { key: "greenTurfs", label: "Green Turfs", id: "includes7" },
+  ];
+
   return (
     <div className="accordion-item mb-4" id="includes">
       <h4 className="accordion-header" id="panelsStayOpen-includes">
@@ -22,111 +71,27 @@ const IncludesDetails = ({ register }: { register: any }) => {
       >
         <div className="accordion-body">
           <ul className="clearfix">
-            <li>
-              <div className="form-check d-flex justify-content-start align-items-center">
-                <div className="d-inline-block">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    {...register("courtIncludes.badmintonRacket")}
-                    id="includes1"
-                  />
+            {includesData.map((item) => (
+              <li key={item.key}>
+                <div className="form-check d-flex justify-content-start align-items-center">
+                  <div className="d-inline-block">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id={item.id}
+                      {...register(`courtIncludes.${item.key}`)}
+                      checked={includes.includes(item.key)}
+                      onChange={(event) =>
+                        handleCheckboxChange(event, item.key)
+                      }
+                    />
+                  </div>
+                  <label className="form-check-label" htmlFor={item.id}>
+                    {item.label}
+                  </label>
                 </div>
-                <label className="form-check-label" htmlFor="includes1">
-                  Badminton Racket Unlimited
-                </label>
-              </div>
-            </li>
-            <li>
-              <div className="form-check d-flex justify-content-start align-items-center">
-                <div className="d-inline-block">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    {...register("courtIncludes.bats")}
-                    id="includes2"
-                  />
-                </div>
-                <label className="form-check-label" htmlFor="includes2">
-                  Bats
-                </label>
-              </div>
-            </li>
-            <li>
-              <div className="form-check d-flex justify-content-start align-items-center">
-                <div className="d-inline-block">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    {...register("courtIncludes.hittingMachines")}
-                    id="includes3"
-                  />
-                </div>
-                <label className="form-check-label" htmlFor="includes3">
-                  Hitting Machines
-                </label>
-              </div>
-            </li>
-            <li>
-              <div className="form-check d-flex justify-content-start align-items-center">
-                <div className="d-inline-block">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    {...register("courtIncludes.multipleCourts")}
-                    id="includes4"
-                  />
-                </div>
-                <label className="form-check-label" htmlFor="includes4">
-                  Multiple Courts
-                </label>
-              </div>
-            </li>
-            <li>
-              <div className="form-check d-flex justify-content-start align-items-center">
-                <div className="d-inline-block">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    {...register("courtIncludes.sparePlayers")}
-                    id="includes5"
-                  />
-                </div>
-                <label className="form-check-label" htmlFor="includes5">
-                  Spare Players
-                </label>
-              </div>
-            </li>
-            <li>
-              <div className="form-check d-flex justify-content-start align-items-center">
-                <div className="d-inline-block">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    {...register("courtIncludes.instantRacket")}
-                    id="includes6"
-                  />
-                </div>
-                <label className="form-check-label" htmlFor="includes6">
-                  Instant Racket
-                </label>
-              </div>
-            </li>
-            <li>
-              <div className="form-check d-flex justify-content-start align-items-center">
-                <div className="d-inline-block">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    {...register("courtIncludes.greenTurfs")}
-                    id="includes7"
-                  />
-                </div>
-                <label className="form-check-label" htmlFor="includes7">
-                  Green Turfs
-                </label>
-              </div>
-            </li>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

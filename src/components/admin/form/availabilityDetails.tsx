@@ -17,6 +17,16 @@ const daysOfWeek = [
   { id: 7, label: "Sun" },
 ];
 
+const fullDaysOfWeek = [
+  { name: "Sunday", key: "sunday", index: 0 },
+  { name: "Monday", key: "monday", index: 1 },
+  { name: "Tuesday", key: "tuesday", index: 2 },
+  { name: "Wednesday", key: "wednesday", index: 3 },
+  { name: "Thursday", key: "thursday", index: 4 },
+  { name: "Friday", key: "friday", index: 5 },
+  { name: "Saturday", key: "saturday", index: 6 },
+];
+
 const hoursOptions = ["1 Hrs", "2 Hrs", "3 Hrs"];
 
 const AvailabilityDetails = ({
@@ -39,6 +49,8 @@ const AvailabilityDetails = ({
   const [selectedDays, setSelectedDays] = useState(
     Array(daysOfWeek.length).fill(false)
   );
+
+  // Function to handle day checkbox changes
   const handleDayChange = (index: number) => {
     const updatedDays = [...selectedDays];
     updatedDays[index] = !updatedDays[index];
@@ -104,7 +116,9 @@ const AvailabilityDetails = ({
   ) => {
     updateDayHours(day.toLowerCase(), "endTime", timeString);
   };
-
+  console.log(selectedHours);
+  console.log(timeSlots);
+  console.log(selectedDays);
   dayjs.extend(customParseFormat);
   return (
     <div className="accordion-item mb-4" id="availability">
@@ -139,8 +153,8 @@ const AvailabilityDetails = ({
                           <input
                             type="checkbox"
                             id={`select_days_${day.id}`}
-                            checked={selectedDays[index]}
-                            onChange={() => handleDayChange(index)}
+                            checked={selectedDays[index + 1]}
+                            onChange={() => handleDayChange(index + 1)}
                             name="day"
                           />
                           <label htmlFor={`select_days_${day.id}`}>
@@ -152,974 +166,178 @@ const AvailabilityDetails = ({
                   </ul>
                 </div>
                 <div className="accordion setting-accordion">
-                  {/* Monday */}
-                  <div
-                    className="accordion-item"
-                    id="day-monday"
-                    style={{
-                      display: selectedDays[0] ? "block" : "none",
-                    }}
-                  >
-                    <div className="accordion-header">
-                      <div
-                        className="accordion-button collapsed"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#monday"
-                      >
-                        <div className="interset-btn empty-space">
-                          <div className="status-toggle d-inline-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              id="status_1"
-                              className="check"
-                            />
-                            <label htmlFor="status_1" className="checktoggle">
-                              checkbox
-                            </label>
-                          </div>
-                        </div>
-                        <span className="accord-title">Monday</span>
-                        <Link to="#">Edit</Link>
-                      </div>
-                    </div>
-                    <div id="monday" className="accordion-collapse collapse">
-                      <div className="accordion-body">
-                        <div className="row gx-2">
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                Duration <span className="text-danger">*</span>
-                              </label>
-                              <Dropdown
-                                value={selectedHours.monday.duration}
-                                onChange={(e) =>
-                                  updateDayHours(
-                                    "monday",
-                                    "duration",
-                                    e.target.value
-                                  )
-                                }
-                                options={hoursOptions}
-                                optionLabel="name"
-                                placeholder="Select Hours"
-                                className="select-bg w-100"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                Start Time{" "}
-                                <span className="text-danger">*</span>
-                              </label>
-                              <div className="form-icon">
-                                <TimePicker
-                                  placeholder="Select Time"
-                                  className="form-control datetimepicker1"
-                                  onChange={(time, timeString) =>
-                                    handleStartTimeChange(
-                                      "Monday",
-                                      time,
-                                      timeString
-                                    )
-                                  }
-                                  defaultOpenValue={dayjs("00:00", "HH:mm")}
-                                  format="HH:mm"
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                End Time <span className="text-danger">*</span>
-                              </label>
-                              <div className="form-icon">
-                                <TimePicker
-                                  placeholder="Select Time"
-                                  className="form-control datetimepicker1"
-                                  onChange={(time, timeString) =>
-                                    handleEndTimeChange(
-                                      "Monday",
-                                      time,
-                                      timeString
-                                    )
-                                  }
-                                  defaultOpenValue={dayjs("00:00", "HH:mm")}
-                                  format="HH:mm"
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-md-12">
-                            <h4>Available Timings</h4>
-                            <div className="token-slot mt-2">
-                              {timeSlots["monday"]?.map(
-                                (
-                                  slot: string,
-                                  index: React.Key | null | undefined
-                                ) => (
-                                  <div
-                                    className="form-check-inline visits me-1"
-                                    key={index}
-                                  >
-                                    <label className="visit-btns">
-                                      <input
-                                        type="checkbox"
-                                        className="form-check-input"
-                                        value={slot && slot}
-                                      />
-                                      <span
-                                        className="visit-rsn"
-                                        data-bs-toggle="tooltip"
-                                        title={slot}
-                                      >
-                                        {formatTime(slot)}
-                                      </span>
-                                    </label>
-                                  </div>
-                                )
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* /Monday */}
-                  {/* Tuesday */}
-                  <div
-                    className="accordion-item"
-                    id="day-tuesday"
-                    style={{
-                      display: selectedDays[1] ? "block" : "none",
-                    }}
-                  >
-                    <div className="accordion-header">
-                      <div
-                        className="accordion-button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#tuesday"
-                      >
-                        <div className="interset-btn empty-space">
-                          <div className="status-toggle d-inline-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              id="status_2"
-                              className="check"
-                            />
-                            <label htmlFor="status_2" className="checktoggle">
-                              checkbox
-                            </label>
-                          </div>
-                        </div>
-                        <span className="accord-title">Tuesday</span>
-                        <Link to="#">Edit</Link>
-                      </div>
-                    </div>
+                  {fullDaysOfWeek.map(({ name, key, index }) => (
                     <div
-                      id="tuesday"
-                      className="accordion-collapse collapse show"
+                      className="accordion-item"
+                      id={`day-${key}`}
+                      style={{
+                        display: selectedDays[index] ? "block" : "none",
+                      }}
+                      key={key}
                     >
-                      <div className="accordion-body">
-                        <div className="row gx-2">
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                Duration <span className="text-danger">*</span>
-                              </label>
-                              <Dropdown
-                                value={selectedHours.tuesday.duration}
-                                onChange={(e) =>
-                                  updateDayHours(
-                                    "tuesday",
-                                    "duration",
-                                    e.target.value
-                                  )
-                                }
-                                options={hoursOptions}
-                                optionLabel="name"
-                                placeholder="Select Hours"
-                                className="select-bg w-100"
+                      <div className="accordion-header">
+                        <div
+                          className="accordion-button collapsed"
+                          data-bs-toggle="collapse"
+                          data-bs-target={`#${key}`}
+                        >
+                          <div className="interset-btn empty-space">
+                            <div className="status-toggle d-inline-flex align-items-center">
+                              <input
+                                type="checkbox"
+                                id={`status_${index + 1}`} // Status IDs starting from 1
+                                className="check"
                               />
+                              <label
+                                htmlFor={`status_${index + 1}`}
+                                className="checktoggle"
+                              >
+                                checkbox
+                              </label>
                             </div>
                           </div>
-
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                Start Time{" "}
-                                <span className="text-danger">*</span>
-                              </label>
-                              <div className="form-icon">
-                                <TimePicker
-                                  placeholder="Select Time"
-                                  className="form-control datetimepicker1"
-                                  onChange={(time, timeString) =>
-                                    handleStartTimeChange(
-                                      "Tuesday",
-                                      time,
-                                      timeString
+                          <span className="accord-title">{name}</span>
+                          <Link to="#">Edit</Link>
+                        </div>
+                      </div>
+                      <div id={key} className="accordion-collapse collapse">
+                        <div className="accordion-body">
+                          <div className="row gx-2">
+                            <div className="col-md-3">
+                              <div className="duration-blk">
+                                <label className="form-control-label">
+                                  Duration{" "}
+                                  <span className="text-danger">*</span>
+                                </label>
+                                <Dropdown
+                                  value={selectedHours[key].duration}
+                                  onChange={(e) =>
+                                    updateDayHours(
+                                      key,
+                                      "duration",
+                                      e.target.value
                                     )
                                   }
-                                  defaultOpenValue={dayjs("00:00", "HH:mm")}
-                                  format="HH:mm"
+                                  options={hoursOptions}
+                                  optionLabel="name"
+                                  placeholder="Select Hours"
+                                  className="select-bg w-100"
                                 />
                               </div>
                             </div>
-                          </div>
 
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                End Time <span className="text-danger">*</span>
-                              </label>
-                              <div className="form-icon">
-                                <TimePicker
-                                  placeholder="Select Time"
-                                  className="form-control datetimepicker1"
-                                  onChange={(time, timeString) =>
-                                    handleEndTimeChange(
-                                      "Tuesday",
-                                      time,
-                                      timeString
-                                    )
-                                  }
-                                  defaultOpenValue={dayjs("00:00", "HH:mm")}
-                                  format="HH:mm"
-                                />
+                            <div className="col-md-3">
+                              <div className="duration-blk">
+                                <label className="form-control-label">
+                                  Start Time{" "}
+                                  <span className="text-danger">*</span>
+                                </label>
+                                <div className="form-icon">
+                                  <TimePicker
+                                    placeholder="Select Time"
+                                    className="form-control datetimepicker1"
+                                    onChange={(time, timeString) =>
+                                      handleStartTimeChange(
+                                        name,
+                                        time,
+                                        timeString
+                                      )
+                                    }
+                                    value={
+                                      selectedHours[key].startTime &&
+                                      dayjs(
+                                        selectedHours[key].startTime,
+                                        "HH:mm"
+                                      )
+                                    }
+                                    defaultOpenValue={
+                                      selectedHours[key].startTime
+                                        ? dayjs(
+                                            selectedHours[key].startTime,
+                                            "HH:mm"
+                                          )
+                                        : dayjs("00:00", "HH:mm")
+                                    }
+                                    format="HH:mm"
+                                  />
+                                </div>
                               </div>
                             </div>
-                          </div>
 
-                          <div className="col-md-12">
-                            <h4>Available Timings</h4>
-                            <div className="token-slot mt-2">
-                              {timeSlots["tuesday"]?.map(
-                                (
-                                  slot: string,
-                                  index: React.Key | null | undefined
-                                ) => (
-                                  <div
-                                    className="form-check-inline visits me-1"
-                                    key={index}
-                                  >
-                                    <label className="visit-btns">
-                                      <input
-                                        type="checkbox"
-                                        className="form-check-input"
-                                        value={slot}
-                                      />
-                                      <span
-                                        className="visit-rsn"
-                                        data-bs-toggle="tooltip"
-                                        title={slot}
+                            <div className="col-md-3">
+                              <div className="duration-blk">
+                                <label className="form-control-label">
+                                  End Time{" "}
+                                  <span className="text-danger">*</span>
+                                </label>
+                                <div className="form-icon">
+                                  <TimePicker
+                                    placeholder="Select Time"
+                                    className="form-control datetimepicker1"
+                                    onChange={(time, timeString) =>
+                                      handleEndTimeChange(
+                                        name,
+                                        time,
+                                        timeString
+                                      )
+                                    }
+                                    value={
+                                      selectedHours[key].endTime &&
+                                      dayjs(selectedHours[key].endTime, "HH:mm")
+                                    }
+                                    defaultOpenValue={
+                                      selectedHours[key].endTime
+                                        ? dayjs(
+                                            selectedHours[key].endTime,
+                                            "HH:mm"
+                                          )
+                                        : dayjs("00:00", "HH:mm")
+                                    }
+                                    format="HH:mm"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="col-md-12">
+                              <h4>Available Timings</h4>
+                              <div className="token-slot mt-2">
+                                {timeSlots[key]?.map(
+                                  (slot: string, index: number) => {
+                                    const processedSlot = slot.includes(":")
+                                      ? slot.split(" ")[0] // If it contains ":", remove AM/PM if present
+                                      : slot; // Otherwise, use the slot as is
+
+                                    return (
+                                      <div
+                                        className="form-check-inline visits me-1"
+                                        key={index}
                                       >
-                                        {formatTime(slot)}
-                                      </span>
-                                    </label>
-                                  </div>
-                                )
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* /Tuesday */}
-                  {/* Wednessday */}
-                  <div
-                    className="accordion-item"
-                    id="day-wednesday"
-                    style={{
-                      display: selectedDays[2] ? "block" : "none",
-                    }}
-                  >
-                    <div className="accordion-header">
-                      <div
-                        className="accordion-button collapsed"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#wednesday"
-                      >
-                        <div className="interset-btn empty-space">
-                          <div className="status-toggle d-inline-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              id="status_3"
-                              className="check"
-                            />
-                            <label htmlFor="status_3" className="checktoggle">
-                              checkbox
-                            </label>
-                          </div>
-                        </div>
-                        <span className="accord-title">Wednesday</span>
-                        <Link to="#">Edit</Link>
-                      </div>
-                    </div>
-                    <div id="wednesday" className="accordion-collapse collapse">
-                      <div className="accordion-body">
-                        <div className="row gx-2">
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                Duration <span className="text-danger">*</span>
-                              </label>
-                              <Dropdown
-                                value={selectedHours.wednesday.duration}
-                                onChange={(e) =>
-                                  updateDayHours(
-                                    "wednesday",
-                                    "duration",
-                                    e.target.value
-                                  )
-                                }
-                                options={hoursOptions}
-                                optionLabel="name"
-                                placeholder="Select Hours"
-                                className="select-bg w-100"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                Start Time{" "}
-                                <span className="text-danger">*</span>
-                              </label>
-                              <div className="form-icon">
-                                <TimePicker
-                                  placeholder="Select Time"
-                                  className="form-control datetimepicker1"
-                                  onChange={(time, timeString) =>
-                                    handleStartTimeChange(
-                                      "Wednesday",
-                                      time,
-                                      timeString
-                                    )
+                                        <label className="visit-btns">
+                                          <input
+                                            type="checkbox"
+                                            className="form-check-input"
+                                            value={slot}
+                                          />
+                                          <span
+                                            className="visit-rsn"
+                                            data-bs-toggle="tooltip"
+                                            title={slot}
+                                          >
+                                            {formatTime(processedSlot)}
+                                          </span>
+                                        </label>
+                                      </div>
+                                    );
                                   }
-                                  defaultOpenValue={dayjs("00:00", "HH:mm")}
-                                  format="HH:mm"
-                                />
+                                )}
                               </div>
                             </div>
                           </div>
-
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                End Time <span className="text-danger">*</span>
-                              </label>
-                              <div className="form-icon">
-                                <TimePicker
-                                  placeholder="Select Time"
-                                  className="form-control datetimepicker1"
-                                  onChange={(time, timeString) =>
-                                    handleEndTimeChange(
-                                      "Wednesday",
-                                      time,
-                                      timeString
-                                    )
-                                  }
-                                  defaultOpenValue={dayjs("00:00", "HH:mm")}
-                                  format="HH:mm"
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-md-12">
-                            <h4>Available Timings</h4>
-                            <div className="token-slot mt-2">
-                              {timeSlots["wednesday"]?.map(
-                                (
-                                  slot: string,
-                                  index: React.Key | null | undefined
-                                ) => (
-                                  <div
-                                    className="form-check-inline visits me-1"
-                                    key={index}
-                                  >
-                                    <label className="visit-btns">
-                                      <input
-                                        type="checkbox"
-                                        className="form-check-input"
-                                        value={slot}
-                                      />
-                                      <span
-                                        className="visit-rsn"
-                                        data-bs-toggle="tooltip"
-                                        title={slot}
-                                      >
-                                        {formatTime(slot)}
-                                      </span>
-                                    </label>
-                                  </div>
-                                )
-                              )}
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  {/* /Wednessday */}
-                  {/* Thursday */}
-                  <div
-                    className="accordion-item"
-                    id="day-thursday"
-                    style={{
-                      display: selectedDays[3] ? "block" : "none",
-                    }}
-                  >
-                    <div className="accordion-header">
-                      <div
-                        className="accordion-button collapsed"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#thursday"
-                      >
-                        <div className="interset-btn empty-space">
-                          <div className="status-toggle d-inline-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              id="status_4"
-                              className="check"
-                            />
-                            <label htmlFor="status_4" className="checktoggle">
-                              checkbox
-                            </label>
-                          </div>
-                        </div>
-                        <span className="accord-title">Thursday</span>
-                        <Link to="#">Edit</Link>
-                      </div>
-                    </div>
-                    <div id="thursday" className="accordion-collapse collapse">
-                      <div className="accordion-body">
-                        <div className="row gx-2">
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                Duration <span className="text-danger">*</span>
-                              </label>
-                              <Dropdown
-                                value={selectedHours.thursday.duration}
-                                onChange={(e) =>
-                                  updateDayHours(
-                                    "thursday",
-                                    "duration",
-                                    e.target.value
-                                  )
-                                }
-                                options={hoursOptions}
-                                optionLabel="name"
-                                placeholder="Select Hours"
-                                className="select-bg w-100"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                Start Time{" "}
-                                <span className="text-danger">*</span>
-                              </label>
-                              <div className="form-icon">
-                                <TimePicker
-                                  placeholder="Select Time"
-                                  className="form-control datetimepicker1"
-                                  onChange={(time, timeString) =>
-                                    handleStartTimeChange(
-                                      "Thursday",
-                                      time,
-                                      timeString
-                                    )
-                                  }
-                                  defaultOpenValue={dayjs("00:00", "HH:mm")}
-                                  format="HH:mm"
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                End Time <span className="text-danger">*</span>
-                              </label>
-                              <div className="form-icon">
-                                <TimePicker
-                                  placeholder="Select Time"
-                                  className="form-control datetimepicker1"
-                                  onChange={(time, timeString) =>
-                                    handleEndTimeChange(
-                                      "Thursday",
-                                      time,
-                                      timeString
-                                    )
-                                  }
-                                  defaultOpenValue={dayjs("00:00", "HH:mm")}
-                                  format="HH:mm"
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-md-12">
-                            <h4>Available Timings</h4>
-                            <div className="token-slot mt-2">
-                              {timeSlots["thursday"]?.map(
-                                (
-                                  slot: string,
-                                  index: React.Key | null | undefined
-                                ) => (
-                                  <div
-                                    className="form-check-inline visits me-1"
-                                    key={index}
-                                  >
-                                    <label className="visit-btns">
-                                      <input
-                                        type="checkbox"
-                                        className="form-check-input"
-                                        value={slot}
-                                      />
-                                      <span
-                                        className="visit-rsn"
-                                        data-bs-toggle="tooltip"
-                                        title={slot}
-                                      >
-                                        {formatTime(slot)}
-                                      </span>
-                                    </label>
-                                  </div>
-                                )
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* /Thursday */}
-                  {/* Friday */}
-                  <div
-                    className="accordion-item"
-                    id="day-friday"
-                    style={{
-                      display: selectedDays[4] ? "block" : "none",
-                    }}
-                  >
-                    <div className="accordion-header">
-                      <div
-                        className="accordion-button collapsed"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#friday"
-                      >
-                        <div className="interset-btn empty-space">
-                          <div className="status-toggle d-inline-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              id="status_5"
-                              className="check"
-                            />
-                            <label htmlFor="status_5" className="checktoggle">
-                              checkbox
-                            </label>
-                          </div>
-                        </div>
-                        <span className="accord-title">Friday</span>
-                        <Link to="#">Edit</Link>
-                      </div>
-                    </div>
-                    <div id="friday" className="accordion-collapse collapse">
-                      <div className="accordion-body">
-                        <div className="row gx-2">
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                Duration <span className="text-danger">*</span>
-                              </label>
-                              <Dropdown
-                                value={selectedHours.friday.duration}
-                                onChange={(e) =>
-                                  updateDayHours(
-                                    "friday",
-                                    "duration",
-                                    e.target.value
-                                  )
-                                }
-                                options={hoursOptions}
-                                optionLabel="name"
-                                placeholder="Select Hours"
-                                className="select-bg w-100"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                Start Time{" "}
-                                <span className="text-danger">*</span>
-                              </label>
-                              <div className="form-icon">
-                                <TimePicker
-                                  placeholder="Select Time"
-                                  className="form-control datetimepicker1"
-                                  onChange={(time, timeString) =>
-                                    handleStartTimeChange(
-                                      "Friday",
-                                      time,
-                                      timeString
-                                    )
-                                  }
-                                  defaultOpenValue={dayjs("00:00", "HH:mm")}
-                                  format="HH:mm"
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                End Time <span className="text-danger">*</span>
-                              </label>
-                              <div className="form-icon">
-                                <TimePicker
-                                  placeholder="Select Time"
-                                  className="form-control datetimepicker1"
-                                  onChange={(time, timeString) =>
-                                    handleEndTimeChange(
-                                      "Friday",
-                                      time,
-                                      timeString
-                                    )
-                                  }
-                                  defaultOpenValue={dayjs("00:00", "HH:mm")}
-                                  format="HH:mm"
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-md-12">
-                            <h4>Available Timings</h4>
-                            <div className="token-slot mt-2">
-                              {timeSlots["friday"]?.map(
-                                (
-                                  slot: string,
-                                  index: React.Key | null | undefined
-                                ) => (
-                                  <div
-                                    className="form-check-inline visits me-1"
-                                    key={index}
-                                  >
-                                    <label className="visit-btns">
-                                      <input
-                                        type="checkbox"
-                                        className="form-check-input"
-                                        value={slot}
-                                      />
-                                      <span
-                                        className="visit-rsn"
-                                        data-bs-toggle="tooltip"
-                                        title={slot}
-                                      >
-                                        {formatTime(slot)}
-                                      </span>
-                                    </label>
-                                  </div>
-                                )
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* /Friday */}
-                  {/* Saturday */}
-                  <div
-                    className="accordion-item"
-                    id="day-saturday"
-                    style={{
-                      display: selectedDays[5] ? "block" : "none",
-                    }}
-                  >
-                    <div className="accordion-header">
-                      <div
-                        className="accordion-button collapsed"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#saturday"
-                      >
-                        <div className="interset-btn empty-space">
-                          <div className="status-toggle d-inline-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              id="status_6"
-                              className="check"
-                            />
-                            <label htmlFor="status_6" className="checktoggle">
-                              checkbox
-                            </label>
-                          </div>
-                        </div>
-                        <span className="accord-title">Saturday</span>
-                        <Link to="#">Edit</Link>
-                      </div>
-                    </div>
-                    <div id="saturday" className="accordion-collapse collapse">
-                      <div className="accordion-body">
-                        <div className="row gx-2">
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                Duration <span className="text-danger">*</span>
-                              </label>
-                              <Dropdown
-                                value={selectedHours.saturday.duration}
-                                onChange={(e) =>
-                                  updateDayHours(
-                                    "saturday",
-                                    "duration",
-                                    e.target.value
-                                  )
-                                }
-                                options={hoursOptions}
-                                optionLabel="name"
-                                placeholder="Select Hours"
-                                className="select-bg w-100"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                Start Time{" "}
-                                <span className="text-danger">*</span>
-                              </label>
-                              <div className="form-icon">
-                                <TimePicker
-                                  placeholder="Select Time"
-                                  className="form-control datetimepicker1"
-                                  onChange={(time, timeString) =>
-                                    handleStartTimeChange(
-                                      "Saturday",
-                                      time,
-                                      timeString
-                                    )
-                                  }
-                                  defaultOpenValue={dayjs("00:00", "HH:mm")}
-                                  format="HH:mm"
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                End Time <span className="text-danger">*</span>
-                              </label>
-                              <div className="form-icon">
-                                <TimePicker
-                                  placeholder="Select Time"
-                                  className="form-control datetimepicker1"
-                                  onChange={(time, timeString) =>
-                                    handleEndTimeChange(
-                                      "Saturday",
-                                      time,
-                                      timeString
-                                    )
-                                  }
-                                  defaultOpenValue={dayjs("00:00", "HH:mm")}
-                                  format="HH:mm"
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-md-12">
-                            <h4>Available Timings</h4>
-                            <div className="token-slot mt-2">
-                              {timeSlots["saturday"]?.map(
-                                (
-                                  slot: string,
-                                  index: React.Key | null | undefined
-                                ) => (
-                                  <div
-                                    className="form-check-inline visits me-1"
-                                    key={index}
-                                  >
-                                    <label className="visit-btns">
-                                      <input
-                                        type="checkbox"
-                                        className="form-check-input"
-                                        value={slot}
-                                      />
-                                      <span
-                                        className="visit-rsn"
-                                        data-bs-toggle="tooltip"
-                                        title={slot}
-                                      >
-                                        {formatTime(slot)}
-                                      </span>
-                                    </label>
-                                  </div>
-                                )
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* /Saturday */}
-                  {/* Sunday */}
-                  <div
-                    className="accordion-item"
-                    id="day-sunday"
-                    style={{
-                      display: selectedDays[6] ? "block" : "none",
-                    }}
-                  >
-                    <div className="accordion-header">
-                      <div
-                        className="accordion-button collapsed"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#sunday"
-                      >
-                        <div className="interset-btn empty-space">
-                          <div className="status-toggle d-inline-flex align-items-center">
-                            <input
-                              type="checkbox"
-                              id="status_7"
-                              className="check"
-                            />
-                            <label htmlFor="status_7" className="checktoggle">
-                              checkbox
-                            </label>
-                          </div>
-                        </div>
-                        <span className="accord-title">Sunday</span>
-                        <Link to="#">Edit</Link>
-                      </div>
-                    </div>
-                    <div id="sunday" className="accordion-collapse collapse">
-                      <div className="accordion-body">
-                        <div className="row gx-2">
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                Duration <span className="text-danger">*</span>
-                              </label>
-                              <Dropdown
-                                value={selectedHours.sunday.duration}
-                                onChange={(e) =>
-                                  updateDayHours(
-                                    "sunday",
-                                    "duration",
-                                    e.target.value
-                                  )
-                                }
-                                options={hoursOptions}
-                                optionLabel="name"
-                                placeholder="Select Hours"
-                                className="select-bg w-100"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                Start Time{" "}
-                                <span className="text-danger">*</span>
-                              </label>
-                              <div className="form-icon">
-                                <TimePicker
-                                  placeholder="Select Time"
-                                  className="form-control datetimepicker1"
-                                  onChange={(time, timeString) =>
-                                    handleStartTimeChange(
-                                      "Sunday",
-                                      time,
-                                      timeString
-                                    )
-                                  }
-                                  defaultOpenValue={dayjs("00:00", "HH:mm")}
-                                  format="HH:mm"
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-md-3">
-                            <div className="duration-blk">
-                              <label className="form-control-label">
-                                End Time <span className="text-danger">*</span>
-                              </label>
-                              <div className="form-icon">
-                                <TimePicker
-                                  placeholder="Select Time"
-                                  className="form-control datetimepicker1"
-                                  onChange={(time, timeString) =>
-                                    handleEndTimeChange(
-                                      "Sunday",
-                                      time,
-                                      timeString
-                                    )
-                                  }
-                                  defaultOpenValue={dayjs("00:00", "HH:mm")}
-                                  format="HH:mm"
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="col-md-12">
-                            <h4>Available Timings</h4>
-                            <div className="token-slot mt-2">
-                              {timeSlots["sunday"]?.map(
-                                (
-                                  slot: string,
-                                  index: React.Key | null | undefined
-                                ) => (
-                                  <div
-                                    className="form-check-inline visits me-1"
-                                    key={index}
-                                  >
-                                    <label className="visit-btns">
-                                      <input
-                                        type="checkbox"
-                                        className="form-check-input"
-                                        value={slot}
-                                      />
-                                      <span
-                                        className="visit-rsn"
-                                        data-bs-toggle="tooltip"
-                                        title={slot}
-                                      >
-                                        {formatTime(slot)}
-                                      </span>
-                                    </label>
-                                  </div>
-                                )
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* /Sunday */}
+                  ))}
                 </div>
               </div>
             </div>
