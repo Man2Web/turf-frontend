@@ -11,6 +11,7 @@ export const all_routes = {
   allCourt: "/admin/all-court",
   bookingCompleted: "/admin/booking-dashboard",
   adminProfile: "/admin/profile",
+  couponsPage: "/admin/coupon-settings",
 
   // User Routes
   userDashboard: "/user/user-dashboard",

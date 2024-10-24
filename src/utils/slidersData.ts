@@ -37,15 +37,16 @@ export const getUserBookingSliderData = (upcomingBookingsCount: number) => {
   return {
     settings: {
       adaptiveHeight: false,
-      slidesToShow: upcomingBookingsCount > 3 ? 3 : upcomingBookingsCount, // Default: up to 3 slides
+      slidesToShow: 3, // Default: up to 3 slides
       slidesToScroll: upcomingBookingsCount > 2 ? 2 : upcomingBookingsCount,
       infinite: false,
     },
     responsive: [
       {
+        adaptiveHeight: false,
         breakpoint: 3000, // Screens between 992px and 1200px will show 2 slides
         settings: {
-          slidesToShow: upcomingBookingsCount >= 3 ? 3 : upcomingBookingsCount,
+          slidesToShow: 3,
           slidesToScroll:
             upcomingBookingsCount >= 2 ? 2 : upcomingBookingsCount,
           infinite: false,

@@ -13,6 +13,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { base_path } from "./environment";
 import Feature from "./router/Feature";
+import { ConfigProvider } from "antd";
 
 // Define the context interface
 interface UserLocationContextInterface {
@@ -39,7 +40,15 @@ const App = () => {
       value={{ userLocationInContext, setUserLocationInContext }}
     >
       <BrowserRouter basename={base_path}>
-        <Feature />
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: "#097E52",
+            },
+          }}
+        >
+          <Feature />
+        </ConfigProvider>
       </BrowserRouter>
     </UserLocationContext.Provider>
   );

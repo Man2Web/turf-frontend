@@ -24,6 +24,7 @@ import SuperAdminLoginPage from "../pages/auth/super-admin/login";
 import SuperAdminDashboard from "../pages/super-admin/dashboard";
 import ViewCourt from "../pages/super-admin/view-court";
 import CourtReview from "../pages/user/court-review";
+import AdminCoupon from "../pages/admin/admin-coupon";
 
 const routes = all_routes;
 
@@ -82,6 +83,11 @@ const adminRoutes = [
   {
     path: routes.adminProfile,
     element: <AdminProfile />,
+    route: Route,
+  },
+  {
+    path: routes.couponsPage,
+    element: <AdminCoupon />,
     route: Route,
   },
 ];

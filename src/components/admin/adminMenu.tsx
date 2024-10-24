@@ -62,6 +62,20 @@ const AdminMenuComponent = () => {
                 </li>
                 <li>
                   <Link
+                    to={routes.couponsPage}
+                    className={
+                      location.pathname === routes.couponsPage ? "active" : ""
+                    }
+                  >
+                    <ImageWithBasePath
+                      src="assets/img/icons/invoice-icon.svg"
+                      alt="Icon"
+                    />
+                    <span>Coupon Settings</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
                     className={
                       location.pathname === routes.adminProfile ? "active" : ""
                     }

@@ -112,21 +112,27 @@ const BookingCompleted = () => {
         `${process.env.REACT_APP_BACKEND_URL}admin/booking/${adminId}`,
         { params: data }
       );
-      console.log(response.data);
+
       const filterNewBookings = (
         prevData: SuccessBookingData[],
         newData: SuccessBookingData[]
       ) => {
-        return newData.filter(
-          (newBooking) =>
-            !prevData.some(
-              (prevBooking) =>
-                prevBooking.transaction_id === newBooking.transaction_id
-            )
-        );
+        console.log(prevData);
+        console.log(newData);
+        if (newData.length > 0) {
+          return newData?.filter(
+            (newBooking) =>
+              !prevData.some(
+                (prevBooking) =>
+                  prevBooking.transaction_id === newBooking.transaction_id
+              )
+          );
+        } else {
+          return [];
+        }
       };
 
-      if (dataToggle === 1) {
+      if (dataToggle === 1 && response.data.todaysBookings.length > 0) {
         setCurrentData((prevData) => [
           ...prevData,
           ...filterNewBookings(prevData, response.data.todaysBookings),
@@ -134,20 +140,26 @@ const BookingCompleted = () => {
       }
       setCountData(response.data.countData);
 
-      setTodaysBooking((prevData) => [
-        ...prevData,
-        ...filterNewBookings(prevData, response.data.todaysBookings),
-      ]);
+      if (response.data.todaysBookings.length > 0) {
+        setTodaysBooking((prevData) => [
+          ...prevData,
+          ...filterNewBookings(prevData, response.data.todaysBookings),
+        ]);
+      }
 
-      setPreviousBooking((prevData) => [
-        ...prevData,
-        ...filterNewBookings(prevData, response.data.previousBookings),
-      ]);
+      if (response.data.previousBookings.length > 0) {
+        setPreviousBooking((prevData) => [
+          ...prevData,
+          ...filterNewBookings(prevData, response.data.previousBookings),
+        ]);
+      }
 
-      setUpcomingBooking((prevData) => [
-        ...prevData,
-        ...filterNewBookings(prevData, response.data.upcomingBookings),
-      ]);
+      if (response.data.upcomingBookings.length > 0) {
+        setUpcomingBooking((prevData) => [
+          ...prevData,
+          ...filterNewBookings(prevData, response.data.upcomingBookings),
+        ]);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -254,24 +266,6 @@ const BookingCompleted = () => {
                                     className="form-control"
                                   />
                                 </label>
-                              </div>
-                              <div className="card-header-btns">
-                                <nav>
-                                  <div className="nav nav-tabs" role="tablist">
-                                    <button
-                                      className="nav-link active"
-                                      id="nav-Recent-tab"
-                                      data-bs-toggle="tab"
-                                      data-bs-target="#nav-Recent"
-                                      type="button"
-                                      role="tab"
-                                      aria-controls="nav-Recent"
-                                      aria-selected="true"
-                                    >
-                                      Court
-                                    </button>
-                                  </div>
-                                </nav>
                               </div>
                             </div>
                           </div>
