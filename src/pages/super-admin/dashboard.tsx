@@ -12,6 +12,7 @@ import LocationDataModal from "../../components/common/location-data-modal";
 import StatsCardComponent from "../../components/super-admin/stats-card";
 import CourtsDataComponent from "../../components/super-admin/courts-data-component";
 import { UserLocationContext } from "../..";
+import SuperAdminMenu from "../../components/super-admin/super-admin-menu";
 
 const SuperAdminDashboard = () => {
   const routes = all_routes;
@@ -28,7 +29,7 @@ const SuperAdminDashboard = () => {
     <div>
       {!userLocationInContext && <LocationDataModal />}
       {/* Dashboard Menu */}
-      {/* <AdminMenuComponent /> */}
+      <SuperAdminMenu />
       {/* /Dashboard Menu */}
       {/* Page Content */}
       <div className="content court-bg">

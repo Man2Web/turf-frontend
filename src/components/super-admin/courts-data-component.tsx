@@ -9,17 +9,17 @@ import { Badge } from "primereact/badge";
 import { Button } from "primereact/button";
 
 type Court = {
-  id: number;
-  court_id: string;
-  user_id: number;
-  court_name: string;
-  court_type: string;
-  venue_overview: string;
-  rules_of_venue: string;
-  featured: boolean;
-  phone_number: string;
-  email: string;
-  approved: boolean;
+  courts: {
+    court_id: string;
+    admin_id: number;
+    court_name: string;
+    court_type: string;
+    featured: boolean;
+    approved: boolean;
+  };
+  court_details: {
+    phone_number: string;
+  };
 };
 
 const CourtsDataComponent = () => {
@@ -56,7 +56,7 @@ const CourtsDataComponent = () => {
     }
   };
 
-  const updateCourtStatus = async (id: number, status: boolean) => {
+  const updateCourtStatus = async (id: string, status: boolean) => {
     try {
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}superadmin/court/approve/${id}`,
@@ -70,7 +70,7 @@ const CourtsDataComponent = () => {
     }
   };
 
-  const deleteCourt = async (id: number) => {
+  const deleteCourt = async (id: string) => {
     try {
       const response = await axios.delete(
         `${process.env.REACT_APP_BACKEND_URL}superadmin/court/${id}`
@@ -133,46 +133,10 @@ const CourtsDataComponent = () => {
                       <div className="row align-items-center">
                         <div className="col-lg-6">
                           <div className="court-table-head">
-                            <h4>Bookings</h4>
+                            <h4>Courts Data</h4>
                             <p>
-                              Effortlessly track and manage your completed
-                              bookings
+                              Effortlessly track and manage your courts data
                             </p>
-                          </div>
-                        </div>
-                        <div className="col-lg-6">
-                          <div className="coach-active-blk">
-                            <div className="dataTables_filter">
-                              <label>
-                                <input
-                                  type="text"
-                                  value={searchInput}
-                                  onChange={(e) =>
-                                    setSearchInput(e.target.value)
-                                  }
-                                  placeholder="Search"
-                                  className="form-control"
-                                />
-                              </label>
-                            </div>
-                            <div className="card-header-btns">
-                              <nav>
-                                <div className="nav nav-tabs" role="tablist">
-                                  <button
-                                    className="nav-link active"
-                                    id="nav-Recent-tab"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#nav-Recent"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="nav-Recent"
-                                    aria-selected="true"
-                                  >
-                                    Court
-                                  </button>
-                                </div>
-                              </nav>
-                            </div>
                           </div>
                         </div>
                       </div>
@@ -196,24 +160,12 @@ const CourtsDataComponent = () => {
                             >
                               <Column
                                 sortable
-                                field="courtId"
-                                header="Court ID"
-                                body={(rowData: Court) => (
-                                  <td>
-                                    <h2 className="table-avatar">
-                                      {rowData.id}
-                                    </h2>
-                                  </td>
-                                )}
-                              ></Column>
-                              <Column
-                                sortable
                                 field="courtName"
                                 header="Court Name"
                                 body={(rowData: Court) => (
                                   <td>
                                     <h2 className="table-avatar">
-                                      {rowData.court_name}
+                                      {rowData.courts.court_name}
                                     </h2>
                                   </td>
                                 )}
@@ -225,7 +177,7 @@ const CourtsDataComponent = () => {
                                 body={(rowData: Court) => (
                                   <td>
                                     <h2 className="table-avatar">
-                                      {rowData.phone_number}
+                                      {rowData.court_details.phone_number}
                                     </h2>
                                   </td>
                                 )}
@@ -237,7 +189,7 @@ const CourtsDataComponent = () => {
                                 body={(rowData: Court) => (
                                   <td>
                                     <h2 className="table-avatar">
-                                      {rowData.court_type}
+                                      {rowData.courts.court_type}
                                     </h2>
                                   </td>
                                 )}
@@ -249,7 +201,7 @@ const CourtsDataComponent = () => {
                                 body={(rowData: Court) => (
                                   <td>
                                     <h2 className="table-avatar">
-                                      {rowData.user_id}
+                                      {rowData.courts.admin_id}
                                     </h2>
                                   </td>
                                 )}
@@ -261,7 +213,7 @@ const CourtsDataComponent = () => {
                                 body={(rowData: Court) => (
                                   <td>
                                     <h2 className="table-avatar">
-                                      {rowData.approved ? (
+                                      {rowData.courts.approved ? (
                                         <Badge
                                           value="Approved"
                                           severity="success"
@@ -283,7 +235,7 @@ const CourtsDataComponent = () => {
                                 body={(rowData: Court) => (
                                   <td className="table-accept-btn text-end">
                                     <Link
-                                      to={`/super-admin/court/${rowData.court_id}`}
+                                      to={`/super-admin/court/${rowData.courts.court_id}`}
                                       className="btn accept-btn"
                                     >
                                       <i className="feather-eye"></i>
@@ -297,11 +249,14 @@ const CourtsDataComponent = () => {
                                 // header=""
                                 body={(rowData: Court) => (
                                   <td>
-                                    {rowData.approved ? (
+                                    {rowData.courts.approved ? (
                                       <div className="table-accept-btn text-end">
                                         <Link
                                           onClick={() =>
-                                            updateCourtStatus(rowData.id, false)
+                                            updateCourtStatus(
+                                              rowData.courts.court_id,
+                                              false
+                                            )
                                           }
                                           to="#"
                                           className="btn accept-btn"
@@ -311,7 +266,7 @@ const CourtsDataComponent = () => {
                                         </Link>
                                         <Link
                                           onClick={() =>
-                                            deleteCourt(rowData.id)
+                                            deleteCourt(rowData.courts.court_id)
                                           }
                                           to="#"
                                           className="btn btn-red"
@@ -324,7 +279,10 @@ const CourtsDataComponent = () => {
                                       <div className="table-accept-btn text-end">
                                         <Link
                                           onClick={() =>
-                                            updateCourtStatus(rowData.id, true)
+                                            updateCourtStatus(
+                                              rowData.courts.court_id,
+                                              true
+                                            )
                                           }
                                           to="#"
                                           className="btn accept-btn"
@@ -334,7 +292,7 @@ const CourtsDataComponent = () => {
                                         </Link>
                                         <Link
                                           onClick={() =>
-                                            deleteCourt(rowData.id)
+                                            deleteCourt(rowData.courts.court_id)
                                           }
                                           to="#"
                                           className="btn btn-red"
@@ -351,16 +309,6 @@ const CourtsDataComponent = () => {
                           )}
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="tab-footer">
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div id="tablelength" />
-                    </div>
-                    <div className="col-md-6">
-                      <div id="tablepage" />
                     </div>
                   </div>
                 </div>

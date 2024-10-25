@@ -22,7 +22,6 @@ const CouponsModal = ({
     >
       {couponsData.map((coupon, index) => (
         <Card
-          className="mb-2"
           key={index}
           size="small"
           title={coupon.coupon_code}

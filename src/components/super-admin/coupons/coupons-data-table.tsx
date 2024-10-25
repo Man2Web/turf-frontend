@@ -9,7 +9,7 @@ import { Button } from "antd";
 const CouponsDataTable: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [couponsData, setCouponsData] = useState<Coupon[]>([]);
-  const adminId = localStorage.getItem("adminId");
+  const adminId = localStorage.getItem("superAdminId");
 
   useEffect(() => {
     getAdminCouponsData();
@@ -19,7 +19,7 @@ const CouponsDataTable: React.FC = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}court/coupon/${adminId}`
+        `${process.env.REACT_APP_BACKEND_URL}superadmin/coupon/${adminId}`
       );
       if (response.status === 200) {
         setCouponsData(response.data.couponsData);
@@ -77,11 +77,6 @@ const CouponsDataTable: React.FC = () => {
 
   const columns = [
     {
-      field: "court_info.court_name",
-      header: "Court Name",
-      sortable: true,
-    },
-    {
       field: "coupon_code",
       header: "Coupon Code",
       sortable: true,
@@ -118,7 +113,6 @@ const CouponsDataTable: React.FC = () => {
       body: deleteCouponHtml,
     },
   ];
-
   return (
     <>
       <ToastContainer />

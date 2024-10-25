@@ -25,6 +25,7 @@ import SuperAdminDashboard from "../pages/super-admin/dashboard";
 import ViewCourt from "../pages/super-admin/view-court";
 import CourtReview from "../pages/user/court-review";
 import AdminCoupon from "../pages/admin/admin-coupon";
+import SuperAdminCoupon from "../pages/super-admin/super-admin-coupon";
 
 const routes = all_routes;
 
@@ -37,6 +38,11 @@ const superAdminRoutes = [
   {
     path: routes.ViewCourt,
     element: <ViewCourt />,
+    route: Route,
+  },
+  {
+    path: routes.superAdminCouponsPage,
+    element: <SuperAdminCoupon />,
     route: Route,
   },
 ];

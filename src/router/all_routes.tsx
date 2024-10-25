@@ -3,6 +3,7 @@ export const all_routes = {
   superAdminLogin: "/auth/super-admin",
   SuperAdminDashboard: "/super-admin/dashboard",
   ViewCourt: "/super-admin/court/:courtId",
+  superAdminCouponsPage: "/super-admin/coupon-settings",
 
   // Admin Routes
   adminDashboard: "/admin/admin-dashboard",

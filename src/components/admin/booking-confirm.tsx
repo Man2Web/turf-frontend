@@ -299,7 +299,8 @@ const BookingConfirmModal = ({
               <i className="feather-arrow-left-circle me-1" />
               Back to Dashboard
             </Link>
-            {bookingData?.review_details !== undefined ? (
+            {bookingData?.review_details === null ||
+            bookingData?.review_details === undefined ? (
               <Link
                 target="_blank"
                 to={`/user/court/${bookingData?.court_info.court_id}/${bookingData?.transaction_id}/${bookingData?.booking_detail_id}`}

@@ -167,14 +167,6 @@ const CheckOutForm = ({
                             </p>
                           </div>
                         )}
-                      {userSelectedCoupon && (
-                        <div className="d-flex justify-content-between price-breakdown">
-                          <p className="m-0 pb-2">Coupon Discout</p>
-                          <p className="m-0 pb-2">
-                            ₹{decimalNumber(discountedPrice)}
-                          </p>
-                        </div>
-                      )}
                       <div className="sorting-select"></div>
                     </div>
                   </div>
@@ -183,6 +175,12 @@ const CheckOutForm = ({
             </div>
           </div>
         </div>
+        {userSelectedCoupon && (
+          <div className="px-2 pt-2 d-flex justify-content-between align-items-center">
+            <h5>Coupon Discount</h5>
+            <h5 className="pb-2">₹-{decimalNumber(discountedPrice)}</h5>
+          </div>
+        )}
         {!isCourtAdmin && (
           <div className="px-2 pt-2 d-flex justify-content-between align-items-center">
             <h5>Order Total</h5>
@@ -209,7 +207,7 @@ const CheckOutForm = ({
                 render={({ field }) => (
                   <Search
                     placeholder="Enter Coupon Code"
-                    enterButton="Get Discount"
+                    enterButton={`${userSelectedCoupon ? "Discount Applied" : "Get Discount"}`}
                     size="large"
                     value={field.value}
                     onChange={(e) => {
