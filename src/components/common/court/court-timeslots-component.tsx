@@ -45,7 +45,7 @@ const CourtTimeSlotsComponent = ({
   selectedDate,
   setSelectedDate,
   selectedSlots,
-  setSetselectedSlots,
+  setSelectedSlots,
   courtDuration,
 }: {
   progress: number;
@@ -54,7 +54,7 @@ const CourtTimeSlotsComponent = ({
   selectedDate: any;
   setSelectedDate: any;
   selectedSlots: any;
-  setSetselectedSlots: any;
+  setSelectedSlots: any;
   courtDuration: string;
 }) => {
   const [timeSlots, setTimeSlots] = useState<TimeSlotInterface[]>([]);
@@ -63,7 +63,7 @@ const CourtTimeSlotsComponent = ({
 
   useEffect(() => {
     generateTimeSlots();
-    setSetselectedSlots([]);
+    setSelectedSlots([]);
   }, [selectedDate]);
 
   useEffect(() => {
@@ -149,7 +149,7 @@ const CourtTimeSlotsComponent = ({
 
       setTimeSlots(updatedTimeSlots);
 
-      setSetselectedSlots((prevSelectedSlots: any) => {
+      setSelectedSlots((prevSelectedSlots: any) => {
         if (updatedTimeSlots[idx].isChecked) {
           return [...prevSelectedSlots, updatedTimeSlots[idx]];
         }
@@ -197,78 +197,72 @@ const CourtTimeSlotsComponent = ({
 
   return (
     <div>
-      <>
-        <ToastContainer />
-        {/* Page Content */}
-        <div className="container pt-0">
-          <div className="row text-center">
-            <div className="col-12 col-sm-12 col-md-12 col-lg-8">
-              <div className="card time-date-card">
-                <section className="booking-date">
-                  <div className="list-unstyled owl-carousel date-slider owl-theme mb-40">
-                    <Slider {...featuredVenuesSlider}>
-                      {Array.from({ length: 30 }).map((_, idx) => {
-                        const newDate = new Date();
-                        newDate.setDate(newDate.getDate() + idx);
-                        const date = newDate.getDate();
+      <ToastContainer />
+      {/* Page Content */}
+      <div className="container pt-0">
+        <div className="row text-center">
+          <div className="col-12 col-sm-12 col-md-12 col-lg-8">
+            <div className="card time-date-card">
+              <section className="booking-date">
+                <div className="list-unstyled owl-carousel date-slider owl-theme mb-40 px-5">
+                  <Slider {...featuredVenuesSlider}>
+                    {Array.from({ length: 30 }).map((_, idx) => {
+                      const newDate = new Date();
+                      newDate.setDate(newDate.getDate() + idx);
+                      const date = newDate.getDate();
 
-                        const month = monthNames[newDate.getMonth()];
-                        const day = dayNames[newDate.getDay()];
-                        return (
-                          <div
-                            key={idx}
-                            className={`booking-date-item ${selectedDate.getDate() === date && selectedDate.getMonth() === newDate.getMonth() ? "selected" : ""}`}
-                            onClick={() => handleDateChange(idx)}
-                          >
-                            <h6>{day}</h6>
-                            <p>
-                              {month} {date}
-                            </p>
-                          </div>
-                        );
-                      })}
-                    </Slider>
-                  </div>
-                  <div className="row">
-                    {slotsLoading && <Loader />}
-                    {!slotsLoading &&
-                    (timeSlots.length == 0 ||
-                      timeSlots[0].time !== "No available slots") ? (
-                      timeSlots.map((slot, index) => (
-                        <div key={index} className="col-12 col-sm-4 col-md-3">
-                          <div
-                            className={`time-slot ${slot.isChecked ? "checked" : ""} ${slot.isActive ? "active" : ""} ${slot.isBooked ? "cursor-none" : ""}`}
-                            onClick={() => handleTimeSlotClick(index)}
-                          >
-                            <span>
-                              {`${formatTime(slot.time)} - ${formatEndTime(slot.time, courtDuration)}`}
-                            </span>
-                            <i className="fa-regular fa-check-circle" />
-                          </div>
+                      const month = monthNames[newDate.getMonth()];
+                      const day = dayNames[newDate.getDay()];
+                      return (
+                        <div
+                          key={idx}
+                          className={`booking-date-item ${selectedDate.getDate() === date && selectedDate.getMonth() === newDate.getMonth() ? "selected" : ""}`}
+                          onClick={() => handleDateChange(idx)}
+                        >
+                          <p>{day}</p>
+                          <p>
+                            {month} {date}
+                          </p>
                         </div>
-                      ))
-                    ) : (
-                      <div className="col-12 py-4">No time slots available</div>
-                    )}
-                  </div>
-                </section>
-              </div>
+                      );
+                    })}
+                  </Slider>
+                </div>
+                <div className="row">
+                  {slotsLoading && <Loader />}
+                  {!slotsLoading &&
+                  (timeSlots.length == 0 ||
+                    timeSlots[0].time !== "No available slots") ? (
+                    timeSlots.map((slot, index) => (
+                      <div key={index} className="col-12 col-sm-4 col-md-3">
+                        <div
+                          className={`time-slot ${slot.isChecked ? "checked" : ""} ${slot.isActive ? "active" : ""} ${slot.isBooked ? "cursor-none" : ""}`}
+                          onClick={() => handleTimeSlotClick(index)}
+                        >
+                          <span>
+                            {`${formatTime(slot.time)} - ${formatEndTime(slot.time, courtDuration)}`}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="col-12 py-4">No time slots available</div>
+                  )}
+                </div>
+              </section>
             </div>
-            <CourtBookingSummaryComponent
-              date={selectedDate}
-              totalPrice={
-                Number(courtData.pricing.starting_price) * selectedSlots.length
-              }
-              slots={selectedSlots}
-              courtDuration={courtDuration}
-              progress={progress}
-              setProgress={setProgress}
-            />
           </div>
+          <CourtBookingSummaryComponent
+            totalPrice={
+              Number(courtData.pricing.starting_price) * selectedSlots.length
+            }
+            slots={selectedSlots}
+            courtDuration={courtDuration}
+            progress={progress}
+            setProgress={setProgress}
+          />
         </div>
-        {/* /Container */}
-        {/* /Page Content */}
-      </>
+      </div>
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import ButtonLoader from "../button-loader";
 import axios from "axios";
 import Search from "antd/es/transfer/search";
-import { Input, message } from "antd";
+import { Collapse, CollapseProps, Input, message } from "antd";
 import CouponsModal from "../../admin/coupons/coupons-modal";
 
 interface CourtPrice {
@@ -99,23 +99,54 @@ const CheckOutForm = ({
       }
     }
   };
-  console.log(couponError);
+
+  const getItems = [
+    {
+      key: "1",
+      label: "Price Breakdown",
+      children: (
+        <div className="card-body-chat gap-2">
+          <div className="d-flex justify-content-between price-breakdown">
+            <p className="m-0 pb-2">GST Charge</p>
+            <p className="m-0 pb-2">₹{decimalNumber(gstAmount)}</p>
+          </div>
+          <div className="d-flex justify-content-between price-breakdown">
+            <p className="m-0 pb-2">Base Fee (2% of court price)</p>
+            <p className="m-0 pb-2">₹{decimalNumber(baseAmount)}</p>
+          </div>
+          {userDetails && userDetails.additionalNumberOfGuests > 0 && (
+            <div className="d-flex justify-content-between price-breakdown">
+              <p className="m-0 pb-2">
+                Additional Guest Charge ({userDetails.additionalNumberOfGuests}{" "}
+                * {courtData.pricing.price_of_additional_guests})
+              </p>
+              <p className="m-0 pb-2">₹{decimalNumber(additionalUserCharge)}</p>
+            </div>
+          )}
+          <div className="sorting-select"></div>
+        </div>
+      ),
+      showArrow: false,
+    },
+  ];
+
+  console.log(totalPrice);
   return (
     <div className="col-12 col-sm-12 col-md-12 col-lg-12">
       <aside className="card payment-modes">
         <h3 className="border-bottom">Checkout</h3>
         <div className="px-2 d-flex justify-content-between align-items-center">
-          <h5>Location Fee</h5>
-          <h5>
+          <h6 className="mb-0">Location Fee</h6>
+          <h6 className="mb-0">
             ₹
             {decimalNumber(
               Number(courtData.pricing.starting_price) * selectedSlots.length
             )}
-          </h5>
+          </h6>
         </div>
         <div className="px-2 pt-2 d-flex justify-content-between align-items-center">
-          <h5>Convience Fee</h5>
-          <h5>₹{decimalNumber(gstAmount + baseAmount)}</h5>
+          <h6>Convience Fee</h6>
+          <h6>₹{decimalNumber(gstAmount + baseAmount)}</h6>
         </div>
         {/* Accordion */}
         <div>
@@ -124,52 +155,14 @@ const CheckOutForm = ({
               {/* Dropdown */}
               <div className="px-2" id="accordionMain2">
                 <div className="accordion-item">
-                  <div className="accordion-header" id="headingTwo">
-                    <h6 className="">
-                      <Link
-                        to="#"
-                        className="w-100 collapsed text-success d-flex justify-content-between"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapseTwo"
-                        aria-expanded="false" // Change to false for correct initial state
-                        aria-controls="collapseTwo"
-                        style={{ fontSize: "12px" }}
-                      >
-                        Price breakdown
-                      </Link>
-                    </h6>
-                  </div>
-                  <div
-                    id="collapseTwo"
-                    className="accordion-collapse collapse"
-                    aria-labelledby="headingTwo"
-                    data-bs-parent="#accordionMain2" // Ensure this matches the parent accordion ID
-                  >
-                    <div className="card-body-chat gap-2">
-                      <div className="d-flex justify-content-between price-breakdown">
-                        <p className="m-0 pb-2">GST Charge</p>
-                        <p className="m-0 pb-2">₹{decimalNumber(gstAmount)}</p>
-                      </div>
-                      <div className="d-flex justify-content-between price-breakdown">
-                        <p className="m-0 pb-2">Base Fee (2% of court price)</p>
-                        <p className="m-0 pb-2">₹{decimalNumber(baseAmount)}</p>
-                      </div>
-                      {userDetails &&
-                        userDetails.additionalNumberOfGuests > 0 && (
-                          <div className="d-flex justify-content-between price-breakdown">
-                            <p className="m-0 pb-2">
-                              Additional Guest Charge (
-                              {userDetails.additionalNumberOfGuests} *{" "}
-                              {courtData.pricing.price_of_additional_guests})
-                            </p>
-                            <p className="m-0 pb-2">
-                              ₹{decimalNumber(additionalUserCharge)}
-                            </p>
-                          </div>
-                        )}
-                      <div className="sorting-select"></div>
-                    </div>
-                  </div>
+                  {/* <Collapse className="w-100 collapsed text-success d-flex justify-content-between">
+                    Price breakdown
+                  </Collapse> */}
+                  <Collapse
+                    bordered={false}
+                    items={getItems}
+                    style={{ backgroundColor: "white" }}
+                  />
                 </div>
               </div>
             </div>
@@ -177,20 +170,22 @@ const CheckOutForm = ({
         </div>
         {userSelectedCoupon && (
           <div className="px-2 pt-2 d-flex justify-content-between align-items-center">
-            <h5>Coupon Discount</h5>
-            <h5 className="pb-2">₹-{decimalNumber(discountedPrice)}</h5>
+            <h6>Coupon Discount</h6>
+            <h6 className="text-success pb-2">
+              ₹-{decimalNumber(discountedPrice)}
+            </h6>
           </div>
         )}
         {!isCourtAdmin && (
           <div className="px-2 pt-2 d-flex justify-content-between align-items-center">
-            <h5>Order Total</h5>
-            <h5 className="pb-2">₹ {decimalNumber(totalPrice)}</h5>
+            <h6>Order Total</h6>
+            <h6 className="pb-2">₹ {decimalNumber(totalPrice)}</h6>
           </div>
         )}
         {!isCourtAdmin && courtCoupons.length > 0 && (
           <div className="px-2 pt-2">
             <div className="d-flex justify-content-between">
-              <h5>Coupons</h5>
+              <h6>Coupons</h6>
               <Link
                 to="#"
                 onClick={() => setToggleModal(true)}
@@ -207,7 +202,7 @@ const CheckOutForm = ({
                 render={({ field }) => (
                   <Search
                     placeholder="Enter Coupon Code"
-                    enterButton={`${userSelectedCoupon ? "Discount Applied" : "Get Discount"}`}
+                    enterButton={`${userSelectedCoupon ? "Applied" : "Apply"}`}
                     size="large"
                     value={field.value}
                     onChange={(e) => {
@@ -222,6 +217,7 @@ const CheckOutForm = ({
                 )}
               />
               <CouponsModal
+                totalPrice={totalPrice}
                 toggleModal={toggleModal}
                 setToggleModal={setToggleModal}
                 couponsData={courtCoupons}
@@ -239,25 +235,25 @@ const CheckOutForm = ({
                 <h5 className="text-primary pb-2">
                   ₹ {decimalNumber(advanceAmount)}
                 </h5>
-                <h6
+                <h5
                   className="text-primary"
                   style={{ fontSize: "12px", fontWeight: "400" }}
                 >
                   Pay Now
-                </h6>
+                </h5>
               </div>
               <div>
                 <h5 className="pb-2">
                   ₹ {decimalNumber(Math.round(totalPrice - advanceAmount))}
                 </h5>
-                <h6
+                <h5
                   style={{
                     fontSize: "12px",
                     fontWeight: "400",
                   }}
                 >
                   Pay at Venue
-                </h6>
+                </h5>
               </div>
             </>
           ) : (

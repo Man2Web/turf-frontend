@@ -87,14 +87,15 @@
     }
     &.checked {
       border-color: $__primarycolor;
+      background-color: $__primarycolor;
       span {
-        color: $__primarycolor;
+        color: $__white;
         font-size: $__font__size__16;
         font-weight: $__medium;
       }
       i {
         display: $__block;
-        color: $__primarycolor;
+        color: $__white;
         font-weight: $__bold;
       }
     }
@@ -107,6 +108,7 @@
 
     .booking-date-item {
       cursor: pointer;
+      padding: 4px;
 
       p {
         margin-bottom: 0;
@@ -116,6 +118,8 @@
         padding: 4px;
         border-radius: 5px;
         border: 1px solid $__primarycolor; // Darker border on selection
+        background-color: $__primarycolor;
+        color: $__white;
       }
     }
 

@@ -26,6 +26,9 @@ import ViewCourt from "../pages/super-admin/view-court";
 import CourtReview from "../pages/user/court-review";
 import AdminCoupon from "../pages/admin/admin-coupon";
 import SuperAdminCoupon from "../pages/super-admin/super-admin-coupon";
+import ForgotPassword from "../pages/auth/forgot-password";
+import ChangePassword from "../pages/auth/change-password";
+import Error404 from "../pages/common/error-404";
 
 const routes = all_routes;
 
@@ -109,6 +112,16 @@ const authenticationRoutes = [
     element: <Login />,
     route: Route,
   },
+  {
+    path: routes.forgotPassword,
+    element: <ForgotPassword />,
+    route: Route,
+  },
+  {
+    path: routes.resetPassword,
+    element: <ChangePassword />,
+    route: Route,
+  },
 ];
 
 const publicRoutes = [
@@ -143,6 +156,11 @@ const noHeaderRoutes = [
   {
     path: routes.courtBooking,
     element: <CourtBooking />,
+    route: Route,
+  },
+  {
+    path: routes.error404,
+    element: <Error404 />,
     route: Route,
   },
 ];

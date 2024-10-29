@@ -10,6 +10,7 @@ import Loader from "./Loader";
 import ButtonLoader from "./button-loader";
 
 const LoginFormComponent = () => {
+  const routes = all_routes;
   const navigate = useNavigate();
   const route = all_routes;
   const {
@@ -105,7 +106,7 @@ const LoginFormComponent = () => {
         <div className="form-group d-sm-flex align-items-center justify-content-between">
           <div className="form-check form-switch d-flex align-items-center justify-content-start"></div>
           <span>
-            <Link to="/forgot-password" className="forgot-pass">
+            <Link to={routes.forgotPassword} className="forgot-pass">
               Forgot Password
             </Link>
           </span>

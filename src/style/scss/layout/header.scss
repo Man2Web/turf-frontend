@@ -128,7 +128,7 @@
       }
     }
     #mobile_btn {
-      display: none;
+      // display: none;
       margin-right: 30px;
       @include respond-below(custom991) {
         display: inline-block;
@@ -761,7 +761,7 @@
       &:before {
         content: "";
         background-color: rgba(0, 0, 0, 0.6);
-        display: none;
+        display: block;
         height: 100%;
         width: 100%;
         z-index: 1040;

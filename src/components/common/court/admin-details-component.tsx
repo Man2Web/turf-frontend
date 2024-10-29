@@ -60,6 +60,7 @@ const AdminDetailsComponent = ({
     numberOfGuests,
     additionalNumberOfGuests,
     setUserDetails,
+    isValid,
   ]);
 
   return (
@@ -90,7 +91,7 @@ const AdminDetailsComponent = ({
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${errors.fName?.message ? "border border-danger" : ""}`}
                     id="fName"
                     placeholder="Enter Name"
                     {...register("fName", {
@@ -101,7 +102,7 @@ const AdminDetailsComponent = ({
                       },
                     })}
                   />
-                  {errors.fName && (
+                  {errors.fName?.type === "minLength" && (
                     <p className="text-danger">{errors.fName.message}</p>
                   )}
                 </div>

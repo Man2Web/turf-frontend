@@ -1,40 +1,21 @@
-import React from "react";
-import { formatEndTime } from "../../../utils/formatEndTime";
+import React, { useState } from "react";
 import { decimalNumber } from "../../../utils/decimalNumber";
 import { RupeeIcon } from "../../../utils/icons";
-import { formatTime } from "../../../utils/formatTime";
-
-const monthNames = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
 
 const CourtBookingSummaryComponent = ({
   progress,
   setProgress,
-  date,
   slots,
   totalPrice,
   courtDuration,
 }: {
   progress: number;
   setProgress: any;
-  date: any;
-  slots: any[]; // Array of slot objects
+  slots: string[]; // Array of slot objects
   totalPrice: number;
   courtDuration: string;
 }) => {
-  console.log(progress);
+  const [slotsError, setSlotsError] = useState<boolean>(false);
   return (
     <div className="col-12 col-sm-12 col-md-12 col-lg-4">
       <aside className="card booking-details">
@@ -52,9 +33,21 @@ const CourtBookingSummaryComponent = ({
           </li>
         </ul>
         {progress === 0 && (
-          <button onClick={() => setProgress(1)} className="btn btn-secondary">
+          <button
+            onClick={() => {
+              slots && slots.length !== 0
+                ? setProgress(1)
+                : setSlotsError(true);
+            }}
+            className="btn btn-primary"
+          >
             Proceed
           </button>
+        )}
+        {slotsError && (
+          <p className="text-danger mb-0">
+            You need to select atleaast one slots to book
+          </p>
         )}
       </aside>
     </div>

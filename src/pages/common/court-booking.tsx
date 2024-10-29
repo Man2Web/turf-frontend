@@ -17,7 +17,7 @@ const CourtBooking = () => {
   // const [images, setImages] = useState<any>();
   const [progress, setProgress] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [selectedSlots, setSetselectedSlots] = useState<any>([]);
+  const [selectedSlots, setSelectedSlots] = useState<any>([]);
   const [courtDuration, setCourtDuration] = useState<string>("");
   const [userDetails, setUserDetails] = useState<UserDetailsFormData>();
 
@@ -68,7 +68,7 @@ const CourtBooking = () => {
             userDetails={userDetails}
           />
           {/* Page Content */}
-          <div className="content book-cage">
+          <div className="mt-4 book-cage">
             <div className="container">
               {courtData && progress === 0 && (
                 <CourtTimeSlotsComponent
@@ -78,22 +78,20 @@ const CourtBooking = () => {
                   selectedDate={selectedDate}
                   setSelectedDate={setSelectedDate}
                   selectedSlots={selectedSlots}
-                  setSetselectedSlots={setSetselectedSlots}
+                  setSelectedSlots={setSelectedSlots}
                   courtDuration={courtDuration}
                 />
               )}
               {selectedDate && selectedSlots && progress === 1 && (
-                <>
-                  <CourtCheckout
-                    courtData={courtData}
-                    userDetails={userDetails}
-                    selectedDate={selectedDate}
-                    selectedSlots={selectedSlots}
-                    setUserDetails={setUserDetails}
-                    courtDuration={courtDuration}
-                    courtId={courtId}
-                  />
-                </>
+                <CourtCheckout
+                  courtData={courtData}
+                  userDetails={userDetails}
+                  selectedDate={selectedDate}
+                  selectedSlots={selectedSlots}
+                  setUserDetails={setUserDetails}
+                  courtDuration={courtDuration}
+                  courtId={courtId}
+                />
               )}
             </div>
             {/* /Container */}

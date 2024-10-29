@@ -2,16 +2,20 @@ import { Button, Card, Modal } from "antd";
 import React from "react";
 
 const CouponsModal = ({
+  totalPrice,
   toggleModal,
   setToggleModal,
   couponsData,
   addCoupon,
 }: {
+  totalPrice: number;
   toggleModal: boolean;
   setToggleModal: (data: boolean) => void;
   couponsData: Coupon[];
   addCoupon: (value: string) => void;
 }) => {
+  console.log(couponsData);
+  console.log(totalPrice);
   return (
     <Modal
       title="Available Coupons"
@@ -29,10 +33,13 @@ const CouponsModal = ({
           extra={
             <Button
               onClick={() => {
-                addCoupon(coupon.coupon_code);
-                setToggleModal(false);
+                if (totalPrice <= Number(coupon.min_amount)) {
+                  addCoupon(coupon.coupon_code);
+                  setToggleModal(false);
+                }
               }}
               color="primary"
+              disabled={totalPrice >= Number(coupon.min_amount)}
             >
               Add Coupon
             </Button>

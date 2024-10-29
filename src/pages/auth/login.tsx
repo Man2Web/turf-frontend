@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { all_routes } from "../../router/all_routes";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoginFormComponent from "../../components/common/login-form";
+import Slider from "react-slick";
+import { loginSliderSettings } from "../../utils/slidersData";
 
 const Login = () => {
   const route = all_routes;
-
   return (
     <>
       <ToastContainer />
@@ -19,29 +19,16 @@ const Login = () => {
         <div className="content">
           <div className="container wrapper no-padding">
             <div className="row no-margin vph-100">
-              <div className="col-12 col-sm-12 col-lg-6 no-padding">
-                <div className="banner-bg login">
-                  <div className="row no-margin h-100">
-                    <div className="col-sm-10 col-md-10 col-lg-10 mx-auto">
-                      <div className="h-100 d-flex justify-content-center align-items-center">
-                        <div className="text-bg register text-center">
-                          <button
-                            type="button"
-                            className="btn btn-limegreen text-capitalize"
-                          >
-                            <i className="fa-solid fa-thumbs-up me-3" />
-                            Login User &amp; Coach
-                          </button>
-                          <p>
-                            Log in right away for our advanced sports software
-                            solutions, created to address issues in regular
-                            sporting events and activities.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="col-12 col-sm-12 col-md-12 col-lg-6 no-padding d-none d-xl-block">
+                <Slider className="slider-full-width" {...loginSliderSettings}>
+                  {new Array(5).fill(null).map((_, index) => (
+                    <ImageWithBasePath
+                      key={index}
+                      className="full-width-image"
+                      src={`assets/img/gallery/gallery1/gallery-0${index + 1}.png`}
+                    />
+                  ))}
+                </Slider>
               </div>
               <div className="col-12 col-sm-12  col-lg-6 no-padding">
                 <div className="dull-pg">

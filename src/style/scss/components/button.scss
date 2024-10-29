@@ -88,6 +88,12 @@
     color: $__white;
   }
 }
+.btn-link {
+  color: $__primarycolor;
+  &:hover {
+    color: $__secondarycolor;
+  }
+}
 
 .btn-load {
   background: $__white;

@@ -5,8 +5,6 @@ import { formatTime } from "../../utils/formatTime";
 import { formatEndTime } from "../../utils/formatEndTime";
 import { monthNames } from "../../utils/monthNames";
 import { weekNames } from "../../utils/weekNames";
-import { getTimeSlotDuration } from "../../utils/getOperationalHours";
-import { getCourtDuration } from "../../utils/getCourtDuration";
 
 const getCourtSlotsForSelectedDate = (
   data: string[][] | undefined,
@@ -57,14 +55,7 @@ const BookingHeader = ({
   const month = monthNames[selectedDate.getMonth()];
   const userSelectedDate = selectedDate.getDate();
   const currentDay = weekNames[selectedDate.getDay()];
-  // const operationalHours = getTimeSlotDuration(currentDay, courtData);
-  // const courtAvailabilityData = getCourtDuration(courtData.availability);
-  // const operationalHours = courtAvailabilityData?.duration;
 
-  // console.log(courtData);
-  // console.log(operationalHours);
-
-  // State to manage the visibility of all slots
   const [showAllSlots, setShowAllSlots] = useState(false);
   const slotsToShow = showAllSlots ? selectedSlots : selectedSlots.slice(0, 3); // Display up to 3 slots
 

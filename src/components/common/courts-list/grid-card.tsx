@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
 import { decimalNumber } from "../../../utils/decimalNumber";
-import { HeartFilledIcon, HeartIcon, ThreeDots } from "../../../utils/icons";
+import { HeartFilledIcon, HeartIcon } from "../../../utils/icons";
 import { getIconBySport } from "./list-card";
 import { formatTime } from "../../../utils/formatTime";
 import { handleWishListUpdate } from "../../../utils/handleWishlistUpdate";
@@ -91,15 +91,15 @@ const GridCard = ({
                     {`${court.court_type}`}
                   </span>
                   <span>
-                    <i className="feather-clock" />
+                    <i className="feather-clock fw-bold" />
                     {`${courtDurationData && courtDurationData.duration} Hrs`}
                   </span>
                   <span>
-                    <i className="feather-sun" />
+                    <i className="feather-sun fw-bold" />
                     {`${formatTime(courtDurationData && courtDurationData.start_time)} - ${formatTime(courtDurationData && courtDurationData.end_time)}`}
                   </span>
                   <span className="text-capitalize">
-                    <i className="feather-map-pin" />
+                    <i className="feather-map-pin fw-bold" />
                     {`${court.location.city}, ${court.location.country}`}
                   </span>
                 </li>

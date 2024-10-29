@@ -80,3 +80,13 @@ export const getUserBookingSliderData = (upcomingBookingsCount: number) => {
     ],
   };
 };
+
+export const loginSliderSettings = {
+  infinite: true,
+  dots: true,
+  arrows: false,
+  autoplay: true,
+  autoplaySpeed: 5000,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+};

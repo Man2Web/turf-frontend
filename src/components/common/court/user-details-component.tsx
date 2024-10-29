@@ -78,8 +78,8 @@ const UserDetailsComponent = ({
     numberOfGuests,
     additionalNumberOfGuests,
     setUserDetails,
+    isValid,
   ]);
-
   return (
     <div>
       <div className="container">
@@ -108,7 +108,7 @@ const UserDetailsComponent = ({
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${errors.fName?.message ? "border border-danger" : ""}`}
                     id="fName"
                     placeholder="Enter Name"
                     {...register("fName", {
@@ -119,7 +119,7 @@ const UserDetailsComponent = ({
                       },
                     })}
                   />
-                  {errors.fName && (
+                  {errors.fName?.type === "minLength" && (
                     <p className="text-danger">{errors.fName.message}</p>
                   )}
                 </div>
@@ -144,7 +144,7 @@ const UserDetailsComponent = ({
                   </label>
                   <input
                     type="email"
-                    className="form-control"
+                    className={`form-control ${errors.email?.message ? "border border-danger" : ""}`}
                     id="email"
                     placeholder="Enter Email Address"
                     {...register("email", {
@@ -155,7 +155,7 @@ const UserDetailsComponent = ({
                       },
                     })}
                   />
-                  {errors.email && (
+                  {errors.email?.type === "pattern" && (
                     <p className="text-danger">{errors.email.message}</p>
                   )}
                 </div>
@@ -166,7 +166,7 @@ const UserDetailsComponent = ({
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${errors.phonenumber?.message ? "border border-danger" : ""}`}
                     id="phonenumber"
                     placeholder="Enter Phone Number"
                     {...register("phonenumber", {
@@ -177,7 +177,7 @@ const UserDetailsComponent = ({
                       },
                     })}
                   />
-                  {errors.phonenumber && (
+                  {errors.phonenumber?.type === "pattern" && (
                     <p className="text-danger">{errors.phonenumber.message}</p>
                   )}
                 </div>
@@ -191,7 +191,7 @@ const UserDetailsComponent = ({
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${errors.address?.message ? "border border-danger" : ""}`}
                     id="address"
                     placeholder="Enter Address"
                     {...register("address", {
@@ -202,7 +202,7 @@ const UserDetailsComponent = ({
                       },
                     })}
                   />
-                  {errors.address && (
+                  {errors.address?.type === "minLength" && (
                     <p className="text-danger">{errors.address.message}</p>
                   )}
                 </div>
@@ -213,7 +213,7 @@ const UserDetailsComponent = ({
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${errors.city?.message ? "border border-danger" : ""}`}
                     id="city"
                     placeholder="Enter City"
                     {...register("city", {
@@ -224,7 +224,7 @@ const UserDetailsComponent = ({
                       },
                     })}
                   />
-                  {errors.city && (
+                  {errors.city?.type === "minLength" && (
                     <p className="text-danger">{errors.city.message}</p>
                   )}
                 </div>
@@ -237,7 +237,7 @@ const UserDetailsComponent = ({
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className={`form-control ${errors.pincode?.message ? "border border-danger" : ""}`}
                     id="pincode"
                     placeholder="Enter pincode"
                     {...register("pincode", {
@@ -256,7 +256,9 @@ const UserDetailsComponent = ({
                       },
                     })}
                   />
-                  {errors.pincode && (
+                  {(errors.pincode?.type === "minLength" ||
+                    errors.pincode?.type === "maxLength" ||
+                    errors.pincode?.type === "pattern") && (
                     <p className="text-danger">{errors.pincode.message}</p>
                   )}
                 </div>
@@ -278,11 +280,11 @@ const UserDetailsComponent = ({
                         filter
                         optionLabel="name"
                         placeholder="Select State"
-                        className="select-bg w-100 list-sidebar-select"
+                        className={`select-bg w-100 list-sidebar-select ${errors.state?.message ? "border border-danger" : ""}`}
                       />
                     )}
                   />
-                  {errors.pincode && (
+                  {errors.pincode?.type === "minLength" && (
                     <p className="text-danger">{errors.state?.message}</p>
                   )}
                 </div>

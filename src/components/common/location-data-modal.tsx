@@ -1,28 +1,14 @@
-import React, { useEffect, useState, ReactDOM, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
 import { citiesList } from "../../utils/citiesList";
 import { toast, ToastContainer } from "react-toastify";
 import ButtonLoader from "./button-loader";
 import { Dropdown } from "primereact/dropdown";
-import { Modal } from "react-bootstrap";
 import { UserLocationContext } from "../../index";
 import { useNavigate } from "react-router-dom";
 import { all_routes } from "../../router/all_routes";
-
-// {
-//   //   locations,
-//   setUserLocation,
-//   // setLoading,
-//   setCourtsData,
-//   setImages,
-// }: {
-//   //   locations: any;
-//   setUserLocation?: any;
-//   setLoading?: any;
-//   setCourtsData?: any;
-//   setImages?: any;
-// }
+import { Modal } from "antd";
 
 const LocationDataModal = () => {
   const { control } = useForm();
@@ -116,92 +102,61 @@ const LocationDataModal = () => {
     setShowModal(false);
   };
 
-  useEffect(() => {
-    const modalElement = document.getElementById("locationDetailsModal");
-    if (modalElement && window.bootstrap) {
-      const modal = new window.bootstrap.Modal(modalElement);
-      modal.show(); // Show the modal on component mount
-
-      modalElement.addEventListener("hidden.bs.modal", () => {
-        setShowModal(false);
-      });
-    }
-
-    return () => {
-      if (modalElement) {
-        modalElement.removeEventListener("hidden.bs.modal", closeModal);
-      }
-    };
-  }, []);
-
   return (
     <>
       <ToastContainer />
       <Modal
-        show={showModal}
-        onHide={closeModal}
+        title="Enter Your Location"
+        open={showModal}
+        onCancel={closeModal}
+        closable={false}
+        maskClosable={false}
+        footer={null}
         centered
-        dialogClassName="modal custom-modal request-modal"
-        id="upcoming-court"
-        style={{ overflow: "visible" }}
-        backdrop="static"
-        tabIndex={-1}
       >
-        <div className="modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header d-flex justify-content-between align-items-center">
-              <h4>Enter Your Location</h4>
-            </div>
-            <div className="modal-body">
-              <button
-                onClick={() => getUserLocation()}
-                className="btn btn-primary mb-4"
-              >
-                <div className="d-flex gap-2 align-items-center">
-                  {loading ? (
-                    <ButtonLoader />
-                  ) : (
-                    <>
-                      <i className="feather-map-pin" />
-                      <p className="m-0">Get My Location</p>
-                    </>
-                  )}
-                </div>
-              </button>
-              {locationError && <p className="text-danger">{locationError}</p>}
-              <form autoComplete="off" className="w-100">
-                <div className="card-body-chat">
-                  <div className="sorting-select">
-                    <Controller
-                      name="userLocationInContext"
-                      control={control}
-                      render={({ field }) => (
-                        <Dropdown
-                          filter
-                          value={field.value}
-                          onChange={(e) => {
-                            field.onChange(e.value);
-                            setUserLocationInContext(e.value);
-                          }}
-                          options={locations}
-                          optionLabel="userLocationInContext"
-                          placeholder="Select Location"
-                          className="select-bg w-100 list-sidebar-select"
-                          onShow={() => {
-                            const panelEl =
-                              document.querySelector(".p-dropdown-panel");
-                            if (panelEl) {
-                              panelEl.style.zIndex = "2000";
-                            }
-                          }}
-                        />
-                      )}
-                    />
-                  </div>
-                </div>
-              </form>
-            </div>
+        <div className="modal-body">
+          <div className="d-flex justify-content-center">
+            <button
+              onClick={() => getUserLocation()}
+              className="btn btn-primary mb-4"
+            >
+              <div className="d-flex gap-2 align-items-center">
+                {loading ? (
+                  <ButtonLoader />
+                ) : (
+                  <>
+                    <i className="feather-map-pin" />
+                    <p className="m-0">Get My Location</p>
+                  </>
+                )}
+              </div>
+            </button>
           </div>
+          {locationError && <p className="text-danger">{locationError}</p>}
+          <form autoComplete="off" className="w-100">
+            <div className="card-body-chat">
+              <div className="sorting-select">
+                <Controller
+                  name="userLocationInContext"
+                  control={control}
+                  render={({ field }) => (
+                    <Dropdown
+                      filter
+                      value={field.value}
+                      onChange={(e) => {
+                        field.onChange(e.value);
+                        setUserLocationInContext(e.value);
+                      }}
+                      options={locations}
+                      optionLabel="userLocationInContext"
+                      placeholder="Select Location"
+                      className="select-bg w-100 list-sidebar-select"
+                    />
+                  )}
+                />
+              </div>
+            </div>
+          </form>
         </div>
       </Modal>
     </>

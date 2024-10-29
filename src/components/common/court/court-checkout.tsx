@@ -53,6 +53,8 @@ const CourtCheckout = ({
     useState<SuccessBookingData>();
   const [userSelectedCoupon, setUserSelectedCoupon] = useState<Coupon>();
 
+  const policy = watch("policy");
+
   useEffect(() => {
     getCourtPrice();
   }, [userSelectedCoupon]);
@@ -103,8 +105,6 @@ const CourtCheckout = ({
     };
   };
 
-  const policy = watch("policy");
-
   const checkIfCourtIsAdminCourt = async (adminId: string) => {
     try {
       setLoading(true);
@@ -127,20 +127,10 @@ const CourtCheckout = ({
     }
   }, []);
 
-  const {
-    gstAmount,
-    baseAmount,
-    additionalUserCharge,
-    totalPrice,
-    advanceAmount,
-  } = getCourtPrice();
-
-  console.log(totalPrice);
+  const { totalPrice, advanceAmount } = getCourtPrice();
 
   // Function to handle API call for default payment method
   const onlinePay = async () => {
-    console.log("Trig");
-    // if (isValid) {
     const updatedData = {
       amount: advanceAmount,
       amountTobePaid: Number(Math.round(totalPrice - advanceAmount)),
@@ -178,7 +168,6 @@ const CourtCheckout = ({
         setLoading(false);
       }
     }
-    // }
   };
 
   // Function to handle API call for CASH payment method
@@ -213,7 +202,6 @@ const CourtCheckout = ({
             const response = await axios.get(
               `${process.env.REACT_APP_BACKEND_URL}booking/get/${transaction_id}`
             );
-            console.log(response.data);
             setAdminBookingData(response.data);
           } catch (error) {
             console.error(error);
@@ -230,7 +218,6 @@ const CourtCheckout = ({
       }
     }
   };
-
   return (
     <div>
       <ToastContainer />
@@ -240,56 +227,54 @@ const CourtCheckout = ({
           bookingData={adminBookingData}
         />
       )}
-      <div className="content pt-0">
-        <div className="container">
-          <section>
-            <div className="row checkout">
-              <div className="d-flex">
-                {/* Form Data collection */}
-                <div className="col-12 col-sm-12 col-md-12 col-lg-7">
-                  {isCourtAdmin ? (
-                    <AdminDetailsComponent
-                      setErrors={setErrors}
-                      setIsValid={setIsValid}
-                      courtData={courtData}
-                      setUserDetails={setUserDetails}
-                    />
-                  ) : (
-                    <UserDetailsComponent
-                      setErrors={setErrors}
-                      setIsValid={setIsValid}
-                      courtData={courtData}
-                      setUserDetails={setUserDetails}
-                    />
-                  )}
-                </div>
-                <div>
-                  {/* Original CheckOut */}
-                  <CheckOutForm
+      <div className="container">
+        <section>
+          <div className="row checkout">
+            <div className="d-flex">
+              {/* Form Data collection */}
+              <div className="col-12 col-sm-12 col-md-12 col-lg-7">
+                {isCourtAdmin ? (
+                  <AdminDetailsComponent
+                    setErrors={setErrors}
+                    setIsValid={setIsValid}
                     courtData={courtData}
-                    selectedSlots={selectedSlots}
-                    userDetails={userDetails}
-                    isCourtAdmin={isCourtAdmin}
-                    getCourtPrice={getCourtPrice}
-                    onlinePay={onlinePay}
-                    onCashPayment={onCashPayment}
-                    register={register}
-                    handleSubmit={handleSubmit}
-                    errors={errors}
-                    loading={loading}
-                    adminLoading={adminLoading}
-                    trigger={trigger}
-                    control={control}
-                    policy={policy}
-                    setValue={setValue}
-                    setUserSelectedCoupon={setUserSelectedCoupon}
-                    userSelectedCoupon={userSelectedCoupon}
+                    setUserDetails={setUserDetails}
                   />
-                </div>
+                ) : (
+                  <UserDetailsComponent
+                    setErrors={setErrors}
+                    setIsValid={setIsValid}
+                    courtData={courtData}
+                    setUserDetails={setUserDetails}
+                  />
+                )}
+              </div>
+              <div>
+                {/* Original CheckOut */}
+                <CheckOutForm
+                  courtData={courtData}
+                  selectedSlots={selectedSlots}
+                  userDetails={userDetails}
+                  isCourtAdmin={isCourtAdmin}
+                  getCourtPrice={getCourtPrice}
+                  onlinePay={onlinePay}
+                  onCashPayment={onCashPayment}
+                  register={register}
+                  handleSubmit={handleSubmit}
+                  errors={errors}
+                  loading={loading}
+                  adminLoading={adminLoading}
+                  trigger={trigger}
+                  control={control}
+                  policy={policy}
+                  setValue={setValue}
+                  setUserSelectedCoupon={setUserSelectedCoupon}
+                  userSelectedCoupon={userSelectedCoupon}
+                />
               </div>
             </div>
-          </section>
-        </div>
+          </div>
+        </section>
       </div>
     </div>
   );

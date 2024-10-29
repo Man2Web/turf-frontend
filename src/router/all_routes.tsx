@@ -23,6 +23,8 @@ export const all_routes = {
   // Auth Routes
   register: "/auth/register",
   login: "/auth/login",
+  forgotPassword: "/auth/forgot-password",
+  resetPassword: "/auth/reset-password/:token",
 
   // Public Routes
   home: "/",
@@ -30,6 +32,7 @@ export const all_routes = {
   ListingList: "/courts",
   // ListingListWithCity: "/courts/:requestedLocation",
   courtBooking: "/court/:courtId/booking",
+  error404: "*",
 
   // Booking Routes
   bookingSuccess: "/booking/success/:t_id",

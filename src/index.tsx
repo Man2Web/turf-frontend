@@ -42,8 +42,15 @@ const App = () => {
       <BrowserRouter basename={base_path}>
         <ConfigProvider
           theme={{
+            components: {
+              Modal: {
+                titleFontSize: 20,
+                titleLineHeight: 2.0,
+              },
+            },
             token: {
               colorPrimary: "#097E52",
+              fontFamily: "Outfit",
             },
           }}
         >

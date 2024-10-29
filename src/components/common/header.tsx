@@ -4,14 +4,20 @@ import { all_routes } from "../../router/all_routes";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { UserLocationContext } from "../..";
 import UserProfileHeader from "./user-profile";
+import {
+  adminHeaderData,
+  publicHeaderData,
+  superHeaderData,
+  userHeaderData,
+} from "../../utils/commin-utils/header-data";
 
 const Header = () => {
   const routes = all_routes;
   const location = useLocation();
-  const navigate = useNavigate();
   const [userLocation, setUserLocation] = useState(
     localStorage.getItem("userLocation") || undefined
   );
+  const [toggleMenu, setToggleMenu] = useState(false);
   const superAdminLoggedIn = localStorage.getItem("superAdminToken");
   const adminLoggedIn = localStorage.getItem("adminToken");
   const userLoggedIn = localStorage.getItem("userToken");
@@ -26,141 +32,17 @@ const Header = () => {
   // Destructure properties from the context
   const { userLocationInContext } = context;
 
-  // console.log(userLocationInContext, setUserLocationInContext);
-
   useEffect(() => {
     if (userLocation) {
       setUserLocation(userLocation);
     }
   }, [userLocation]);
 
-  const superHeaderData = [
-    {
-      tittle: "Home",
-      showAsTab: false,
-      separateRoute: true,
-      routes: routes.SuperAdminDashboard,
-      hasSubRoute: false,
-      showSubRoute: false,
-    },
-    {
-      tittle: "Booking",
-      showAsTab: false,
-      separateRoute: false,
-      menu: [
-        {
-          menuValue: "Book A Court",
-          routes: routes.ListingList,
-          hasSubRoute: false,
-          showSubRoute: false,
-          subMenus: [],
-        },
-      ],
-    },
-  ];
-
-  const adminHeaderData = [
-    {
-      tittle: "Home",
-      showAsTab: false,
-      separateRoute: true,
-      routes: routes.adminDashboard,
-      hasSubRoute: false,
-      showSubRoute: false,
-    },
-    {
-      tittle: "Courts",
-      showAsTab: false,
-      separateRoute: false,
-      menu: [
-        {
-          menuValue: "Add Court",
-          routes: routes.addCourt,
-          hasSubRoute: false,
-          showSubRoute: false,
-          subMenus: [],
-        },
-        {
-          menuValue: "Courts List",
-          routes: routes.allCourt,
-          hasSubRoute: false,
-          showSubRoute: false,
-          subMenus: [],
-        },
-      ],
-    },
-    {
-      tittle: "Booking",
-      showAsTab: false,
-      separateRoute: false,
-      menu: [
-        {
-          menuValue: "Book A Court",
-          routes: routes.ListingList,
-          hasSubRoute: false,
-          showSubRoute: false,
-          subMenus: [],
-        },
-      ],
-    },
-  ];
-
-  const userHeaderData = [
-    {
-      tittle: "Home",
-      showAsTab: false,
-      separateRoute: true,
-      routes: routes.userDashboard,
-      hasSubRoute: false,
-      showSubRoute: false,
-    },
-    {
-      tittle: "Booking",
-      showAsTab: false,
-      separateRoute: false,
-      menu: [
-        {
-          menuValue: "Book A Court",
-          routes: routes.ListingList,
-          hasSubRoute: false,
-          showSubRoute: false,
-          subMenus: [],
-        },
-      ],
-    },
-  ];
-
-  const publicHeaderData = [
-    {
-      tittle: "Home",
-      showAsTab: false,
-      separateRoute: true,
-      routes: routes.home,
-      hasSubRoute: false,
-      showSubRoute: false,
-    },
-    {
-      tittle: "Booking",
-      showAsTab: false,
-      separateRoute: false,
-      menu: [
-        {
-          menuValue: "Book A Court",
-          routes: routes.ListingList,
-          hasSubRoute: false,
-          showSubRoute: false,
-          subMenus: [],
-        },
-      ],
-    },
-  ];
-
   const customStyle = {
     background: location.pathname.includes(routes.home)
       ? "rgb(23, 124, 130)"
       : "#ffffff",
   };
-
   return (
     <header
       className={
@@ -173,7 +55,13 @@ const Header = () => {
       <div className="container-fluid">
         <nav className="navbar navbar-expand-lg header-nav">
           <div className="navbar-header">
-            <Link id="mobile_btn" to="#">
+            <Link
+              onClick={() => {
+                setToggleMenu((prev) => !prev);
+              }}
+              id="mobile_btn"
+              to="#"
+            >
               <span className="bar-icon">
                 <span />
                 <span />
@@ -181,8 +69,6 @@ const Header = () => {
               </span>
             </Link>
             <Link to="index" className="navbar-brand logo">
-              {/* <ImageWithBasePath src="assets/img/logo.svg" className="img-fluid" alt="Logo" /> */}
-
               {location.pathname.includes("#") ? (
                 <ImageWithBasePath
                   src="assets/img/logo.svg"
@@ -198,7 +84,9 @@ const Header = () => {
               )}
             </Link>
           </div>
-          <div className="main-menu-wrapper">
+          <div
+            className={`main-menu-wrapper ${toggleMenu ? "menu-opened" : ""}`}
+          >
             <div className="menu-header">
               <Link to="index" className="menu-logo">
                 <ImageWithBasePath
@@ -216,7 +104,7 @@ const Header = () => {
               {adminLoggedIn &&
                 adminHeaderData.map((mainMenus, mainIndex) => (
                   <React.Fragment key={mainIndex}>
-                    {mainMenus.separateRoute ? (
+                    {mainMenus.separateRoute && mainMenus.routes ? (
                       <li
                         key={mainIndex}
                         className={
@@ -243,25 +131,11 @@ const Header = () => {
                           {mainMenus.menu?.map((menu, menuIndex) => (
                             <li
                               key={menuIndex}
-                              className={`${menu.hasSubRoute ? "has-submenu" : ""} ${menu?.subMenus?.map((item) => item?.routes).includes(location.pathname) ? "active" : ""}`}
+                              className={`${menu.hasSubRoute ? "has-submenu" : ""}`}
                             >
                               {menu.hasSubRoute ? (
-                                <React.Fragment>
-                                  <Link to="#">{menu.menuValue}</Link>
-                                  <ul
-                                    className={`submenu ${menu.showSubRoute ? "d-block" : ""}`}
-                                  >
-                                    {menu.subMenus?.map(
-                                      (subMenu, subMenuIndex) => (
-                                        <li key={subMenuIndex}>
-                                          <Link to={subMenu.routes}>
-                                            {subMenu.menuValue}
-                                          </Link>
-                                        </li>
-                                      )
-                                    )}
-                                  </ul>
-                                </React.Fragment>
+                                // We can add subroute logic in here if exists
+                                <></>
                               ) : (
                                 <li
                                   className={
@@ -283,7 +157,7 @@ const Header = () => {
               {userLoggedIn &&
                 userHeaderData.map((mainMenus, mainIndex) => (
                   <React.Fragment key={mainIndex}>
-                    {mainMenus.separateRoute ? (
+                    {mainMenus.separateRoute && mainMenus.routes ? (
                       <li
                         key={mainIndex}
                         className={
@@ -297,60 +171,14 @@ const Header = () => {
                         </Link>
                       </li>
                     ) : (
-                      <li
-                        className={`has-submenu ${mainMenus?.menu?.map((item) => item?.routes).includes(location.pathname) ? "active" : ""}`}
-                      >
-                        <Link style={{ color: "white" }} to="#">
-                          {mainMenus.tittle}{" "}
-                          <i className="fas fa-chevron-down"></i>
-                        </Link>
-                        <ul
-                          className={`submenu ${mainMenus.showAsTab ? "d-block" : ""}`}
-                        >
-                          {mainMenus.menu?.map((menu, menuIndex) => (
-                            <li
-                              key={menuIndex}
-                              className={`${menu.hasSubRoute ? "has-submenu" : ""} ${menu?.subMenus?.map((item) => item?.routes).includes(location.pathname) ? "active" : ""}`}
-                            >
-                              {menu.hasSubRoute ? (
-                                <React.Fragment>
-                                  <Link to="#">{menu.menuValue}</Link>
-                                  <ul
-                                    className={`submenu ${menu.showSubRoute ? "d-block" : ""}`}
-                                  >
-                                    {menu.subMenus?.map(
-                                      (subMenu, subMenuIndex) => (
-                                        <li key={subMenuIndex}>
-                                          <Link to={subMenu.routes}>
-                                            {subMenu.menuValue}
-                                          </Link>
-                                        </li>
-                                      )
-                                    )}
-                                  </ul>
-                                </React.Fragment>
-                              ) : (
-                                <li
-                                  className={
-                                    location.pathname.includes(menu.routes)
-                                      ? "active"
-                                      : ""
-                                  }
-                                >
-                                  <Link to={menu.routes}>{menu.menuValue}</Link>
-                                </li>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      </li>
+                      <></>
                     )}
                   </React.Fragment>
                 ))}
               {superAdminLoggedIn &&
                 superHeaderData.map((mainMenus, mainIndex) => (
                   <React.Fragment key={mainIndex}>
-                    {mainMenus.separateRoute ? (
+                    {mainMenus.separateRoute && mainMenus.routes ? (
                       <li
                         key={mainIndex}
                         className={
@@ -364,53 +192,7 @@ const Header = () => {
                         </Link>
                       </li>
                     ) : (
-                      <li
-                        className={`has-submenu ${mainMenus?.menu?.map((item) => item?.routes).includes(location.pathname) ? "active" : ""}`}
-                      >
-                        <Link style={{ color: "white" }} to="#">
-                          {mainMenus.tittle}{" "}
-                          <i className="fas fa-chevron-down"></i>
-                        </Link>
-                        <ul
-                          className={`submenu ${mainMenus.showAsTab ? "d-block" : ""}`}
-                        >
-                          {mainMenus.menu?.map((menu, menuIndex) => (
-                            <li
-                              key={menuIndex}
-                              className={`${menu.hasSubRoute ? "has-submenu" : ""} ${menu?.subMenus?.map((item) => item?.routes).includes(location.pathname) ? "active" : ""}`}
-                            >
-                              {menu.hasSubRoute ? (
-                                <React.Fragment>
-                                  <Link to="#">{menu.menuValue}</Link>
-                                  <ul
-                                    className={`submenu ${menu.showSubRoute ? "d-block" : ""}`}
-                                  >
-                                    {menu.subMenus?.map(
-                                      (subMenu, subMenuIndex) => (
-                                        <li key={subMenuIndex}>
-                                          <Link to={subMenu.routes}>
-                                            {subMenu.menuValue}
-                                          </Link>
-                                        </li>
-                                      )
-                                    )}
-                                  </ul>
-                                </React.Fragment>
-                              ) : (
-                                <li
-                                  className={
-                                    location.pathname.includes(menu.routes)
-                                      ? "active"
-                                      : ""
-                                  }
-                                >
-                                  <Link to={menu.routes}>{menu.menuValue}</Link>
-                                </li>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      </li>
+                      <></>
                     )}
                   </React.Fragment>
                 ))}
@@ -419,7 +201,7 @@ const Header = () => {
                 !superAdminLoggedIn &&
                 publicHeaderData.map((mainMenus, mainIndex) => (
                   <React.Fragment key={mainIndex}>
-                    {mainMenus.separateRoute ? (
+                    {mainMenus.separateRoute && mainMenus.routes ? (
                       <li
                         key={mainIndex}
                         className={
@@ -431,53 +213,7 @@ const Header = () => {
                         </Link>
                       </li>
                     ) : (
-                      <li
-                        className={`has-submenu ${mainMenus?.menu?.map((item) => item?.routes).includes(location.pathname) ? "active" : ""}`}
-                      >
-                        <Link style={{ color: "white" }} to="#">
-                          {mainMenus.tittle}{" "}
-                          <i className="fas fa-chevron-down"></i>
-                        </Link>
-                        <ul
-                          className={`submenu ${mainMenus.showAsTab ? "d-block" : ""}`}
-                        >
-                          {mainMenus.menu?.map((menu, menuIndex) => (
-                            <li
-                              key={menuIndex}
-                              className={`${menu.hasSubRoute ? "has-submenu" : ""} ${menu?.subMenus?.map((item) => item?.routes).includes(location.pathname) ? "active" : ""}`}
-                            >
-                              {menu.hasSubRoute ? (
-                                <React.Fragment>
-                                  <Link to="#">{menu.menuValue}</Link>
-                                  <ul
-                                    className={`submenu ${menu.showSubRoute ? "d-block" : ""}`}
-                                  >
-                                    {menu.subMenus?.map(
-                                      (subMenu, subMenuIndex) => (
-                                        <li key={subMenuIndex}>
-                                          <Link to={subMenu.routes}>
-                                            {subMenu.menuValue}
-                                          </Link>
-                                        </li>
-                                      )
-                                    )}
-                                  </ul>
-                                </React.Fragment>
-                              ) : (
-                                <li
-                                  className={
-                                    location.pathname.includes(menu.routes)
-                                      ? "active"
-                                      : ""
-                                  }
-                                >
-                                  <Link to={menu.routes}>{menu.menuValue}</Link>
-                                </li>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      </li>
+                      <></>
                     )}
                   </React.Fragment>
                 ))}
@@ -508,36 +244,22 @@ const Header = () => {
               </>
             )}
             {(userLoggedIn || superAdminLoggedIn) && (
-              <>
-                <li className="nav-item">
-                  <div className="nav-link btn btn-primary log-register">
-                    <Link to={routes.ListingList}>Book A Court</Link>
-                  </div>
-                </li>
-                <li className="nav-item">
-                  <UserProfileHeader />
-                </li>
-              </>
+              <li className="nav-item">
+                <UserProfileHeader />
+              </li>
             )}
             {!userLoggedIn && !adminLoggedIn && !superAdminLoggedIn && (
-              <>
-                <li className="nav-item">
-                  <div className="nav-link btn btn-white log-register">
-                    <Link to={routes.login}>
-                      <span>
-                        <i className="feather-users" />
-                      </span>
-                      Login
-                    </Link>{" "}
-                    / <Link to={routes.register}>Register</Link>
-                  </div>
-                </li>
-                <li className="nav-item">
-                  <div className="nav-link btn btn-primary log-register">
-                    <Link to={routes.ListingList}>Book A Court</Link>
-                  </div>
-                </li>
-              </>
+              <li className="nav-item">
+                <div className="nav-link btn btn-white log-register">
+                  <Link to={routes.login}>
+                    <span>
+                      <i className="feather-users" />
+                    </span>
+                    Login
+                  </Link>{" "}
+                  / <Link to={routes.register}>Register</Link>
+                </div>
+              </li>
             )}
           </ul>
         </nav>
