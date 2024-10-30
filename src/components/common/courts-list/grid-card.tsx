@@ -11,7 +11,6 @@ import { getCourtDuration } from "../../../utils/getCourtDuration";
 const GridCard = ({
   showFilters,
   court,
-  images,
   idx,
   userWishlist,
   setUserWishlist,
@@ -19,7 +18,6 @@ const GridCard = ({
 }: {
   showFilters: boolean;
   court: CourtsData;
-  images: string[] | undefined;
   idx: number;
   userWishlist: string[];
   setUserWishlist: any;
@@ -27,6 +25,7 @@ const GridCard = ({
 }) => {
   const routes = all_routes;
   const courtDurationData = getCourtDuration(court.availability);
+  const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${court.admin_id}/${court.court_id}/${court.images[0]}`;
   return (
     <div
       key={idx}
@@ -41,7 +40,7 @@ const GridCard = ({
                   height: "250px",
                   width: "415px",
                 }}
-                src={images && images[idx]}
+                src={imageUrl}
                 alt="court img"
               />
             </Link>

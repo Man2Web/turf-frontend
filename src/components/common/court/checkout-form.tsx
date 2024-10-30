@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { decimalNumber } from "../../../utils/decimalNumber";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { Link } from "react-router-dom";
 import ButtonLoader from "../button-loader";
 import axios from "axios";
-import Search from "antd/es/transfer/search";
-import { Collapse, CollapseProps, Input, message } from "antd";
+import { Collapse, Input } from "antd";
 import CouponsModal from "../../admin/coupons/coupons-modal";
 
 interface CourtPrice {
@@ -155,9 +154,6 @@ const CheckOutForm = ({
               {/* Dropdown */}
               <div className="px-2" id="accordionMain2">
                 <div className="accordion-item">
-                  {/* <Collapse className="w-100 collapsed text-success d-flex justify-content-between">
-                    Price breakdown
-                  </Collapse> */}
                   <Collapse
                     bordered={false}
                     items={getItems}
@@ -267,7 +263,7 @@ const CheckOutForm = ({
           id="terms-and-cond-form"
           onSubmit={handleSubmit(isCourtAdmin ? onCashPayment : onlinePay)}
         >
-          <div className="form-check d-flex justify-content-start align-items-center policy m-0 mb-2">
+          <div className="form-check d-flex flex-column gap-2 justify-content-start align-items-start policy m-0 mb-4">
             <div className="d-flex align-items-center">
               <input
                 className="form-check-input"
@@ -283,6 +279,20 @@ const CheckOutForm = ({
                 <Link to="privacy-policy">Privacy Policy</Link>,{" "}
                 <Link to="terms-condition">Refund Policy</Link>, and{" "}
                 <Link to="terms-condition">Terms & Conditions.</Link>
+              </label>
+            </div>
+            <div className="d-flex align-items-center">
+              <input
+                className="form-check-input"
+                type="checkbox"
+                id="dataConfirmation"
+                {...register("dataConfirmation")}
+              />
+              <label
+                className="form-check-label pt-0"
+                htmlFor="dataConfirmation"
+              >
+                Save the data for faster checkouts in future
               </label>
             </div>
           </div>

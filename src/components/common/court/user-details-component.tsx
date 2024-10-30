@@ -6,6 +6,7 @@ import { Dropdown } from "primereact/dropdown";
 import { statesList } from "../../../utils/statesList";
 import { countriesList } from "../../../utils/countriesList";
 import { updateGuestCount } from "../../../utils/updateGuestCount";
+import { autoFillFormData } from "../../user/auto-fill-form";
 
 const UserDetailsComponent = ({
   courtData,
@@ -22,6 +23,7 @@ const UserDetailsComponent = ({
     register,
     trigger,
     handleSubmit,
+    reset,
     setValue,
     watch,
     control,
@@ -80,6 +82,7 @@ const UserDetailsComponent = ({
     setUserDetails,
     isValid,
   ]);
+  autoFillFormData(reset);
   return (
     <div>
       <div className="container">

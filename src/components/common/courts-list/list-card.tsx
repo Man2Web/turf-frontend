@@ -35,14 +35,12 @@ export const getIconBySport = (sport: string) => {
 
 const ListCard = ({
   court,
-  images,
   idx,
   userWishlist,
   setUserWishlist,
   updateWishList,
 }: {
   court: CourtsData;
-  images: string[] | undefined;
   idx: number;
   userWishlist: string[];
   setUserWishlist: any;
@@ -50,6 +48,7 @@ const ListCard = ({
 }) => {
   const routes = all_routes;
   const courtDurationData = getCourtDuration(court.availability);
+  const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${court.admin_id}/${court.court_id}/${court.images[0]}`;
   return (
     <div key={idx} className="col-lg-12 col-md-12 mb-2">
       <div className="featured-venues-item venue-list-item">
@@ -61,7 +60,7 @@ const ListCard = ({
                   height: "225px",
                   width: "400px",
                 }}
-                src={images && images[idx]}
+                src={imageUrl}
                 alt="court img"
               />
             </Link>

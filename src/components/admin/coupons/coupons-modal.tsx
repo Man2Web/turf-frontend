@@ -14,8 +14,6 @@ const CouponsModal = ({
   couponsData: Coupon[];
   addCoupon: (value: string) => void;
 }) => {
-  console.log(couponsData);
-  console.log(totalPrice);
   return (
     <Modal
       title="Available Coupons"
@@ -33,13 +31,13 @@ const CouponsModal = ({
           extra={
             <Button
               onClick={() => {
-                if (totalPrice <= Number(coupon.min_amount)) {
+                if (totalPrice >= Number(coupon.min_amount)) {
                   addCoupon(coupon.coupon_code);
                   setToggleModal(false);
                 }
               }}
               color="primary"
-              disabled={totalPrice >= Number(coupon.min_amount)}
+              disabled={totalPrice <= Number(coupon.min_amount)}
             >
               Add Coupon
             </Button>

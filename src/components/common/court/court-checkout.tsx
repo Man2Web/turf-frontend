@@ -11,6 +11,7 @@ import { couponDiscount } from "../../../utils/court-utils/coupon-discount";
 
 interface CheckoutForm {
   policy: boolean;
+  dataConfirmation: boolean;
   adminDetailsForm: any;
   userDetailsForm: any;
 }
@@ -54,6 +55,7 @@ const CourtCheckout = ({
   const [userSelectedCoupon, setUserSelectedCoupon] = useState<Coupon>();
 
   const policy = watch("policy");
+  const dataConfirmation = watch("dataConfirmation");
 
   useEffect(() => {
     getCourtPrice();
@@ -145,6 +147,7 @@ const CourtCheckout = ({
         localStorage.getItem("adminId") ||
         localStorage.getItem("userId") ||
         null,
+      dataConfirmation,
     };
     if (policy && isValid) {
       try {
@@ -186,7 +189,6 @@ const CourtCheckout = ({
         localStorage.getItem("userId") ||
         null,
     };
-
     if (policy && isValid) {
       try {
         setAdminLoading(true);
@@ -218,6 +220,7 @@ const CourtCheckout = ({
       }
     }
   };
+
   return (
     <div>
       <ToastContainer />

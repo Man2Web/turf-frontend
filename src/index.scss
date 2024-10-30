@@ -491,24 +491,16 @@ div.p-datepicker table td.p-datepicker-today > span:focus {
   height: 200px;
 }
 
-:where(.css-dev-only-do-not-override-1m58a8j).ant-collapse
-  > .ant-collapse-item
-  > .ant-collapse-header {
+.ant-collapse .ant-collapse-content > .ant-collapse-content-box {
+  padding: 0;
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
   padding: 0;
   color: #097e52;
   font-family: "Outfit", sans-serif;
   font-size: 12px;
   font-weight: 500;
-}
-
-:where(.css-dev-only-do-not-override-1m58a8j).ant-collapse
-  .ant-collapse-content
-  > .ant-collapse-content-box {
-  padding: 0;
-}
-
-.test-red {
-  background-color: red;
 }
 
 /* Set the slider to 100% width */

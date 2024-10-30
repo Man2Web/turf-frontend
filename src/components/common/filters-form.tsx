@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Dropdown } from "primereact/dropdown";
 import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
-import { FloatLabel } from "primereact/floatlabel";
 import { sportValues } from "../../utils/sportsData";
 import { citiesList } from "../../utils/citiesList";
 
@@ -26,7 +25,6 @@ interface AdvancedSearchForm {
 
 export const FilterForm = ({
   setFiltersLoading,
-  setImages,
   setCourtsData,
   userLocation,
   setUserLocation,
@@ -34,7 +32,6 @@ export const FilterForm = ({
   offset,
 }: {
   setFiltersLoading: any;
-  setImages: any;
   setCourtsData: any;
   userLocation: any;
   setUserLocation: any;
@@ -77,11 +74,9 @@ export const FilterForm = ({
   courtName = courtName?.toLowerCase().trim();
 
   const onSubmit = async (data: AdvancedSearchForm) => {
-    console.log(data);
     try {
       setFiltersApplied(true);
       setFiltersLoading(true);
-      setImages([]);
       setCourtsData([]);
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}court/fetch/all/${userLocation}`,
@@ -99,37 +94,7 @@ export const FilterForm = ({
           },
         }
       );
-
-      console.log(response.data);
-
       setCourtsData(response.data.updatedCourtsData);
-
-      // Fetch court images
-      const imagePromises = response.data.updatedCourtsData.map(
-        async (court: CourtsData) => {
-          try {
-            const image = court.images[0];
-            const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${court.admin_id}/${court.court_id}/${image}`;
-            const getImage = await axios.get(imageUrl, {
-              responseType: "arraybuffer", // Expect binary data
-            });
-            const blob = new Blob([getImage.data], { type: "image/webp" });
-            const imgSrc = URL.createObjectURL(blob);
-            return imgSrc; // Return the image source URL
-          } catch (error) {
-            console.error(
-              `Error fetching image for court ${court.court_name}:`,
-              error
-            );
-            return null; // Return null for failed images
-          }
-        }
-      );
-
-      // Await all image promises
-      const resolvedImages = await Promise.all(imagePromises);
-
-      setImages(resolvedImages.filter((image) => image !== null)); // Filter out nulls
     } catch (error) {
       console.error(error);
     } finally {

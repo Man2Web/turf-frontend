@@ -25,7 +25,6 @@ const ListingList = () => {
   const [filtersLoading, setFiltersLoading] = useState<boolean>(false);
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [courtsData, setCourtsData] = useState<CourtsData[]>([]);
-  const [images, setImages] = useState<string[]>([]);
   const [selectedSort, setSelectedSort] = useState<any>(sortOptions[0].name);
   const [userWishlist, setUserWishlist] = useState<string[]>([]);
   const [limit, setLimit] = useState<number>(18);
@@ -123,37 +122,6 @@ const ListingList = () => {
       setPageLoading(false);
     }
   };
-
-  useEffect(() => {
-    const fetchImages = async () => {
-      const imagePromises = courtsData.map(async (court: CourtsData) => {
-        try {
-          const image = court.images[0];
-          console.log(image);
-          const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${court.admin_id}/${court.court_id}/${image}`;
-          const getImage = await axios.get(imageUrl, {
-            responseType: "arraybuffer",
-          });
-          const blob = new Blob([getImage.data], { type: "image/webp" });
-          const imgSrc = URL.createObjectURL(blob);
-          return imgSrc;
-        } catch (error) {
-          console.error(
-            `Error fetching image for court ${court.court_name}:`,
-            error
-          );
-          return null;
-        }
-      });
-
-      const resolvedImages = await Promise.all(imagePromises);
-
-      // Replace the images state instead of appending
-      setImages(resolvedImages.filter(Boolean) as string[]);
-    };
-
-    fetchImages();
-  }, [courtsData]);
 
   const updateWishList = async (wishList: number[]) => {
     if (userId) {
@@ -300,7 +268,6 @@ const ListingList = () => {
                   {showFilters && (
                     <FilterForm
                       setFiltersLoading={setFiltersLoading}
-                      setImages={setImages}
                       setCourtsData={setCourtsData}
                       userLocation={userLocationInContext}
                       setUserLocation={setUserLocationInContext}
@@ -319,7 +286,6 @@ const ListingList = () => {
                             showFilters={showFilters}
                             key={idx}
                             court={court}
-                            images={images}
                             idx={idx}
                             userWishlist={userWishlist}
                             setUserWishlist={setUserWishlist}
@@ -334,7 +300,6 @@ const ListingList = () => {
                           <ListCard
                             key={idx}
                             court={court}
-                            images={images}
                             idx={idx}
                             userWishlist={userWishlist}
                             setUserWishlist={setUserWishlist}
