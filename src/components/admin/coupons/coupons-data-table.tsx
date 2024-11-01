@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Loader from "../../common/Loader";
+import Loader from "../../common/loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { DataTable } from "primereact/datatable";

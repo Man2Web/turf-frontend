@@ -3,9 +3,9 @@ import { all_routes } from "../../router/all_routes";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { useForm } from "react-hook-form";
-import ButtonLoader from "../../components/common/button-loader";
+import ButtonLoader from "../../components/common/loader/button-loader";
 import axios from "axios";
-import Loader from "../../components/common/Loader";
+import Loader from "../../components/common/loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
 
 interface ResetPassword {

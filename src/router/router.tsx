@@ -10,8 +10,8 @@ import {
 } from "./router.link";
 import { Outlet, Route, Routes } from "react-router-dom";
 import PrivateAdminRoute from "./PrivateAdminRoute";
-import Header from "../components/common/header";
-import Footer from "../components/common/footer";
+import Header from "../components/common/layout/header";
+import Footer from "../components/common/layout/footer";
 import AuthRoute from "./AuthRoute";
 import UserAuthRoute from "./UserRoute";
 import SuperAdminRoute from "./SuperAdminRoute";

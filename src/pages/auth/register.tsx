@@ -4,8 +4,8 @@ import { all_routes } from "../../router/all_routes";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import UserRegisterForm from "../../components/user/user-register-form";
-import AdminRegistrationForm from "../../components/admin/admin-register-form";
+import UserRegisterForm from "../../components/user/auth/user-register-form";
+import AdminRegistrationForm from "../../components/admin/auth/admin-register-form";
 import Slider from "react-slick";
 import { loginSliderSettings } from "../../utils/slidersData";
 

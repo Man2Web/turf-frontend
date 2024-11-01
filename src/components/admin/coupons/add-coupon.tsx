@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import Loader from "../../common/Loader";
+import Loader from "../../common/loader/Loader";
 import Dropdown from "react-bootstrap/Dropdown";
 import { ConfigProvider, DatePicker, Radio, Space } from "antd";
 import type { DatePickerProps, GetProps } from "antd";

@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import { all_routes } from "../../../router/all_routes";
 import axios from "axios";
 import { ToastContainer } from "react-bootstrap";
-import Loader from "../Loader";
+import Loader from "../loader/Loader";
 import CourtBookingSummaryComponent from "./court-booking-summary-component";
 import { formatTime } from "../../../utils/formatTime";
 import { formatEndTime } from "../../../utils/formatEndTime";

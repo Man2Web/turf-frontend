@@ -5,7 +5,7 @@ import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import ButtonLoader from "../../components/common/button-loader";
+import ButtonLoader from "../../components/common/loader/button-loader";
 
 interface ResetForm {
   email: string;

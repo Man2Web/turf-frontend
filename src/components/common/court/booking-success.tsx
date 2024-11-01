@@ -7,8 +7,8 @@ import { dateFormat } from "../../../utils/dateFormat";
 import { formatTime } from "../../../utils/formatTime";
 import { decimalNumber } from "../../../utils/decimalNumber";
 import { formatEndTime } from "../../../utils/formatEndTime";
-import Loader from "../Loader";
-import ButtonLoader from "../button-loader";
+import Loader from "../loader/Loader";
+import ButtonLoader from "../loader/button-loader";
 import { toast, ToastContainer } from "react-toastify";
 
 const BookingSuccess = () => {

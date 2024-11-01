@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import UserDetailsComponent from "./user-details-component";
 import AdminDetailsComponent from "./admin-details-component";
-import BookingConfirmModal from "../../admin/booking-confirm";
+import BookingConfirmModal from "../../admin/booking/booking-confirm";
 import CheckOutForm from "./checkout-form";
 import { couponDiscount } from "../../../utils/court-utils/coupon-discount";
 

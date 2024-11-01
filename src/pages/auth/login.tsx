@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { all_routes } from "../../router/all_routes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import LoginFormComponent from "../../components/common/login-form";
+import LoginFormComponent from "../../components/common/auth/login-form";
 import Slider from "react-slick";
 import { loginSliderSettings } from "../../utils/slidersData";
 

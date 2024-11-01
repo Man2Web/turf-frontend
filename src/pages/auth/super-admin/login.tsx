@@ -6,8 +6,8 @@ import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
 import { all_routes } from "../../../router/all_routes";
-import Loader from "../../../components/common/Loader";
-import ButtonLoader from "../../../components/common/button-loader";
+import Loader from "../../../components/common/loader/Loader";
+import ButtonLoader from "../../../components/common/loader/button-loader";
 
 const SuperAdminLoginFormComponent = () => {
   const navigate = useNavigate();

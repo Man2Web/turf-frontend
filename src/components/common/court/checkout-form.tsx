@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { decimalNumber } from "../../../utils/decimalNumber";
 import { Controller } from "react-hook-form";
 import { Link } from "react-router-dom";
-import ButtonLoader from "../button-loader";
+import ButtonLoader from "../loader/button-loader";
 import axios from "axios";
 import { Collapse, Input } from "antd";
 import CouponsModal from "../../admin/coupons/coupons-modal";
