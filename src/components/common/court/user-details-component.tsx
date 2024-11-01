@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { UserDetailsFormData } from "../../../utils/types/userDetailsBookingForm";
+import { UserDetailsFormData } from "../../../utils/types/user/userDetailsBookingForm";
 import { Dropdown } from "primereact/dropdown";
-import { statesList } from "../../../utils/statesList";
-import { countriesList } from "../../../utils/countriesList";
-import { updateGuestCount } from "../../../utils/updateGuestCount";
+import { statesList } from "../../../utils/data-list/statesList";
+import { countriesList } from "../../../utils/data-list/countriesList";
+import { updateGuestCount } from "../../../utils/commin-utils/updateGuestCount";
 import { autoFillFormData } from "../../user/form/auto-fill-form";
 
 const UserDetailsComponent = ({

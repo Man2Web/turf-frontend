@@ -5,7 +5,7 @@ import { TimePicker } from "antd";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import dayjs, { Dayjs } from "dayjs";
 import moment from "moment";
-import { formatTime } from "../../../utils/formatTime";
+import { formatTime } from "../../../utils/commin-utils/formatTime";
 
 const daysOfWeek = [
   { id: 1, label: "Mon" },

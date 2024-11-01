@@ -1,6 +1,6 @@
 import React from "react";
 import { Controller } from "react-hook-form";
-import { courtOptions } from "../../../utils/courtOptions";
+import { courtOptions } from "../../../utils/court-utils/courtOptions";
 import { Dropdown } from "primereact/dropdown";
 
 const BasicDetails = ({

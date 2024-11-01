@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { Dropdown } from "primereact/dropdown";
 import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
-import { sportValues } from "../../../utils/sportsData";
-import { citiesList } from "../../../utils/citiesList";
+import { sportValues } from "../../../utils/data-list/sportsData";
+import { citiesList } from "../../../utils/data-list/citiesList";
 
 interface AdvancedSearchForm {
   courtName: string; // for the court name input

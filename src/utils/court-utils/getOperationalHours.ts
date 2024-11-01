@@ -1,4 +1,4 @@
-import { formatTime } from "./formatTime";
+import { formatTime } from "../commin-utils/formatTime";
 
 export const getTimeSlotDuration = (
   day: string,

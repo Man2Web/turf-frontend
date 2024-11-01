@@ -5,9 +5,9 @@ import { DataTable } from "primereact/datatable";
 import AdminMenuComponent from "../../../components/admin/profile/adminMenu";
 import axios from "axios";
 import Loader from "../../../components/common/loader/Loader";
-import { dateFormat } from "../../../utils/dateFormat";
-import { formatTime } from "../../../utils/formatTime";
-import { formatEndTime } from "../../../utils/formatEndTime";
+import { dateFormat } from "../../../utils/commin-utils/dateFormat";
+import { formatTime } from "../../../utils/commin-utils/formatTime";
+import { formatEndTime } from "../../../utils/commin-utils/formatEndTime";
 import BookingConfirmModal from "../../../components/admin/booking/booking-confirm";
 
 interface countData {

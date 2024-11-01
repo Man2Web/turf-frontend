@@ -6,15 +6,15 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import axios from "axios";
 import { all_routes } from "../../../router/all_routes";
-import { decimalNumber } from "../../../utils/decimalNumber";
+import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
 import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../../components/common/loader/Loader";
-import { formatTime } from "../../../utils/formatTime";
-import { weekNames } from "../../../utils/weekNames";
+import { formatTime } from "../../../utils/commin-utils/formatTime";
+import { weekNames } from "../../../utils/data-list/weekNames";
 import BulkBookingModal from "../../../components/admin/booking/bulk-booking-modal";
-import { getTimeSlotDuration } from "../../../utils/getOperationalHours";
-import { HeartFilledIcon, HeartIcon } from "../../../utils/icons";
-import { getCourtDuration } from "../../../utils/getCourtDuration";
+import { getTimeSlotDuration } from "../../../utils/court-utils/getOperationalHours";
+import { HeartFilledIcon, HeartIcon } from "../../../utils/icons/icons";
+import { getCourtDuration } from "../../../utils/court-utils/getCourtDuration";
 
 const ViewCourt = () => {
   const routes = all_routes;

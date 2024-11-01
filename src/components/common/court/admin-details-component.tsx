@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { UserDetailsFormData } from "../../../utils/types/userDetailsBookingForm";
-import { AdminDetailsFormData } from "../../../utils/types/adminDetailsBookingForm";
-import { updateGuestCount } from "../../../utils/updateGuestCount";
+import { UserDetailsFormData } from "../../../utils/types/user/userDetailsBookingForm";
+import { AdminDetailsFormData } from "../../../utils/types/admin/adminDetailsBookingForm";
+import { updateGuestCount } from "../../../utils/commin-utils/updateGuestCount";
 
 const AdminDetailsComponent = ({
   courtData,

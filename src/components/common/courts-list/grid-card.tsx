@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
-import { decimalNumber } from "../../../utils/decimalNumber";
-import { HeartFilledIcon, HeartIcon } from "../../../utils/icons";
+import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
+import { HeartFilledIcon, HeartIcon } from "../../../utils/icons/icons";
 import { getIconBySport } from "./list-card";
-import { formatTime } from "../../../utils/formatTime";
-import { handleWishListUpdate } from "../../../utils/handleWishlistUpdate";
-import { getCourtDuration } from "../../../utils/getCourtDuration";
+import { formatTime } from "../../../utils/commin-utils/formatTime";
+import { handleWishListUpdate } from "../../../utils/commin-utils/handleWishlistUpdate";
+import { getCourtDuration } from "../../../utils/court-utils/getCourtDuration";
 
 const GridCard = ({
   showFilters,

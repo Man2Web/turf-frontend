@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
-import { statesList } from "../../../utils/statesList";
+import { statesList } from "../../../utils/data-list/statesList";
 import Loader from "../../common/loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
 

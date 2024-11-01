@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
 import axios from "axios";
 import Loader from "../../../components/common/loader/Loader";
-import { dateFormat } from "../../../utils/dateFormat";
+import { dateFormat } from "../../../utils/commin-utils/dateFormat";
 import UserMenuComponent from "../../../components/user/profile/userMenu";
-import { formatTime } from "../../../utils/formatTime";
+import { formatTime } from "../../../utils/commin-utils/formatTime";
 import Slider from "react-slick";
-import { decimalNumber } from "../../../utils/decimalNumber";
+import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
 import { getIconBySport } from "../../../components/common/courts-list/list-card";
-import { getSlotDurationInHrs } from "../../../utils/slotDuration";
-import { getUserBookingSliderData } from "../../../utils/slidersData";
+import { getSlotDurationInHrs } from "../../../utils/court-utils/slotDuration";
+import { getUserBookingSliderData } from "../../../utils/data-list/slidersData";
 import BookingConfirmModal from "../../../components/admin/booking/booking-confirm";
 
 const UserBookingsPage = () => {

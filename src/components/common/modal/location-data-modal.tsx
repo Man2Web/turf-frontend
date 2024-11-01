@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
-import { citiesList } from "../../../utils/citiesList";
+import { citiesList } from "../../../utils/data-list/citiesList";
 import { toast, ToastContainer } from "react-toastify";
 import ButtonLoader from "../loader/button-loader";
 import { Dropdown } from "primereact/dropdown";

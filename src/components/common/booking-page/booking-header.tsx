@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
-import { formatTime } from "../../../utils/formatTime";
-import { formatEndTime } from "../../../utils/formatEndTime";
-import { monthNames } from "../../../utils/monthNames";
-import { weekNames } from "../../../utils/weekNames";
+import { formatTime } from "../../../utils/commin-utils/formatTime";
+import { formatEndTime } from "../../../utils/commin-utils/formatEndTime";
+import { monthNames } from "../../../utils/data-list/monthNames";
+import { weekNames } from "../../../utils/data-list/weekNames";
 
 const getCourtSlotsForSelectedDate = (
   data: string[][] | undefined,

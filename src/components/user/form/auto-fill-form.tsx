@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect } from "react";
-import { UserDetailsFormData } from "../../../utils/types/userDetailsBookingForm";
+import { UserDetailsFormData } from "../../../utils/types/user/userDetailsBookingForm";
 
 export const autoFillFormData = (
   reset: (data: Partial<UserDetailsFormData>) => void

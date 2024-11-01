@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { decimalNumber } from "../../../utils/decimalNumber";
-import { RupeeIcon } from "../../../utils/icons";
+import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
+import { RupeeIcon } from "../../../utils/icons/icons";
 
 const CourtBookingSummaryComponent = ({
   progress,

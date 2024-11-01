@@ -5,11 +5,14 @@ import axios from "axios";
 import { ToastContainer } from "react-bootstrap";
 import Loader from "../loader/Loader";
 import CourtBookingSummaryComponent from "./court-booking-summary-component";
-import { formatTime } from "../../../utils/formatTime";
-import { formatEndTime } from "../../../utils/formatEndTime";
-import { dayNames, monthNames } from "../../../utils/calenderData";
-import { featuredVenuesSlider } from "../../../utils/slidersData";
-import { dateFormat, diffDateFormat } from "../../../utils/dateFormat";
+import { formatTime } from "../../../utils/commin-utils/formatTime";
+import { formatEndTime } from "../../../utils/commin-utils/formatEndTime";
+import { dayNames, monthNames } from "../../../utils/data-list/calenderData";
+import { featuredVenuesSlider } from "../../../utils/data-list/slidersData";
+import {
+  dateFormat,
+  diffDateFormat,
+} from "../../../utils/commin-utils/dateFormat";
 
 const getCourtSlotsForSelectedDate = (
   data: string[][] | undefined,

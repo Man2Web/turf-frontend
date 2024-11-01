@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { decimalNumber } from "../../../utils/decimalNumber";
+import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
 import { Controller } from "react-hook-form";
 import { Link } from "react-router-dom";
 import ButtonLoader from "../loader/button-loader";

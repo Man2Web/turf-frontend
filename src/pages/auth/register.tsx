@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import UserRegisterForm from "../../components/user/auth/user-register-form";
 import AdminRegistrationForm from "../../components/admin/auth/admin-register-form";
 import Slider from "react-slick";
-import { loginSliderSettings } from "../../utils/slidersData";
+import { loginSliderSettings } from "../../utils/data-list/slidersData";
 
 const Signin = () => {
   const route = all_routes;

@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoginFormComponent from "../../components/common/auth/login-form";
 import Slider from "react-slick";
-import { loginSliderSettings } from "../../utils/slidersData";
+import { loginSliderSettings } from "../../utils/data-list/slidersData";
 
 const Login = () => {
   const route = all_routes;

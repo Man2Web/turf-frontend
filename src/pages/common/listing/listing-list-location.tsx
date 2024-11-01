@@ -4,7 +4,7 @@ import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
 import { Dropdown } from "primereact/dropdown";
 import { all_routes } from "../../../router/all_routes";
 import Loader from "../../../components/common/loader/Loader";
-import { citiesList } from "../../../utils/citiesList";
+import { citiesList } from "../../../utils/data-list/citiesList";
 import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
 import { arrayBuffer } from "stream/consumers";

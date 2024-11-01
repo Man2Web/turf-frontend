@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
-import { decimalNumber } from "../../../utils/decimalNumber";
+import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
 import {
   HeartFilledIcon,
   HeartIcon,
@@ -11,10 +11,10 @@ import {
   TennisBallIcon,
   Basketball01Icon,
   CricketBatIcon,
-} from "../../../utils/icons";
-import { formatTime } from "../../../utils/formatTime";
-import { handleWishListUpdate } from "../../../utils/handleWishlistUpdate";
-import { getCourtDuration } from "../../../utils/getCourtDuration";
+} from "../../../utils/icons/icons";
+import { formatTime } from "../../../utils/commin-utils/formatTime";
+import { handleWishListUpdate } from "../../../utils/commin-utils/handleWishlistUpdate";
+import { getCourtDuration } from "../../../utils/court-utils/getCourtDuration";
 
 export const getIconBySport = (sport: string) => {
   switch (sport) {

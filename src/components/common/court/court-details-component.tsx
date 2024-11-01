@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
-import { decimalNumber } from "../../../utils/decimalNumber";
+import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
 
 const CourtDetailsComponent = ({
   courtData,

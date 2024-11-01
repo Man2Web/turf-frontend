@@ -1,6 +1,6 @@
 // axiosConfig.ts
 
-import axios from 'axios';
+import axios from "axios";
 
 // Setup Axios interceptor
 axios.interceptors.request.use(

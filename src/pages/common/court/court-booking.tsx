@@ -6,9 +6,9 @@ import axios from "axios";
 import Loader from "../../../components/common/loader/Loader";
 import CourtTimeSlotsComponent from "../../../components/common/court/court-timeslots-component";
 import CourtCheckout from "../../../components/common/court/court-checkout";
-import { UserDetailsFormData } from "../../../utils/types/userDetailsBookingForm";
+import { UserDetailsFormData } from "../../../utils/types/user/userDetailsBookingForm";
 import BookingHeader from "../../../components/common/booking-page/booking-header";
-import { getCourtDuration } from "../../../utils/getCourtDuration";
+import { getCourtDuration } from "../../../utils/court-utils/getCourtDuration";
 
 const CourtBooking = () => {
   const { courtId } = useParams();
