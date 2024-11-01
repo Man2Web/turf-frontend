@@ -10,7 +10,7 @@ import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
 import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../../components/common/loader/Loader";
 import { weekNames } from "../../../utils/data-list/weekNames";
-import BulkBookingModal from "../../../components/admin/booking/bulk-booking-modal";
+import BulkBookingModal from "../../../components/common/modal/bulk-booking-modal";
 import { getTimeSlotDuration } from "../../../utils/court-utils/getOperationalHours";
 import { HeartFilledIcon, HeartIcon } from "../../../utils/icons/icons";
 import { getCourtDuration } from "../../../utils/court-utils/getCourtDuration";
@@ -161,12 +161,12 @@ const CourtDetails = () => {
   };
 
   const courtDurationData = getCourtDuration(courtData?.availability || []);
-  console.log(courtDurationData);
+
   return (
     <div>
       <ToastContainer />
       <BulkBookingModal />
-      {loading && <Loader />}
+      <Loader loader={loading} loadingDescription="Fetching Court Data..." />
       {courtData && (
         <div>
           {/*Galler Slider Section*/}
@@ -573,7 +573,7 @@ const CourtDetails = () => {
                     {/* locationdata Details */}
                     <div className="white-bg book-court">
                       <div>
-                        <h4 className="border-bottom">locationdata Details</h4>
+                        <h4 className="border-bottom">Location Details</h4>
                       </div>
                       <div className="accordion-item" id="locationdata">
                         <div
@@ -613,7 +613,7 @@ const CourtDetails = () => {
                                 />
                               </div>
                               <div>
-                                <h6>Our Venue locationdata</h6>
+                                <h6>Venue Location</h6>
                                 <p className="text-capitalize">{`${courtData?.location.city}, ${courtData?.location.country}`}</p>
                               </div>
                             </a>

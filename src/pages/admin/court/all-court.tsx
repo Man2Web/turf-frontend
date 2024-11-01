@@ -160,8 +160,6 @@ const AllCourt = () => {
     { body: renderActions, header: "Action" },
   ];
 
-  console.log(courtsData);
-
   const deleteCourt = async (courtId: string) => {
     // console.log(courtId, Number(adminId));
     const response = await axios.post(
@@ -178,6 +176,7 @@ const AllCourt = () => {
   return (
     <div>
       <ToastContainer />
+      <Loader loader={loading} loadingDescription="Fetching Courts Data..." />
       {/* Dashboard Menu */}
       <div className="dashboard-section coach-dash-section mb-10">
         <div className="container">
@@ -213,21 +212,17 @@ const AllCourt = () => {
                   />
                 </div> */}
               </div>
-              {loading ? (
-                <Loader />
-              ) : (
-                <DataTable value={filteredData}>
-                  {columns.map((col) => (
-                    <Column
-                      key={col.field}
-                      field={col.field}
-                      header={col.header}
-                      body={col.body}
-                      sortable={col.sortable}
-                    />
-                  ))}
-                </DataTable>
-              )}
+              <DataTable value={filteredData}>
+                {columns.map((col) => (
+                  <Column
+                    key={col.field}
+                    field={col.field}
+                    header={col.header}
+                    body={col.body}
+                    sortable={col.sortable}
+                  />
+                ))}
+              </DataTable>
             </div>
           </div>
         </div>

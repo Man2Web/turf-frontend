@@ -116,7 +116,7 @@ const CouponsDataTable: React.FC = () => {
   return (
     <>
       <ToastContainer />
-      {loading && <Loader />}
+      <Loader loader={loading} loadingDescription="Fetching Coupons..." />
       {!loading && (
         <div className="row">
           <div className="card col-sm-12">

@@ -65,55 +65,53 @@ const PaymentSettingsForm = () => {
   return (
     <div className="row">
       <ToastContainer />
-      {loading ? (
-        <Loader />
-      ) : (
-        <div className="col-sm-12">
-          <div className="profile-detail-group">
-            <div className="card">
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="row">
-                  <div className="col-lg-4 col-md-6">
-                    <div className="input-space">
-                      <label htmlFor="name" className="form-label">
-                        Merchant ID
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="name"
-                        placeholder="PGTESTPAYUAT"
-                        {...register("merchantId", {
-                          required:
-                            "Merchant Id is required in order to accept payments",
-                        })}
-                      />
-                      <p>We only accept PhonePe merchant ID as of now</p>
-                      {errors.merchantId && (
-                        <p className="text-danger">
-                          {errors.merchantId.message}
-                        </p>
-                      )}
-                    </div>
+      <Loader
+        loader={loading}
+        loadingDescription="Fetching Payment Details Data..."
+      />
+      <div className="col-sm-12">
+        <div className="profile-detail-group">
+          <div className="card">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="row">
+                <div className="col-lg-4 col-md-6">
+                  <div className="input-space">
+                    <label htmlFor="name" className="form-label">
+                      Merchant ID
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="name"
+                      placeholder="PGTESTPAYUAT"
+                      {...register("merchantId", {
+                        required:
+                          "Merchant Id is required in order to accept payments",
+                      })}
+                    />
+                    <p>We only accept PhonePe merchant ID as of now</p>
+                    {errors.merchantId && (
+                      <p className="text-danger">{errors.merchantId.message}</p>
+                    )}
                   </div>
                 </div>
-                <div className="save-changes text-end mt-3">
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => reset()}
-                  >
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn btn-secondary ms-2">
-                    Update
-                  </button>
-                </div>
-              </form>
-            </div>
+              </div>
+              <div className="save-changes text-end mt-3">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => reset()}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-secondary ms-2">
+                  Update
+                </button>
+              </div>
+            </form>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

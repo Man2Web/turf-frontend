@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
-import { all_routes } from "../../../router/all_routes";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
@@ -14,15 +11,9 @@ interface formDataType {
 }
 
 const ChangePasswordComponent = () => {
-  const routes = all_routes;
-  const location = useLocation();
   const [loading, setLoading] = useState<boolean>(false);
 
   const userId = localStorage.getItem("userId");
-
-  const isLinkActive = (route: string) => {
-    return location.pathname === route;
-  };
 
   // Initialize react-hook-form
   const {
@@ -59,90 +50,88 @@ const ChangePasswordComponent = () => {
   return (
     <div>
       <ToastContainer />
+      <Loader loader={loading} loadingDescription="Updating User Password..." />
       {/* Page Content */}
       <div className="container">
-        {loading && <Loader />}
-        {!loading && (
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="profile-detail-group">
-                <div className="card">
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="row">
-                      <div className="col-lg-7 col-md-7">
-                        <div className="input-space">
-                          <label className="form-label">Old Password</label>
-                          <input
-                            type="password"
-                            className="form-control"
-                            id="password"
-                            placeholder="Enter Old Password"
-                            {...register("oldPassword", {
-                              required: "Old Password is required",
-                            })}
-                          />
-                          {errors.oldPassword && (
-                            <span className="text-danger">
-                              {errors.oldPassword.message}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="col-lg-7 col-md-7">
-                        <div className="input-space">
-                          <label className="form-label">New Password</label>
-                          <input
-                            type="password"
-                            className="form-control"
-                            id="new-password"
-                            placeholder="Enter New Password"
-                            {...register("newPassword", {
-                              required: "New Password is required",
-                            })}
-                          />
-                          {errors.newPassword && (
-                            <span className="text-danger">
-                              {errors.newPassword.message}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="col-lg-7 col-md-7">
-                        <div className="input-space mb-0">
-                          <label className="form-label">Confirm Password</label>
-                          <input
-                            type="password"
-                            className="form-control"
-                            id="confirm-password"
-                            placeholder="Enter Confirm Password"
-                            {...register("confirmPassword", {
-                              required: "Confirm Password is required",
-                              validate: (value) =>
-                                value === newPass || "Passwords do not match",
-                            })}
-                          />
-                          {errors.confirmPassword && (
-                            <span className="text-danger">
-                              {errors.confirmPassword.message}
-                            </span>
-                          )}
-                        </div>
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="profile-detail-group">
+              <div className="card">
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="row">
+                    <div className="col-lg-7 col-md-7">
+                      <div className="input-space">
+                        <label className="form-label">Old Password</label>
+                        <input
+                          type="password"
+                          className="form-control"
+                          id="password"
+                          placeholder="Enter Old Password"
+                          {...register("oldPassword", {
+                            required: "Old Password is required",
+                          })}
+                        />
+                        {errors.oldPassword && (
+                          <span className="text-danger">
+                            {errors.oldPassword.message}
+                          </span>
+                        )}
                       </div>
                     </div>
-                    <div className="save-changes text-end">
-                      <button
-                        type="submit"
-                        className="btn btn-secondary save-profile"
-                      >
-                        Update Password
-                      </button>
+                    <div className="col-lg-7 col-md-7">
+                      <div className="input-space">
+                        <label className="form-label">New Password</label>
+                        <input
+                          type="password"
+                          className="form-control"
+                          id="new-password"
+                          placeholder="Enter New Password"
+                          {...register("newPassword", {
+                            required: "New Password is required",
+                          })}
+                        />
+                        {errors.newPassword && (
+                          <span className="text-danger">
+                            {errors.newPassword.message}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </form>
-                </div>
+                    <div className="col-lg-7 col-md-7">
+                      <div className="input-space mb-0">
+                        <label className="form-label">Confirm Password</label>
+                        <input
+                          type="password"
+                          className="form-control"
+                          id="confirm-password"
+                          placeholder="Enter Confirm Password"
+                          {...register("confirmPassword", {
+                            required: "Confirm Password is required",
+                            validate: (value) =>
+                              value === newPass || "Passwords do not match",
+                          })}
+                        />
+                        {errors.confirmPassword && (
+                          <span className="text-danger">
+                            {errors.confirmPassword.message}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="save-changes text-end">
+                    <button
+                      type="submit"
+                      className="btn btn-secondary save-profile"
+                    >
+                      Update Password
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
-        )}
+        </div>
       </div>
       {/* /Page Content */}
     </div>

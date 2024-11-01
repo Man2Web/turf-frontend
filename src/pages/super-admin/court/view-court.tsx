@@ -11,7 +11,7 @@ import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../../components/common/loader/Loader";
 import { formatTime } from "../../../utils/commin-utils/formatTime";
 import { weekNames } from "../../../utils/data-list/weekNames";
-import BulkBookingModal from "../../../components/admin/booking/bulk-booking-modal";
+import BulkBookingModal from "../../../components/common/modal/bulk-booking-modal";
 import { getTimeSlotDuration } from "../../../utils/court-utils/getOperationalHours";
 import { HeartFilledIcon, HeartIcon } from "../../../utils/icons/icons";
 import { getCourtDuration } from "../../../utils/court-utils/getCourtDuration";
@@ -146,13 +146,12 @@ const ViewCourt = () => {
   };
 
   const courtDurationData = getCourtDuration(courtData?.availability || []);
-  console.log(images);
 
   return (
     <div>
       <ToastContainer />
       <BulkBookingModal />
-      {loading && <Loader />}
+      <Loader loader={loading} loadingDescription="Fetching Court Data..." />
       {courtData && (
         <div>
           {/*Galler Slider Section*/}

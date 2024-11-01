@@ -121,8 +121,8 @@ const CourtReview = () => {
 
   return (
     <div className="d-flex justify-content-center">
-      {loading && <Loader />}
       <ToastContainer />
+      <Loader loader={loading} loadingDescription="Fetching Review Data..." />
       {!loading && (
         <div className="col-lg-4 col-md-12 mb-2 px-6 d-flex flex-column align-content-center">
           <h1>{reviewData ? "Update" : "Create"} Review</h1>

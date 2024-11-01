@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { ToastContainer } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
-import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
+import { useNavigate } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
 import Loader from "../../../components/common/loader/Loader";
-import ButtonLoader from "../../../components/common/loader/button-loader";
 
 const SuperAdminLoginFormComponent = () => {
   const navigate = useNavigate();
@@ -17,13 +14,8 @@ const SuperAdminLoginFormComponent = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [passwordVisible, setPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisible((prev) => !prev);
-  };
 
   const onSubmit = async (data: any) => {
     try {
@@ -53,6 +45,7 @@ const SuperAdminLoginFormComponent = () => {
 
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100">
+      <Loader loader={loading} loadingDescription="Logging In..." />
       <form
         className="w-50 d-flex flex-column gap-4"
         onSubmit={handleSubmit(onSubmit)}
@@ -78,7 +71,7 @@ const SuperAdminLoginFormComponent = () => {
         <div className="form-group">
           <div className="pass-group group-img">
             <input
-              type={passwordVisible ? "text" : "password"}
+              type="password"
               className="form-control pass-input"
               placeholder="Password"
               {...register("password", {
@@ -111,13 +104,8 @@ const SuperAdminLoginFormComponent = () => {
           className="btn btn-secondary register-btn d-inline-flex justify-content-center align-items-center w-100 btn-block"
           type="submit"
         >
-          {loading && <ButtonLoader />}
-          {!loading && (
-            <>
-              Sign In
-              <i className="feather-arrow-right-circle ms-2" />
-            </>
-          )}
+          Sign In
+          <i className="feather-arrow-right-circle ms-2" />
         </button>
       </form>
     </div>

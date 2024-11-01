@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import axios from "axios";
-import { statesList } from "../../../utils/data-list/statesList";
 import Loader from "../../common/loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -21,8 +19,6 @@ const UserProfileForm: React.FC = () => {
   const {
     register,
     handleSubmit,
-    setValue,
-    control,
     formState: { errors },
     reset,
   } = useForm<UserProfileFormInputs>();
@@ -84,7 +80,7 @@ const UserProfileForm: React.FC = () => {
   return (
     <>
       <ToastContainer />
-      {loading && <Loader />}
+      <Loader loader={loading} loadingDescription="Fetching User Details..." />
       {!loading && (
         <div className="row">
           <div className="col-sm-12">

@@ -5,6 +5,7 @@ import { all_routes } from "../../../router/all_routes";
 import UserMenuComponent from "../../../components/user/profile/userMenu";
 import LocationDataModal from "../../../components/common/modal/location-data-modal";
 import { UserLocationContext } from "../../..";
+import Loader from "../../../components/common/loader/Loader";
 
 const UserDashboard = () => {
   const routes = all_routes;

@@ -122,24 +122,22 @@ const CouponsDataTable: React.FC = () => {
   return (
     <>
       <ToastContainer />
-      {loading && <Loader />}
-      {!loading && (
-        <div className="row">
-          <div className="card col-sm-12">
-            <DataTable stripedRows value={couponsData}>
-              {columns.map((column, index) => (
-                <Column
-                  key={index}
-                  field={column.field}
-                  header={column.header}
-                  body={column.body}
-                  sortable={column.sortable}
-                />
-              ))}
-            </DataTable>
-          </div>
+      <Loader loader={loading} loadingDescription="Fetching Coupons..." />
+      <div className="row">
+        <div className="card col-sm-12">
+          <DataTable stripedRows value={couponsData}>
+            {columns.map((column, index) => (
+              <Column
+                key={index}
+                field={column.field}
+                header={column.header}
+                body={column.body}
+                sortable={column.sortable}
+              />
+            ))}
+          </DataTable>
         </div>
-      )}
+      </div>
     </>
   );
 };

@@ -10,7 +10,6 @@ import LocationDataModal from "../../../components/common/modal/location-data-mo
 import GridCard from "../../../components/common/courts-list/grid-card";
 import ListCard from "../../../components/common/courts-list/list-card";
 import { UserLocationContext } from "../../..";
-import ButtonLoader from "../../../components/common/loader/button-loader";
 
 const sortOptions = [
   { name: "Relevance" },
@@ -35,8 +34,6 @@ const ListingList = () => {
   const [pageLoading, setPageLoading] = useState<boolean>(false);
   const userId =
     localStorage.getItem("adminId") || localStorage.getItem("userId");
-
-  const pageLoadingRef = useRef(null);
 
   const locationContext = useContext(UserLocationContext);
 
@@ -175,7 +172,10 @@ const ListingList = () => {
   return (
     <>
       {!userLocationInContext && <LocationDataModal />}
-      {courtsData.length === 0 && loading && <Loader />}
+      <Loader
+        loader={loading || pageLoading}
+        loadingDescription={`Fetching Courts In ${userLocationInContext}...`}
+      />
       {userLocationInContext && courtsData.length > 0 && (
         <div>
           {/* Page Content */}
@@ -307,22 +307,12 @@ const ListingList = () => {
                           />
                         ))}
 
-                      {/* Loader Animation */}
-                      {filtersLoading && <Loader />}
-
                       {courtsData.length === 0 && !filtersLoading && (
                         <h1>No Data found</h1>
                       )}
                     </div>
                     {/* /Listing Content */}
                   </div>
-                  {/* Pagination */}
-                  {pageLoading && (
-                    <div className="w-full d-flex justify-content-center">
-                      <ButtonLoader />
-                    </div>
-                  )}
-                  {/* /Pagination */}
                 </div>
               </div>
               {/* Listing Content Group*/}

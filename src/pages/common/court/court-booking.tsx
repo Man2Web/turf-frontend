@@ -55,7 +55,7 @@ const CourtBooking = () => {
 
   return (
     <div>
-      {loading && <Loader />}
+      <Loader loader={loading} loadingDescription="Fetching Court Data..." />
       {courtData && (
         <React.Fragment>
           <BookingHeader

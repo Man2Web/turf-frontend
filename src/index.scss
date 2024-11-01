@@ -515,3 +515,24 @@ div.p-datepicker table td.p-datepicker-today > span:focus {
   width: 100% !important;
   height: 100vh;
 }
+
+@keyframes bounce-animation {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-15px);
+  }
+  60% {
+    transform: translateY(-8px);
+  }
+}
+
+.bounce-animation {
+  animation: bounce-animation 2s ease infinite;
+  padding: 100px;
+}

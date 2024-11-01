@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
-import { Modal } from "react-bootstrap";
 import { dateFormat } from "../../../utils/commin-utils/dateFormat";
 import { formatTime } from "../../../utils/commin-utils/formatTime";
 import { formatEndTime } from "../../../utils/commin-utils/formatEndTime";
 import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
 import axios from "axios";
 import { saveAs } from "file-saver";
-import ButtonLoader from "../../common/loader/button-loader";
+import { Modal } from "antd";
+import Loader from "../loader/Loader";
 
 const BookingConfirmModal = ({
   toggleModal,
@@ -21,6 +21,7 @@ const BookingConfirmModal = ({
 }) => {
   const [buttonLoader, setButtonLoader] = useState<boolean>(false);
   const routes = all_routes;
+
   const getPdf = async (transaction_id: string) => {
     try {
       setButtonLoader(true);
@@ -38,42 +39,71 @@ const BookingConfirmModal = ({
       setButtonLoader(false);
     }
   };
+
+  const ModalFooter = () => (
+    <div className="d-flex justify-content-center my-4 gap-2">
+      <button
+        onClick={() => {
+          bookingData?.transaction_id && getPdf(bookingData?.transaction_id);
+        }}
+        className="btn btn-primary btn-icon"
+      >
+        <i className="feather-mail me-1" />
+        Download PDF
+      </button>
+      <Link to={routes.adminDashboard} className="btn btn-primary btn-icon">
+        <i className="feather-arrow-left-circle me-1" />
+        Back to Dashboard
+      </Link>
+      {bookingData?.review_details === null ||
+      bookingData?.review_details === undefined ? (
+        <Link
+          target="_blank"
+          to={`/user/court/${bookingData?.court_info.court_id}/${bookingData?.transaction_id}/${bookingData?.booking_detail_id}`}
+          className="btn btn-primary"
+        >
+          {bookingData?.review_details === null
+            ? "Add Review"
+            : "Update Review"}
+        </Link>
+      ) : (
+        <Link target="_blank" to="#" className="btn btn-red">
+          <i className="feather-x me-1" />
+          Cancel
+        </Link>
+      )}
+    </div>
+  );
+
+  const ModalHeader = () => (
+    <div className="modal-header d-flex justify-content-between">
+      <div className="form-header modal-header-title">
+        <h4 className="">
+          Court Booking Details
+          <span
+            className="badge ms-2"
+            style={{ backgroundColor: "grey", color: "white" }}
+          >{`ID: ${bookingData?.transaction_id}`}</span>
+          <span className="badge bg-success ms-2">Paid</span>
+        </h4>
+      </div>
+    </div>
+  );
+
   return (
     <Modal
-      show={toggleModal}
-      onHide={() => {
+      open={toggleModal}
+      onCancel={() => {
         setToggleModal(false);
       }}
-      backdrop="static"
+      width={1000}
       keyboard={false}
+      title={<ModalHeader />}
+      footer={<ModalFooter />}
       centered
-      className="modal fade w-100 modal-xl"
-      id="bookingconfirmModal"
     >
+      <Loader loader={buttonLoader} loadingDescription="Generating PDF..." />
       <div className="modal-content w-100">
-        <div className="modal-header d-flex justify-content-between">
-          <div className="form-header modal-header-title">
-            <h4 className="">
-              Court Booking Details
-              <span
-                className="badge ms-2"
-                style={{ backgroundColor: "grey", color: "white" }}
-              >{`ID: ${bookingData?.transaction_id}`}</span>
-              <span className="badge bg-success ms-2">Paid</span>
-            </h4>
-          </div>
-          {setToggleModal && (
-            <button
-              onClick={() => {
-                setToggleModal(false);
-              }}
-              className="btn btn-red"
-            >
-              X
-            </button>
-          )}
-        </div>
-
         <div className="modal-body">
           {/* Court Request */}
           <div className="row">
@@ -275,48 +305,6 @@ const BookingConfirmModal = ({
             </div>
           </div>
           {/* /Court Request */}
-          <div className="d-flex justify-content-center my-4 gap-2">
-            <button
-              onClick={() => {
-                bookingData?.transaction_id &&
-                  getPdf(bookingData?.transaction_id);
-              }}
-              className="btn btn-primary btn-icon"
-            >
-              {buttonLoader ? (
-                <ButtonLoader />
-              ) : (
-                <>
-                  <i className="feather-mail me-1" />
-                  Download PDF
-                </>
-              )}
-            </button>
-            <Link
-              to={routes.adminDashboard}
-              className="btn btn-primary btn-icon"
-            >
-              <i className="feather-arrow-left-circle me-1" />
-              Back to Dashboard
-            </Link>
-            {bookingData?.review_details === null ||
-            bookingData?.review_details === undefined ? (
-              <Link
-                target="_blank"
-                to={`/user/court/${bookingData?.court_info.court_id}/${bookingData?.transaction_id}/${bookingData?.booking_detail_id}`}
-                className="btn btn-primary"
-              >
-                {bookingData?.review_details === null
-                  ? "Add Review"
-                  : "Update Review"}
-              </Link>
-            ) : (
-              <Link target="_blank" to="#" className="btn btn-red">
-                <i className="feather-x me-1" />
-                Cancel
-              </Link>
-            )}
-          </div>
         </div>
       </div>
     </Modal>

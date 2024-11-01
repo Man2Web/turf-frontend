@@ -1,23 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { all_routes } from "../../../router/all_routes";
+import { all_routes } from "../router/all_routes";
 import { saveAs } from "file-saver";
 import axios from "axios";
-import { dateFormat } from "../../../utils/commin-utils/dateFormat";
-import { formatTime } from "../../../utils/commin-utils/formatTime";
-import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
-import { formatEndTime } from "../../../utils/commin-utils/formatEndTime";
-import Loader from "../loader/Loader";
-import ButtonLoader from "../loader/button-loader";
+import { dateFormat } from "../utils/commin-utils/dateFormat";
+import { formatTime } from "../utils/commin-utils/formatTime";
+import { decimalNumber } from "../utils/commin-utils/decimalNumber";
+import { formatEndTime } from "../utils/commin-utils/formatEndTime";
+import Loader from "../components/common/loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
+import { Modal } from "antd";
 
 const BookingSuccess = () => {
   const routes = all_routes;
   const { t_id } = useParams();
   const [bookingData, setBookingData] = useState<SuccessBookingData>();
   const [buttonLoader, setButtonLoader] = useState(false);
-
-  const pdfRef = useRef<HTMLDivElement>(null);
 
   const getBookingData = async (id: string) => {
     const response = await axios.get(
@@ -69,13 +67,12 @@ const BookingSuccess = () => {
   return (
     <>
       <ToastContainer />
-      {!bookingData && <Loader />}
+      <Loader
+        loader={buttonLoader}
+        loadingDescription="Fetching Booking Data..."
+      />
       {bookingData && (
-        <div
-          ref={pdfRef}
-          style={{ maxWidth: "80%" }}
-          className="modal-dialog modal-dialog-centered modal-md mt-4"
-        >
+        <Modal>
           <div className="modal-content">
             <div className="modal-header d-flex justify-content-between">
               <div className="form-header modal-header-title">
@@ -298,14 +295,8 @@ const BookingSuccess = () => {
                   }}
                   className="btn btn-primary btn-icon"
                 >
-                  {buttonLoader ? (
-                    <ButtonLoader />
-                  ) : (
-                    <>
-                      <i className="feather-mail me-1" />
-                      Download PDF
-                    </>
-                  )}
+                  <i className="feather-mail me-1" />
+                  Download PDF
                 </button>
                 <Link to={redirectUrl()} className="btn btn-primary btn-icon">
                   <i className="feather-arrow-left-circle me-1" />
@@ -314,7 +305,7 @@ const BookingSuccess = () => {
               </div>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
     </>
   );

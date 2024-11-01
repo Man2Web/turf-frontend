@@ -12,7 +12,7 @@ import AllCourt from "../pages/admin/court/all-court";
 import CourtDetails from "../pages/common/court/court-details";
 import ListingList from "../pages/common/listing/listing-list";
 import CourtBooking from "../pages/common/court/court-booking";
-import BookingSuccess from "../components/common/court/booking-success";
+import BookingSuccess from "../dump/booking-success";
 import BookingFailure from "../components/common/court/booking-failure";
 import BookingCompleted from "../pages/admin/booking/booking-completed";
 import AdminProfile from "../pages/admin/profile/admin-profile";

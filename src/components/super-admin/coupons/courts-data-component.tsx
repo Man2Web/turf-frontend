@@ -1,12 +1,11 @@
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Loader from "../../common/loader/Loader";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { Badge } from "primereact/badge";
-import { Button } from "primereact/button";
 
 type Court = {
   courts: {
@@ -25,13 +24,7 @@ type Court = {
 const CourtsDataComponent = () => {
   const [dataToggle, setDataToggle] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
-  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
-  const [searchInput, setSearchInput] = useState<string>("");
-  const [approvedCourtsData, setApprovedCourtsData] = useState<Court[]>();
-  const [pendingCourtsData, setPendingCourtsData] = useState<Court[]>();
   const [currentData, setCurrentData] = useState<Court[]>();
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     getCourtsData();
@@ -46,8 +39,6 @@ const CourtsDataComponent = () => {
       dataToggle === 1
         ? setCurrentData(response.data.pendingCourts)
         : setCurrentData(response.data.approvedCourts);
-      setPendingCourtsData(response.data.pendingCourts);
-      setApprovedCourtsData(response.data.approvedCourts);
     } catch (error) {
       toast.error("Error fetching courts data");
       console.error(error);
@@ -82,10 +73,11 @@ const CourtsDataComponent = () => {
       console.log(error);
     }
   };
-  console.log(currentData);
+
   return (
     <div>
       <ToastContainer />
+      <Loader loader={loading} loadingDescription="Fetching Courts Data..." />
       <div className="content court-bg">
         <div className="container">
           {/* Sort By */}
@@ -150,7 +142,6 @@ const CourtsDataComponent = () => {
                         tabIndex={0}
                       >
                         <div className="table-responsive">
-                          {loading && <Loader />}
                           {!loading && (
                             <DataTable
                               value={currentData}

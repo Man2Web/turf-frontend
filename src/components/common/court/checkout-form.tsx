@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
 import { Controller } from "react-hook-form";
 import { Link } from "react-router-dom";
-import ButtonLoader from "../loader/button-loader";
 import axios from "axios";
 import { Collapse, Input } from "antd";
 import CouponsModal from "../../admin/coupons/coupons-modal";
+import Loader from "../loader/Loader";
 
 interface CourtPrice {
   gstAmount: number;
@@ -129,9 +129,12 @@ const CheckOutForm = ({
     },
   ];
 
-  console.log(totalPrice);
   return (
     <div className="col-12 col-sm-12 col-md-12 col-lg-12">
+      <Loader
+        loader={adminLoading || loading}
+        loadingDescription="Processing Booking..."
+      />
       <aside className="card payment-modes">
         <h3 className="border-bottom">Checkout</h3>
         <div className="px-2 d-flex justify-content-between align-items-center">
@@ -310,7 +313,7 @@ const CheckOutForm = ({
                 form="admin-form"
                 className="mb-2 btn btn-primary"
               >
-                {adminLoading ? <ButtonLoader /> : "Reserve Now (CASH)"}
+                Reserve Now (CASH)
               </button>
             )}
             {!isCourtAdmin && (
@@ -322,7 +325,7 @@ const CheckOutForm = ({
                 form="user-form"
                 className="mb-2 btn btn-primary"
               >
-                {loading ? <ButtonLoader /> : "Reserve Now"}
+                Reserve Now
               </button>
             )}
           </div>

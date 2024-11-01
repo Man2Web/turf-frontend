@@ -11,7 +11,7 @@ import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
 import { getIconBySport } from "../../../components/common/courts-list/list-card";
 import { getSlotDurationInHrs } from "../../../utils/court-utils/slotDuration";
 import { getUserBookingSliderData } from "../../../utils/data-list/slidersData";
-import BookingConfirmModal from "../../../components/admin/booking/booking-confirm";
+import BookingConfirmModal from "../../../components/common/modal/booking-confirm";
 
 const UserBookingsPage = () => {
   const routes = all_routes;
@@ -171,6 +171,10 @@ const UserBookingsPage = () => {
     <div>
       {/* Dashboard Menu */}
       <UserMenuComponent />
+      <Loader
+        loader={loading}
+        loadingDescription="Fetching User Bookings Data..."
+      />
       {/* /Dashboard Menu */}
       {/* Page Content */}
       <div className="content court-bg">
@@ -319,7 +323,6 @@ const UserBookingsPage = () => {
                         tabIndex={0}
                       >
                         <div className="table-responsive">
-                          {loading && <Loader />}
                           {!loading && previousBooking.length !== 0 ? (
                             previousBooking.map(
                               (bookingData: SuccessBookingData, index) => (

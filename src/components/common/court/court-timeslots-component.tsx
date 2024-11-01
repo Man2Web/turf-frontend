@@ -232,7 +232,10 @@ const CourtTimeSlotsComponent = ({
                   </Slider>
                 </div>
                 <div className="row">
-                  {slotsLoading && <Loader />}
+                  <Loader
+                    loader={slotsLoading}
+                    loadingDescription="Fetching Slots..."
+                  />
                   {!slotsLoading &&
                   (timeSlots.length == 0 ||
                     timeSlots[0].time !== "No available slots") ? (

@@ -5,7 +5,7 @@ import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import ButtonLoader from "../../components/common/loader/button-loader";
+import Loader from "../../components/common/loader/Loader";
 
 interface ResetForm {
   email: string;
@@ -53,6 +53,10 @@ const ForgotPassword = () => {
   return (
     <div className="main-wrapper authendication-pages">
       <ToastContainer />
+      <Loader
+        loader={loading}
+        loadingDescription="Sending Update Password Link..."
+      />
       <div className="content blur-ellipses">
         <div className="container">
           <div className="row">
@@ -93,14 +97,8 @@ const ForgotPassword = () => {
                       </div>
                     </div>
                     <button className="btn btn-secondary w-100 d-inline-flex justify-content-center align-items-center">
-                      {loading ? (
-                        <ButtonLoader />
-                      ) : (
-                        <>
-                          Submit
-                          <i className="feather-arrow-right-circle ms-2" />
-                        </>
-                      )}
+                      Submit
+                      <i className="feather-arrow-right-circle ms-2" />
                     </button>
                   </form>
                   {/* /Login Form */}

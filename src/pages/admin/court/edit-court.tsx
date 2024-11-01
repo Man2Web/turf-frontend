@@ -315,139 +315,132 @@ const EditCourt = () => {
   return (
     <div>
       <ToastContainer />
+      <Loader loader={loading} loadingDescription="Fetching Court Data..." />
       {/* Page Content */}
-      {loading ? (
-        <Loader />
-      ) : (
-        <div className="content">
-          <div className="container">
-            {/* Row */}
-            <div className="row">
-              <div className="col-12 col-sm-12 col-md-12 col-lg-12">
-                <div className="venue-options option-list-court white-bg">
-                  <ul className="clearfix">
-                    <li className="active">
-                      <Link to="#" onClick={() => scrollContent("basic-info")}>
-                        Basic Info
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" onClick={() => scrollContent("venue-price")}>
-                        Venue Price
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        to="#"
-                        onClick={() => scrollContent("availability")}
-                      >
-                        Availability
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" onClick={() => scrollContent("overview")}>
-                        Overview
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" onClick={() => scrollContent("includes")}>
-                        Includes
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" onClick={() => scrollContent("rules")}>
-                        Rules
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" onClick={() => scrollContent("amenities")}>
-                        Amenities
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" onClick={() => scrollContent("gallery")}>
-                        Gallery
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="#" onClick={() => scrollContent("location")}>
-                        Locations
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                {/* Accordian Contents */}
-                <form
-                  onSubmit={handleSubmit(onSubmit)}
-                  className="accordion"
-                  id="accordionPanel"
-                >
-                  {/* basic info */}
-                  <BasicDetails
-                    errors={errors}
-                    control={control}
-                    register={register}
-                  />
-                  {/* Venue Price */}
-                  <PricingDetails
-                    errors={errors}
-                    control={control}
-                    register={register}
-                  />
-                  {/* Availability */}
-                  <AvailabilityDetails
-                    errors={errors}
-                    control={control}
-                    register={register}
-                    timeSlots={timeSlots}
-                    setTimeSlots={setTimeSlots}
-                    selectedHours={selectedHours}
-                    setSelectedHours={setSelectedHours}
-                  />
-                  {/* overview */}
-                  <OverviewDetails errors={errors} register={register} />
-                  {/* includes */}
-                  <IncludesDetails
-                    includes={includes}
-                    setIncludes={setIncludes}
-                    register={register}
-                  />
-                  {/* Rules */}
-                  <RulesDetails
-                    errors={errors}
-                    control={control}
-                    rules={rules}
-                    setRules={setRules}
-                  />
-                  {/* Amenities */}
-                  <AmenitiesDetails
-                    register={register}
-                    amenities={amenities}
-                    setAmenities={setAmenities}
-                  />
-                  {/* Gallery */}
-                  <GalleryDetails
-                    errors={errors}
-                    handleFileChange={handleFileChange}
-                    removeImg={removeImg}
-                    images={images}
-                  />
-                  {/* Location */}
-                  <LocationDetails errors={errors} register={register} />
-                  {/* Save form button */}
-                  <button className="text-center btn-row btn btn-secondary save-profile">
-                    Update Court{" "}
-                    <i className="feather-arrow-right-circle ms-1" />
-                  </button>
-                </form>
-                {/* Accordian Contents */}
+      <div className="content">
+        <div className="container">
+          {/* Row */}
+          <div className="row">
+            <div className="col-12 col-sm-12 col-md-12 col-lg-12">
+              <div className="venue-options option-list-court white-bg">
+                <ul className="clearfix">
+                  <li className="active">
+                    <Link to="#" onClick={() => scrollContent("basic-info")}>
+                      Basic Info
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="#" onClick={() => scrollContent("venue-price")}>
+                      Venue Price
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="#" onClick={() => scrollContent("availability")}>
+                      Availability
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="#" onClick={() => scrollContent("overview")}>
+                      Overview
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="#" onClick={() => scrollContent("includes")}>
+                      Includes
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="#" onClick={() => scrollContent("rules")}>
+                      Rules
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="#" onClick={() => scrollContent("amenities")}>
+                      Amenities
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="#" onClick={() => scrollContent("gallery")}>
+                      Gallery
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="#" onClick={() => scrollContent("location")}>
+                      Locations
+                    </Link>
+                  </li>
+                </ul>
               </div>
+              {/* Accordian Contents */}
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="accordion"
+                id="accordionPanel"
+              >
+                {/* basic info */}
+                <BasicDetails
+                  errors={errors}
+                  control={control}
+                  register={register}
+                />
+                {/* Venue Price */}
+                <PricingDetails
+                  errors={errors}
+                  control={control}
+                  register={register}
+                />
+                {/* Availability */}
+                <AvailabilityDetails
+                  errors={errors}
+                  control={control}
+                  register={register}
+                  timeSlots={timeSlots}
+                  setTimeSlots={setTimeSlots}
+                  selectedHours={selectedHours}
+                  setSelectedHours={setSelectedHours}
+                />
+                {/* overview */}
+                <OverviewDetails errors={errors} register={register} />
+                {/* includes */}
+                <IncludesDetails
+                  includes={includes}
+                  setIncludes={setIncludes}
+                  register={register}
+                />
+                {/* Rules */}
+                <RulesDetails
+                  errors={errors}
+                  control={control}
+                  rules={rules}
+                  setRules={setRules}
+                />
+                {/* Amenities */}
+                <AmenitiesDetails
+                  register={register}
+                  amenities={amenities}
+                  setAmenities={setAmenities}
+                />
+                {/* Gallery */}
+                <GalleryDetails
+                  errors={errors}
+                  handleFileChange={handleFileChange}
+                  removeImg={removeImg}
+                  images={images}
+                />
+                {/* Location */}
+                <LocationDetails errors={errors} register={register} />
+                {/* Save form button */}
+                <button className="text-center btn-row btn btn-secondary save-profile">
+                  Update Court <i className="feather-arrow-right-circle ms-1" />
+                </button>
+              </form>
+              {/* Accordian Contents */}
             </div>
-            {/* /Row */}
           </div>
-          {/* /Container */}
+          {/* /Row */}
         </div>
-      )}
+        {/* /Container */}
+      </div>
       {/* /Page Content */}
     </div>
   );

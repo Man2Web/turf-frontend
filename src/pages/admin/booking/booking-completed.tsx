@@ -8,7 +8,7 @@ import Loader from "../../../components/common/loader/Loader";
 import { dateFormat } from "../../../utils/commin-utils/dateFormat";
 import { formatTime } from "../../../utils/commin-utils/formatTime";
 import { formatEndTime } from "../../../utils/commin-utils/formatEndTime";
-import BookingConfirmModal from "../../../components/admin/booking/booking-confirm";
+import BookingConfirmModal from "../../../components/common/modal/booking-confirm";
 
 interface countData {
   todaysBookingsCount: string;
@@ -186,6 +186,10 @@ const BookingCompleted = () => {
       <>
         {/* Dashboard Menu */}
         <AdminMenuComponent />
+        <Loader
+          loader={loading}
+          loadingDescription="Fetching Bookings Data..."
+        />
         {/* /Dashboard Menu */}
         {/* Page Content */}
         <div className="content court-bg">
@@ -280,7 +284,6 @@ const BookingCompleted = () => {
                           tabIndex={0}
                         >
                           <div className="table-responsive">
-                            {loading && <Loader />}
                             {!loading && (
                               <DataTable
                                 value={currentData}
