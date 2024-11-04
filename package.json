@@ -20,6 +20,7 @@
     "feather-icons-react": "^0.6.2",
     "file-saver": "^2.0.5",
     "google-map-react": "^2.2.1",
+    "js-cookie": "^3.0.5",
     "lightbox.js-react": "^1.0.0",
     "lightgallery": "^2.7.2",
     "moment": "^2.30.1",
@@ -81,6 +82,7 @@
   },
   "devDependencies": {
     "@types/aos": "^3.0.6",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20.8.8",
     "@types/react": "^18.2.29",
     "@types/react-datepicker": "^4.19.1",

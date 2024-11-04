@@ -23,17 +23,26 @@ export const updateGuestCount = (
   } else if (movement === 1) {
     if (direction === 0) {
       if (additionalNumberOfGuests > 0) {
-        setValue("additionalNumberOfGuests", additionalNumberOfGuests - 1, {
-          shouldValidate: true,
-        });
+        setValue(
+          "additionalNumberOfGuests",
+          Number(additionalNumberOfGuests) - 1,
+          {
+            shouldValidate: true,
+          }
+        );
       }
     } else {
       if (
-        additionalNumberOfGuests < Number(courtData.pricing.additional_guests)
+        Number(additionalNumberOfGuests) <
+        Number(courtData.pricing.additional_guests)
       ) {
-        setValue("additionalNumberOfGuests", additionalNumberOfGuests + 1, {
-          shouldValidate: true,
-        });
+        setValue(
+          "additionalNumberOfGuests",
+          Number(additionalNumberOfGuests) + 1,
+          {
+            shouldValidate: true,
+          }
+        );
       }
     }
   }

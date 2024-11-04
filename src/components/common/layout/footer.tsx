@@ -1,10 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import AOS from "aos";
 import "aos/dist/aos.css";
 import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
 import { all_routes } from "../../../router/all_routes";
-import { Dropdown } from "primereact/dropdown";
 
 const Footer = () => {
   const routes = all_routes;

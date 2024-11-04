@@ -9,7 +9,7 @@ import { FilterForm } from "../../../components/common/courts-list/filters-form"
 import LocationDataModal from "../../../components/common/modal/location-data-modal";
 import GridCard from "../../../components/common/courts-list/grid-card";
 import ListCard from "../../../components/common/courts-list/list-card";
-import { UserLocationContext } from "../../..";
+import { useAppContext } from "../../../context/app-context";
 
 const sortOptions = [
   { name: "Relevance" },
@@ -35,19 +35,13 @@ const ListingList = () => {
   const userId =
     localStorage.getItem("adminId") || localStorage.getItem("userId");
 
-  const locationContext = useContext(UserLocationContext);
-
-  if (!locationContext) {
-    throw new Error("Error getting user location");
-  }
-
-  const { userLocationInContext, setUserLocationInContext } = locationContext;
+  const { userLocation, setUserLocation } = useAppContext();
 
   useEffect(() => {
-    if (userLocationInContext) {
+    if (userLocation) {
       SubmitHandler();
     }
-  }, [userLocationInContext, offset, userWishlist]);
+  }, [userLocation, offset, userWishlist]);
 
   useEffect(() => {
     if (userId) {
@@ -77,14 +71,14 @@ const ListingList = () => {
   }, [selectedSort]);
 
   const SubmitHandler = async () => {
-    userLocationInContext && setUserLocationInContext(userLocationInContext);
+    userLocation && setUserLocation(userLocation);
 
     try {
       setLoading(true);
       setPageLoading(true);
       // Fetch all courts based on user location
       const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}court/fetch/all/${userLocationInContext}`,
+        `${process.env.REACT_APP_BACKEND_URL}court/fetch/all/${userLocation}`,
         {
           params: {
             limit,
@@ -171,12 +165,12 @@ const ListingList = () => {
 
   return (
     <>
-      {!userLocationInContext && <LocationDataModal />}
+      {!userLocation && <LocationDataModal />}
       <Loader
         loader={loading || pageLoading}
-        loadingDescription={`Fetching Courts In ${userLocationInContext}...`}
+        loadingDescription={`Fetching Courts In ${userLocation}...`}
       />
-      {userLocationInContext && courtsData.length > 0 && (
+      {userLocation && courtsData.length > 0 && (
         <div>
           {/* Page Content */}
           <div className="content listing-page listing-list-page">
@@ -194,7 +188,7 @@ const ListingList = () => {
                               <span>{Number(paginationData?.totalCount)}</span>{" "}
                               Locations in{" "}
                               <span className="text-capitalize">
-                                {userLocationInContext}
+                                {userLocation}
                               </span>
                             </p>
                             <Link
@@ -269,8 +263,8 @@ const ListingList = () => {
                     <FilterForm
                       setFiltersLoading={setFiltersLoading}
                       setCourtsData={setCourtsData}
-                      userLocation={userLocationInContext}
-                      setUserLocation={setUserLocationInContext}
+                      userLocation={userLocation}
+                      setUserLocation={setUserLocation}
                       limit={limit}
                       offset={offset}
                     />

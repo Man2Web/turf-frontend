@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
 import Loader from "../loader/Loader";
+import axios from "axios";
+import { useAppContext } from "../../../context/app-context";
+import Cookies from "js-cookie";
 
 const LoginFormComponent = () => {
   const routes = all_routes;
@@ -15,13 +17,8 @@ const LoginFormComponent = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisible((prev) => !prev);
-  };
+  const { setIsAdmin, setIsUser } = useAppContext();
 
   const onSubmit = async (data: any) => {
     try {
@@ -35,7 +32,6 @@ const LoginFormComponent = () => {
 
       toast.success(message);
 
-      // Store token and userId in localStorage, naming them based on the role
       if (role === "admin") {
         localStorage.setItem("adminToken", token);
         localStorage.setItem("adminId", userId);
@@ -75,19 +71,14 @@ const LoginFormComponent = () => {
 
       <div className="form-group">
         <div className="pass-group group-img">
-          <i
-            className={`toggle-password ${passwordVisible ? "feather-eye" : "feather-eye-off"}`}
-            onClick={togglePasswordVisibility}
-          />
+          <i className={`toggle-password `} />
           <input
-            type={passwordVisible ? "text" : "password"}
+            type={"password"}
             className="form-control pass-input"
             placeholder="Password"
             {...register("password", {
               required: "Password is required",
             })}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
           />
           {errors.password && (
             <p className="error">{errors.password.message as string}</p>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { all_routes } from "../router/all_routes";
 import { saveAs } from "file-saver";
@@ -15,7 +15,7 @@ const BookingSuccess = () => {
   const routes = all_routes;
   const { t_id } = useParams();
   const [bookingData, setBookingData] = useState<SuccessBookingData>();
-  const [buttonLoader, setButtonLoader] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getBookingData = async (id: string) => {
     const response = await axios.get(
@@ -46,9 +46,9 @@ const BookingSuccess = () => {
     }
   };
 
-  const getPdf = async (transaction_id: string) => {
+  const getPdf = async (transaction_id: string | undefined) => {
     try {
-      setButtonLoader(true);
+      setLoading(true);
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}booking/download/${transaction_id}`,
         {
@@ -60,19 +60,19 @@ const BookingSuccess = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      setButtonLoader(false);
+      setLoading(false);
     }
   };
 
   return (
     <>
       <ToastContainer />
-      <Loader
-        loader={buttonLoader}
-        loadingDescription="Fetching Booking Data..."
-      />
+      <Loader loader={loading} loadingDescription="Fetching Booking Data..." />
       {bookingData && (
-        <Modal>
+        <div
+          style={{ maxWidth: "80%" }}
+          className="modal-dialog modal-dialog-centered modal-md mt-4"
+        >
           <div className="modal-content">
             <div className="modal-header d-flex justify-content-between">
               <div className="form-header modal-header-title">
@@ -81,7 +81,7 @@ const BookingSuccess = () => {
                   <span
                     className="badge ms-2"
                     style={{ backgroundColor: "grey", color: "white" }}
-                  >{`ID: ${bookingData.transaction_id}`}</span>
+                  >{`ID: ${bookingData?.transaction_id}`}</span>
                   <span className="badge bg-success ms-2">Paid</span>
                 </h4>
               </div>
@@ -114,18 +114,18 @@ const BookingSuccess = () => {
                           <h6>Court Email</h6>
                           <a
                             className="text-success"
-                            href={`mailto: ${bookingData.court_details.email}`}
+                            href={`mailto: ${bookingData?.court_details.email}`}
                           >
-                            {`${bookingData.court_details.email}`}
+                            {`${bookingData?.court_details.email}`}
                           </a>
                         </li>
                         <li>
                           <h6>Court Number</h6>
                           <a
                             className="text-success"
-                            href={`tel:+91${bookingData.court_details.phone_number}`}
+                            href={`tel:+91${bookingData?.court_details.phone_number}`}
                           >
-                            {`+91${bookingData.court_details.phone_number}`}
+                            {`+91${bookingData?.court_details.phone_number}`}
                           </a>
                         </li>
                         <li>
@@ -151,21 +151,21 @@ const BookingSuccess = () => {
                       <ul className="appointmentset">
                         <li>
                           <h6>Player Name</h6>
-                          <p>{`${bookingData.booking_info.fname} ${bookingData.booking_info.lname}`}</p>
+                          <p>{`${bookingData?.booking_info.fname} ${bookingData?.booking_info.lname}`}</p>
                         </li>
-                        {bookingData.booking_info.phone_number && (
+                        {bookingData?.booking_info.phone_number && (
                           <li>
                             <h6>Phone Number</h6>
-                            <p>{bookingData.booking_info.phone_number}</p>
+                            <p>{bookingData?.booking_info.phone_number}</p>
                           </li>
                         )}
                         <li>
                           <h6>Guests</h6>
-                          <p>{bookingData.booking_info.guests}</p>
+                          <p>{bookingData?.booking_info.guests}</p>
                         </li>
                         <li>
                           <h6>Additional Guests</h6>
-                          <p>{bookingData.booking_info.add_guests}</p>
+                          <p>{bookingData?.booking_info.add_guests}</p>
                         </li>
                       </ul>
                     </div>
@@ -291,7 +291,7 @@ const BookingSuccess = () => {
               <div className="d-flex justify-content-center my-4 gap-2">
                 <button
                   onClick={() => {
-                    getPdf(bookingData.transaction_id);
+                    getPdf(bookingData?.transaction_id);
                   }}
                   className="btn btn-primary btn-icon"
                 >
@@ -305,7 +305,7 @@ const BookingSuccess = () => {
               </div>
             </div>
           </div>
-        </Modal>
+        </div>
       )}
     </>
   );

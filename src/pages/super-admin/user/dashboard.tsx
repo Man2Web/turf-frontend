@@ -11,23 +11,16 @@ import { citiesList } from "../../../utils/data-list/citiesList";
 import LocationDataModal from "../../../components/common/modal/location-data-modal";
 import StatsCardComponent from "../../../components/super-admin/stats-card";
 import CourtsDataComponent from "../../../components/super-admin/coupons/courts-data-component";
-import { UserLocationContext } from "../../..";
 import SuperAdminMenu from "../../../components/super-admin/profile/super-admin-menu";
+import { useAppContext } from "../../../context/app-context";
 
 const SuperAdminDashboard = () => {
   const routes = all_routes;
-
-  const locationContext = useContext(UserLocationContext);
-
-  if (!locationContext) {
-    throw new Error("Error getting user location");
-  }
-
-  const { userLocationInContext } = locationContext;
+  const { userLocation, setUserLocation } = useAppContext();
 
   return (
     <div>
-      {!userLocationInContext && <LocationDataModal />}
+      {!userLocation && <LocationDataModal />}
       {/* Dashboard Menu */}
       <SuperAdminMenu />
       {/* /Dashboard Menu */}

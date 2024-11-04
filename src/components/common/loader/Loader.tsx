@@ -31,7 +31,7 @@ const Loader = ({
       timeOut = setTimeout(() => {
         setSpinning(false);
         setPercentage(0);
-      }, 500);
+      }, 1000);
     }
     return () => {
       clearInterval(interval);
@@ -39,12 +39,17 @@ const Loader = ({
     };
   }, [loader]);
 
+  const CustomDescription = ({ description }: { description: string }) => (
+    <p className="text-success fw-semibold">{description}</p>
+  );
+
   return (
     <Spin
+      className="custom-spinner-background"
       indicator={<BounceBasketball01Icon />}
       spinning={spinning}
       percent={percentage}
-      tip={loadingDescription}
+      tip={<CustomDescription description={loadingDescription} />}
       fullscreen
     />
   );

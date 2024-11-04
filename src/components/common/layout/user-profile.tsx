@@ -1,25 +1,28 @@
-import React, { useContext } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
-import { Avatar } from "primereact/avatar";
-import { UserLocationContext } from "../../..";
+import { useAppContext } from "../../../context/app-context";
+import Loader from "../loader/Loader";
 
 export const UserProfileHeader = () => {
-  const routes = all_routes;
+  const { setUserLocation } = useAppContext();
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-
-  const context = useContext(UserLocationContext);
-
-  if (!context) {
-    throw new Error("Error getting user Location");
-  }
-
-  const { setUserLocationInContext } = context;
+  const routes = all_routes;
 
   const logout = () => {
-    navigate(routes.home);
-    localStorage.clear();
-    setUserLocationInContext(null);
+    try {
+      setLoading(true);
+      localStorage.clear();
+      setUserLocation(null);
+      setTimeout(() => {
+        navigate(routes.home);
+      }, 1000);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const profilePage = () => {
@@ -34,6 +37,7 @@ export const UserProfileHeader = () => {
 
   return (
     <div className="dropdown dropdown-action table-drop-action btn btn-primary">
+      <Loader loader={loading} loadingDescription="Logging Out..." />
       <Link
         to="#"
         className="action-item dropdown-toggle"
@@ -47,7 +51,13 @@ export const UserProfileHeader = () => {
           <i className="feather-user-x" />
           Profile
         </Link>
-        <Link className="dropdown-item" to="#" onClick={() => logout()}>
+        <Link
+          className="dropdown-item"
+          to="#"
+          onClick={() => {
+            logout();
+          }}
+        >
           <i className="feather-log-out" />
           Logout
         </Link>

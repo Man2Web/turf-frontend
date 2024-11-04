@@ -1,10 +1,9 @@
 import React from "react";
-import { Navigate, Route } from "react-router";
+import { Route } from "react-router";
 import { all_routes } from "./all_routes";
 
 import Signin from "../pages/auth/register";
 import Login from "../pages/auth/login";
-
 import AdminDashboard from "../pages/admin/profile/admin-dashboard";
 import AddCourt from "../pages/admin/court/add-court";
 import EditCourt from "../pages/admin/court/edit-court";

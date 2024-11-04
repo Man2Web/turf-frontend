@@ -27,7 +27,6 @@ const UserBookingsPage = () => {
   const [infiniteLoading, setInfiniteLoading] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
   const [adminSelected, setAdminSelected] = useState<SuccessBookingData>();
-  const [searchInput, setSearchInput] = useState("");
   const [totalPrevCount, setTotalPrevCount] = useState<number>(0);
   const [limit, setLimit] = useState<number>(20);
   const [offset, setOffset] = useState<number>(0);
@@ -166,7 +165,6 @@ const UserBookingsPage = () => {
   const userBookingsSliderData = getUserBookingSliderData(
     upcomingBooking.length
   );
-  console.log(upcomingBooking);
   return (
     <div>
       {/* Dashboard Menu */}
@@ -218,7 +216,7 @@ const UserBookingsPage = () => {
                                           </span>
                                         )}
                                         <h5 className="tag tag-primary">
-                                          ₹{decimalNumber(10000)}
+                                          ₹{decimalNumber(booking.pay_required)}
                                         </h5>
                                       </div>
                                     </div>

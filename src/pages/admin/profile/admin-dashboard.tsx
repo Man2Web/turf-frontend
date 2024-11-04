@@ -1,23 +1,16 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
-import { all_routes } from "../../../router/all_routes";
 import AdminMenuComponent from "../../../components/admin/profile/adminMenu";
 import LocationDataModal from "../../../components/common/modal/location-data-modal";
-import { UserLocationContext } from "../../..";
+import { useAppContext } from "../../../context/app-context";
 
 const AdminDashboard = () => {
-  const locationContext = useContext(UserLocationContext);
-
-  if (!locationContext) {
-    throw new Error("Error getting user location");
-  }
-
-  const { userLocationInContext } = locationContext;
+  const { userLocation, setUserLocation } = useAppContext();
 
   return (
     <div>
-      {!userLocationInContext && <LocationDataModal />}
+      {!userLocation && <LocationDataModal />}
       {/* Dashboard Menu */}
       <AdminMenuComponent />
       {/* /Dashboard Menu */}

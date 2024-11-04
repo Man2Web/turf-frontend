@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
 import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
-import { UserLocationContext } from "../../..";
 import UserProfileHeader from "./user-profile";
 import {
   adminHeaderData,
@@ -10,27 +9,16 @@ import {
   superHeaderData,
   userHeaderData,
 } from "../../../utils/commin-utils/header-data";
+import { useAppContext } from "../../../context/app-context";
 
 const Header = () => {
   const routes = all_routes;
   const location = useLocation();
-  const [userLocation, setUserLocation] = useState(
-    localStorage.getItem("userLocation") || undefined
-  );
+  const { userLocation, setUserLocation } = useAppContext();
   const [toggleMenu, setToggleMenu] = useState(false);
   const superAdminLoggedIn = localStorage.getItem("superAdminToken");
   const adminLoggedIn = localStorage.getItem("adminToken");
   const userLoggedIn = localStorage.getItem("userToken");
-
-  const context = useContext(UserLocationContext);
-
-  // Check if the context is undefined
-  if (!context) {
-    throw new Error("SomeComponent must be used within a UserLocationProvider");
-  }
-
-  // Destructure properties from the context
-  const { userLocationInContext } = context;
 
   useEffect(() => {
     if (userLocation) {
@@ -68,7 +56,7 @@ const Header = () => {
                 <span />
               </span>
             </Link>
-            <Link to="index" className="navbar-brand logo">
+            <Link to={routes.home} className="navbar-brand logo">
               {location.pathname.includes("#") ? (
                 <ImageWithBasePath
                   src="assets/img/logo.svg"
@@ -88,7 +76,7 @@ const Header = () => {
             className={`main-menu-wrapper ${toggleMenu ? "menu-opened" : ""}`}
           >
             <div className="menu-header">
-              <Link to="index" className="menu-logo">
+              <Link to={routes.home} className="menu-logo">
                 <ImageWithBasePath
                   src="assets/img/logo-black.svg"
                   className="img-fluid"
@@ -220,10 +208,10 @@ const Header = () => {
             </ul>
           </div>
           <ul className="nav header-navbar-rht gap-2">
-            {userLocationInContext && (
+            {userLocation && (
               <li className="d-flex align-items-center gap-1 text-white header-nav-location-comp">
                 <i className="feather-map-pin" />
-                <p className="mb-0 text-capitalize">{userLocationInContext}</p>
+                <p className="mb-0 text-capitalize">{userLocation}</p>
               </li>
             )}
             {adminLoggedIn && (

@@ -4,11 +4,11 @@ import axios from "axios";
 import { citiesList } from "../../../utils/data-list/citiesList";
 import { toast, ToastContainer } from "react-toastify";
 import { Dropdown } from "primereact/dropdown";
-import { UserLocationContext } from "../../../index";
 import { useNavigate } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
-import { Modal } from "antd";
+import { Divider, Modal } from "antd";
 import Loader from "../loader/Loader";
+import { useAppContext } from "../../../context/app-context";
 
 const LocationDataModal = () => {
   const { control } = useForm();
@@ -19,15 +19,8 @@ const LocationDataModal = () => {
   const routes = all_routes;
   const navigate = useNavigate();
 
-  const context = useContext(UserLocationContext);
-
-  // Check if the context is undefined
-  if (!context) {
-    throw new Error("SomeComponent must be used within a UserLocationProvider");
-  }
-
   // Destructure properties from the context
-  const { setUserLocationInContext } = context;
+  const { userLocation, setUserLocation } = useAppContext();
 
   useEffect(() => {
     getCitiesData();
@@ -76,7 +69,7 @@ const LocationDataModal = () => {
       if (locations.includes(userLocationInContext)) {
         // setUserLocation(userLocationInContext);
         localStorage.setItem("userLocation", userLocationInContext);
-        setUserLocationInContext(userLocationInContext);
+        setUserLocation(userLocationInContext);
         navigate(routes.ListingList);
       } else {
         toast.error(
@@ -109,7 +102,7 @@ const LocationDataModal = () => {
         <Loader loader={loading} loadingDescription="Fetching User Location" />
       ) : (
         <Modal
-          title="Enter Your Location"
+          title={<p className="text-center">Enter Your Location</p>}
           open={showModal}
           onCancel={closeModal}
           closable={false}
@@ -118,7 +111,7 @@ const LocationDataModal = () => {
           centered
         >
           <div className="modal-body">
-            <div className="d-flex justify-content-center">
+            <div className="text-center">
               <button
                 onClick={() => getUserLocation()}
                 className="btn btn-primary mb-4"
@@ -130,6 +123,7 @@ const LocationDataModal = () => {
               </button>
             </div>
             {locationError && <p className="text-danger">{locationError}</p>}
+            <Divider orientation="center">Or</Divider>
             <form autoComplete="off" className="w-100">
               <div className="card-body-chat">
                 <div className="sorting-select">
@@ -142,7 +136,7 @@ const LocationDataModal = () => {
                         value={field.value}
                         onChange={(e) => {
                           field.onChange(e.value);
-                          setUserLocationInContext(e.value);
+                          setUserLocation(e.value);
                         }}
                         options={locations}
                         optionLabel="userLocationInContext"
