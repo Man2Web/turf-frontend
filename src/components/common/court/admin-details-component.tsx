@@ -9,12 +9,10 @@ const AdminDetailsComponent = ({
   courtData,
   setUserDetails,
   setIsValid,
-  setErrors,
 }: {
   setUserDetails: (data: AdminDetailsFormData) => void;
   courtData: CourtsData;
   setIsValid: any;
-  setErrors: any;
 }) => {
   const {
     register,
@@ -51,7 +49,6 @@ const AdminDetailsComponent = ({
       additionalNumberOfGuests,
     });
     setIsValid(isValid);
-    setErrors(errors);
   }, [
     fName,
     lName,

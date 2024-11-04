@@ -44,7 +44,6 @@ const CourtCheckout = ({
   } = useForm<CheckoutForm>({
     mode: "onTouched",
   });
-  const [localErrors, setErrors] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [isValid, setIsValid] = useState<boolean>();
   const [adminLoading, setAdminLoading] = useState<boolean>(false);
@@ -149,28 +148,29 @@ const CourtCheckout = ({
         null,
       dataConfirmation,
     };
-    if (policy && isValid) {
-      try {
-        setLoading(true);
-        const response = await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}payment`,
-          updatedData
-        );
+    console.log(updatedData);
+    // if (policy && isValid) {
+    //   try {
+    //     setLoading(true);
+    //     const response = await axios.post(
+    //       `${process.env.REACT_APP_BACKEND_URL}payment`,
+    //       updatedData
+    //     );
 
-        const redirectUrl =
-          response.data?.data?.instrumentResponse?.redirectInfo?.url;
+    //     const redirectUrl =
+    //       response.data?.data?.instrumentResponse?.redirectInfo?.url;
 
-        if (redirectUrl) {
-          window.location.href = redirectUrl;
-        } else {
-          toast.error("Error booking slot");
-        }
-      } catch (error) {
-        console.error("Error during payment:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
+    //     if (redirectUrl) {
+    //       window.location.href = redirectUrl;
+    //     } else {
+    //       toast.error("Error booking slot");
+    //     }
+    //   } catch (error) {
+    //     console.error("Error during payment:", error);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // }
   };
 
   // Function to handle API call for CASH payment method
@@ -238,14 +238,12 @@ const CourtCheckout = ({
               <div className="col-12 col-sm-12 col-md-12 col-lg-7">
                 {isCourtAdmin ? (
                   <AdminDetailsComponent
-                    setErrors={setErrors}
                     setIsValid={setIsValid}
                     courtData={courtData}
                     setUserDetails={setUserDetails}
                   />
                 ) : (
                   <UserDetailsComponent
-                    setErrors={setErrors}
                     setIsValid={setIsValid}
                     courtData={courtData}
                     setUserDetails={setUserDetails}

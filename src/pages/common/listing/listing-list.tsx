@@ -162,13 +162,12 @@ const ListingList = () => {
   const handlePagination = (movement: number) => {
     setOffset(movement);
   };
-
   return (
     <>
       {!userLocation && <LocationDataModal />}
       <Loader
         loader={loading || pageLoading}
-        loadingDescription={`Fetching Courts In ${userLocation}...`}
+        loadingDescription={`Fetching Courts In ${userLocation && userLocation?.charAt(0).toUpperCase() + userLocation?.slice(1)}...`}
       />
       {userLocation && courtsData.length > 0 && (
         <div>

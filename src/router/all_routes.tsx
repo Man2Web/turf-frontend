@@ -1,3 +1,6 @@
+import AboutUs from "../pages/common/about-us";
+import TermsCondition from "../pages/common/terms-condition";
+
 export const all_routes = {
   // Super Admin
   superAdminLogin: "/auth/super-admin",
@@ -32,6 +35,11 @@ export const all_routes = {
   ListingList: "/courts",
   // ListingListWithCity: "/courts/:requestedLocation",
   courtBooking: "/court/:courtId/booking",
+  aboutUs: "/about",
+  contactUs: "/contact",
+  faq: "/faq",
+  privacyPolicy: "/privacy",
+  termsCondition: "/terms",
   error404: "*",
 
   // Booking Routes

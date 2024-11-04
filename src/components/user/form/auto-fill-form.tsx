@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { UserDetailsFormData } from "../../../utils/types/user/userDetailsBookingForm";
+import { countriesList } from "../../../utils/data-list/countriesList";
 
 export const autoFillFormData = (
   reset: (data: Partial<UserDetailsFormData>) => void
@@ -27,7 +28,7 @@ export const autoFillFormData = (
           address: userDetails.address || "",
           city: userDetails.city || "",
           state: userDetails.state || "",
-          country: userDetails.country || "",
+          country: userDetails.country || countriesList[102],
           pincode: userDetails.pincode || "",
         });
       }

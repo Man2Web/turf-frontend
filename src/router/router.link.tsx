@@ -28,6 +28,11 @@ import SuperAdminCoupon from "../pages/super-admin/coupon/super-admin-coupon";
 import ForgotPassword from "../pages/auth/forgot-password";
 import ChangePassword from "../pages/auth/change-password";
 import Error404 from "../pages/common/error-404";
+import AboutUs from "../pages/common/about-us";
+import ContactUs from "../pages/common/contact-us";
+import Faq from "../pages/common/faq";
+import PrivacyPolicy from "../pages/common/privacy-policy";
+import TermsCondition from "../pages/common/terms-condition";
 
 const routes = all_routes;
 
@@ -147,6 +152,31 @@ const publicRoutes = [
   {
     path: routes.bookingFailure,
     element: <BookingFailure />,
+    route: Route,
+  },
+  {
+    path: routes.aboutUs,
+    element: <AboutUs />,
+    route: Route,
+  },
+  {
+    path: routes.contactUs,
+    element: <ContactUs />,
+    route: Route,
+  },
+  {
+    path: routes.faq,
+    element: <Faq />,
+    route: Route,
+  },
+  {
+    path: routes.privacyPolicy,
+    element: <PrivacyPolicy />,
+    route: Route,
+  },
+  {
+    path: routes.termsCondition,
+    element: <TermsCondition />,
     route: Route,
   },
 ];

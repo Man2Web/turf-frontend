@@ -12,12 +12,10 @@ const UserDetailsComponent = ({
   courtData,
   setUserDetails,
   setIsValid,
-  setErrors,
 }: {
   setUserDetails: (data: UserDetailsFormData) => void;
   courtData: CourtsData;
   setIsValid: any;
-  setErrors: any;
 }) => {
   const {
     register,
@@ -33,6 +31,7 @@ const UserDetailsComponent = ({
     defaultValues: {
       numberOfGuests: Number(courtData.pricing.guests),
       additionalNumberOfGuests: 0,
+      country: countriesList[102],
     },
   }); // Validation on field touch
 
@@ -65,7 +64,6 @@ const UserDetailsComponent = ({
       numberOfGuests,
       additionalNumberOfGuests,
     });
-    setErrors(errors);
     setIsValid(isValid);
   }, [
     fName,
@@ -302,7 +300,7 @@ const UserDetailsComponent = ({
                     control={control}
                     render={({ field }) => (
                       <Dropdown
-                        value={countriesList[102]}
+                        value={field.value}
                         disabled
                         onChange={(e) => field.onChange(e.value)}
                         options={countriesList}

@@ -6,24 +6,16 @@ import Select from "react-select";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Dropdown } from "primereact/dropdown";
 import { all_routes } from "../../router/all_routes";
+import { citiesList } from "../../utils/data-list/citiesList";
+import { useAppContext } from "../../context/app-context";
 
 const HomePage = () => {
   const routes = all_routes;
-
-  const [selectedTimeframe, setSelectedTimeframe] = useState();
-  const [selectedSort, setSelectedSort] = useState();
-
-  const timeframeOptions = [{ name: "Courts" }, { name: "Coaches" }];
-  const sortOptions = [
-    { name: "German" },
-    { name: "Russian" },
-    { name: "France" },
-    { name: "UK" },
-    { name: "Colombia" },
-  ];
+  const navigate = useNavigate();
+  const [citiesData, setCitiesData] = useState<string[]>([]);
 
   const settings = {
     dots: false,
@@ -50,15 +42,20 @@ const HomePage = () => {
     slidesToScroll: 1,
   };
 
-  const locationOptions = [
-    { value: "germany", label: "Germany" },
-    { value: "russia", label: "Russia" },
-    { value: "france", label: "France" },
-    { value: "uk", label: "UK" },
-    { value: "colombia", label: "Colombia" },
-  ];
+  const { userLocation, setUserLocation } = useAppContext();
+
+  const fetchCourts = (location: string) => {
+    setUserLocation(location);
+    navigate(routes.ListingList);
+  };
+
   useEffect(() => {
     AOS.init({ duration: 1200, once: true });
+    const fetchData = async () => {
+      const data = await citiesList();
+      setCitiesData(data);
+    };
+    fetchData();
   }, []);
 
   return (
@@ -100,47 +97,27 @@ const HomePage = () => {
                     Programs.
                   </p>
                   <div className="search-box">
-                    <form action={"routes.coachesGrid"}>
-                      <div className="search-input line">
+                    <form className="container gap-2">
+                      {/* <div className="search-input line"></div> */}
+                      <div className="col-8">
                         <div className="form-group mb-0">
-                          <label>Search for</label>
-                          {/* <Select
-                            options={[
-                              { value: "courts", label: "Courts" },
-                              { value: "coaches", label: "Coaches" },
-                            ]}
-                            className="select"
-                          /> */}
-
                           <Dropdown
-                            value={selectedTimeframe}
-                            onChange={(e) => setSelectedTimeframe(e.value)}
-                            options={timeframeOptions}
-                            optionLabel="name"
-                            placeholder="Courts"
-                            className="select custom-select-list"
-                          />
-                        </div>
-                      </div>
-                      <div className="search-input">
-                        <div className="form-group mb-0">
-                          <label>Where </label>
-                          <Dropdown
-                            value={selectedSort}
-                            onChange={(e) => setSelectedSort(e.value)}
-                            options={sortOptions}
+                            value={userLocation}
+                            onChange={(e) => setUserLocation(e.value)}
+                            options={citiesData}
                             optionLabel="name"
                             placeholder="Choose Location"
-                            className="select custom-select-list w-100"
+                            className="select custom-select-list w-100 text-capitalize"
                           />
                         </div>
                       </div>
-                      <div className="search-btn">
-                        <button className="btn" type="submit">
-                          <i className="feather-search" />
-                          <span className="search-text">Search</span>
-                        </button>
-                      </div>
+                      <Link
+                        to={routes.ListingList}
+                        className="btn btn-primary col-4 d-flex gap-2 justify-content-center  align-items-center"
+                      >
+                        <span className="search-text">Search Courts</span>
+                        <i className="feather-search" />
+                      </Link>
                     </form>
                   </div>
                 </div>

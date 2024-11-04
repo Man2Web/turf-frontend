@@ -6,6 +6,7 @@ interface SuccessBookingData {
   booking_detail_id: string;
   admin_id: string;
   payment_mode: boolean;
+  status: boolean;
   amount_paid: string; // Assuming it's a string due to quotes, could also be number
   transaction_id: string;
   booked_on: string; // Date string in ISO format
@@ -15,7 +16,7 @@ interface SuccessBookingData {
   court_info: CourtInfo;
   booking_info: BookingInfo;
   court_details: CourtDetails;
-  review_details: ReviewDetails;
+  court_reviews?: ReviewDetails;
   total_count: string; // Assuming it's a string due to quotes, could also be number
 }
 

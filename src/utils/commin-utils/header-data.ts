@@ -79,20 +79,20 @@ export const userHeaderData = [
 ];
 
 export const publicHeaderData = [
-  {
-    tittle: "Home",
-    showAsTab: false,
-    separateRoute: true,
-    routes: routes.home,
-    hasSubRoute: false,
-    showSubRoute: false,
-  },
-  {
-    tittle: "Book A Court",
-    showAsTab: false,
-    separateRoute: true,
-    routes: routes.ListingList,
-    hasSubRoute: false,
-    showSubRoute: false,
-  },
+  // {
+  //   tittle: "Home",
+  //   showAsTab: false,
+  //   separateRoute: true,
+  //   routes: routes.home,
+  //   hasSubRoute: false,
+  //   showSubRoute: false,
+  // },
+  // {
+  //   tittle: "Book A Court",
+  //   showAsTab: false,
+  //   separateRoute: true,
+  //   routes: routes.ListingList,
+  //   hasSubRoute: false,
+  //   showSubRoute: false,
+  // },
 ];

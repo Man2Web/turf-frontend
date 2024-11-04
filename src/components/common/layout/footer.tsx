@@ -71,10 +71,10 @@ const Footer = () => {
                 <h4 className="footer-title">Quick Links</h4>
                 <ul>
                   <li>
-                    <Link to={"routes.aboutUs"}>About us</Link>
+                    <Link to={routes.aboutUs}>About us</Link>
                   </li>
                   <li>
-                    <Link to={"routes.contactUs"}>Contact us</Link>
+                    <Link to={routes.contactUs}>Contact us</Link>
                   </li>
                   <li>
                     <Link to={"routes.contactUs"}>Patner With Us</Link>
@@ -89,13 +89,13 @@ const Footer = () => {
                 <h4 className="footer-title">Privacy & Terms</h4>
                 <ul>
                   <li>
-                    <Link to={"routes.faq"}>Faq</Link>
+                    <Link to={routes.faq}>Faq</Link>
                   </li>
                   <li>
-                    <Link to={"routes.privacyPolicy"}>Privacy Policy</Link>
+                    <Link to={routes.privacyPolicy}>Privacy Policy</Link>
                   </li>
                   <li>
-                    <Link to={"routes.termsCondition"}>
+                    <Link to={routes.termsCondition}>
                       Terms &amp; Conditions
                     </Link>
                   </li>

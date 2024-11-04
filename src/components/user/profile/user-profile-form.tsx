@@ -4,17 +4,6 @@ import axios from "axios";
 import Loader from "../../common/loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
 
-type UserProfileFormInputs = {
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  state: string;
-  city: string;
-  country: string;
-  zipcode: string;
-};
-
 const UserProfileForm: React.FC = () => {
   const {
     register,
@@ -42,7 +31,7 @@ const UserProfileForm: React.FC = () => {
         state: locationDetails?.state,
         city: locationDetails?.city,
         country: locationDetails?.country,
-        zipcode: locationDetails?.zipcode,
+        zipcode: locationDetails?.pincode,
       });
     } catch (error) {
       console.error(error);

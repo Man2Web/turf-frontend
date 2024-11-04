@@ -1,22 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { all_routes } from "../../../router/all_routes";
 import { toast, ToastContainer } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { Rating } from "primereact/rating";
 import Loader from "../../../components/common/loader/Loader";
 import { Card, Flex, Rate } from "antd";
-
-interface ReviewFormData {
-  court_id: string | undefined;
-  user_id: string;
-  transaction_id: string | undefined;
-  booking_details_id: string | undefined;
-  title: string;
-  description: string;
-  rating: number;
-}
 
 const CourtReview = () => {
   const routes = all_routes;
@@ -28,7 +17,6 @@ const CourtReview = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
     setValue,
   } = useForm<ReviewFormData>();

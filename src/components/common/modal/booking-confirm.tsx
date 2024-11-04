@@ -55,16 +55,13 @@ const BookingConfirmModal = ({
         <i className="feather-arrow-left-circle me-1" />
         Back to Dashboard
       </Link>
-      {bookingData?.review_details === null ||
-      bookingData?.review_details === undefined ? (
+      {bookingData?.court_reviews === null ? (
         <Link
           target="_blank"
           to={`/user/court/${bookingData?.court_info.court_id}/${bookingData?.transaction_id}/${bookingData?.booking_detail_id}`}
           className="btn btn-primary"
         >
-          {bookingData?.review_details === null
-            ? "Add Review"
-            : "Update Review"}
+          {bookingData?.court_reviews === null ? "Add Review" : "Update Review"}
         </Link>
       ) : (
         <Link target="_blank" to="#" className="btn btn-red">
@@ -84,7 +81,11 @@ const BookingConfirmModal = ({
             className="badge ms-2"
             style={{ backgroundColor: "grey", color: "white" }}
           >{`ID: ${bookingData?.transaction_id}`}</span>
-          <span className="badge bg-success ms-2">Paid</span>
+          {bookingData?.status ? (
+            <span className="badge bg-success ms-2">Success</span>
+          ) : (
+            <span className="badge bg-danger ms-2">Failed</span>
+          )}
         </h4>
       </div>
     </div>
