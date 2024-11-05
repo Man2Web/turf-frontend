@@ -14,10 +14,12 @@ const BookingConfirmModal = ({
   toggleModal,
   bookingData,
   setToggleModal,
+  closeModal,
 }: {
   toggleModal: boolean;
   bookingData: SuccessBookingData | undefined;
   setToggleModal?: any;
+  closeModal?: boolean;
 }) => {
   const [buttonLoader, setButtonLoader] = useState<boolean>(false);
   const routes = all_routes;
@@ -99,6 +101,8 @@ const BookingConfirmModal = ({
       }}
       width={1000}
       keyboard={false}
+      closable={closeModal}
+      maskClosable={closeModal}
       title={<ModalHeader />}
       footer={<ModalFooter />}
       centered

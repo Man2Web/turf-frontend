@@ -4,21 +4,21 @@ import { ToastContainer } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
+import { all_routes } from "../../../router/all_routes";
 
 const UserRegisterForm = () => {
+  const routes = all_routes;
   const [passwordVisible1, setPasswordVisible1] = useState(false);
   const [confirmPasswordVisible1, setConfirmPasswordVisible1] = useState(false);
-  const [confirmPassword1, setConfirmPassword1] = useState("");
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
-  } = useForm();
+  } = useForm<UserRegisterForm>();
 
   const onSubmitUser = async (data: any) => {
-    console.log(data);
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}user/addUser`,
@@ -27,7 +27,6 @@ const UserRegisterForm = () => {
       response.status === 201
         ? toast.success(response.data.message)
         : toast.error(response.data.message);
-      console.log(response);
     } catch (error: any) {
       toast.error(error.response.data.message);
       console.error("Error posting data:", error);
@@ -50,14 +49,13 @@ const UserRegisterForm = () => {
           <i className="feather-user" />
           <input
             type="text"
-            className="form-control"
+            className={`form-control ${errors.username ? "border border-danger" : ""}`}
             placeholder="Username"
             {...register("username", {
               required: "Username is required",
             })}
           />
         </div>
-        {errors.username && <p>{errors.username.message as string}</p>}
       </div>
 
       <div className="form-group">
@@ -65,14 +63,24 @@ const UserRegisterForm = () => {
           <i className="feather-mail" />
           <input
             type="text"
-            className="form-control"
+            className={`form-control ${errors.email ? "border border-danger" : ""}`}
             placeholder="Email"
             {...register("email", {
               required: "Email is required",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Please enter a valid email address",
+              },
             })}
           />
         </div>
-        {errors.email && <p>{errors.email.message as string}</p>}
+
+        {/* Conditionally show error messages excluding 'required' if needed */}
+        {errors.email && (
+          <p className="text-danger">
+            {errors.email.type === "pattern" && errors.email.message}
+          </p>
+        )}
       </div>
 
       <div className="form-group">
@@ -80,7 +88,7 @@ const UserRegisterForm = () => {
           <i className="feather-phone" />
           <input
             type="tel"
-            className="form-control"
+            className={`form-control ${errors.phonenumber ? "border border-danger" : ""}`}
             placeholder="Phone Number"
             {...register("phonenumber", {
               required: "Phone Number is required",
@@ -99,7 +107,11 @@ const UserRegisterForm = () => {
             })}
           />
         </div>
-        {errors.phonenumber && <p>{errors.phonenumber.message as string}</p>}
+
+        {/* Conditionally show error message, excluding the 'required' error */}
+        {errors.phonenumber && errors.phonenumber.type !== "required" && (
+          <p className="text-danger">{errors.phonenumber.message}</p>
+        )}
       </div>
 
       <div className="form-group">
@@ -110,14 +122,34 @@ const UserRegisterForm = () => {
           />
           <input
             type={passwordVisible1 ? "text" : "password"}
-            className="form-control pass-input"
+            className={`form-control pass-input ${errors.password ? "border border-danger" : ""}`}
             placeholder="Password"
             {...register("password", {
               required: "Password is required",
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters long",
+              },
+              validate: {
+                hasUpperCase: (value) =>
+                  /[A-Z]/.test(value) ||
+                  "Password must contain at least one uppercase letter",
+                hasLowerCase: (value) =>
+                  /[a-z]/.test(value) ||
+                  "Password must contain at least one lowercase letter",
+                hasNumber: (value) =>
+                  /\d/.test(value) ||
+                  "Password must contain at least one number",
+                hasSpecialChar: (value) =>
+                  /[!@#$%^&*(),.?":{}|<>]/.test(value) ||
+                  "Password must contain at least one special character",
+              },
             })}
           />
+          {errors.password && errors.password?.type !== "required" && (
+            <p className="text-danger">{errors.password.message}</p>
+          )}
         </div>
-        {errors.password && <p>{errors.password.message as string}</p>}
       </div>
 
       <div className="form-group">
@@ -128,22 +160,25 @@ const UserRegisterForm = () => {
           />
           <input
             type={confirmPasswordVisible1 ? "text" : "password"}
-            className="form-control pass-input"
+            className={`form-control pass-input ${errors.confirmPassword ? "border border-danger" : ""}`}
             placeholder="Confirm Password"
             {...register("confirmPassword", {
               required: "Please confirm your password",
+              validate: (value) =>
+                value === watch("password") || "Passwords do not match",
             })}
           />
-          {errors.confirmPassword && (
-            <p>{errors.confirmPassword.message as string}</p>
-          )}
+          {errors.confirmPassword &&
+            errors.confirmPassword.type !== "required" && (
+              <p className="text-danger">{errors.confirmPassword.message}</p>
+            )}
         </div>
       </div>
 
       <div className="form-check d-flex justify-content-start align-items-center policy">
         <div className="d-inline-block">
           <input
-            className="form-check-input"
+            className={`form-check-input ${errors.terms ? "border border-danger" : ""}`}
             type="checkbox"
             {...register("terms", {
               required: "You must agree to the terms",
@@ -152,10 +187,9 @@ const UserRegisterForm = () => {
         </div>
         <label className="form-check-label">
           By continuing you indicate that you read and agreed to the{" "}
-          <Link to={"route.termsCondition"}>Terms of Use</Link>
+          <Link to={routes.termsCondition}>Terms of Use</Link>
         </label>
       </div>
-      {errors.terms && <p>{errors.terms.message as string}</p>}
 
       <button
         className="btn btn-secondary register-btn d-inline-flex justify-content-center align-items-center w-100 btn-block"

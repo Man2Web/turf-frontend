@@ -5,8 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
 import Loader from "../loader/Loader";
 import axios from "axios";
-import { useAppContext } from "../../../context/app-context";
-import Cookies from "js-cookie";
 
 const LoginFormComponent = () => {
   const routes = all_routes;
@@ -16,9 +14,8 @@ const LoginFormComponent = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<LoginProfileForm>();
   const [loading, setLoading] = useState<boolean>(false);
-  const { setIsAdmin, setIsUser } = useAppContext();
 
   const onSubmit = async (data: any) => {
     try {
@@ -57,31 +54,66 @@ const LoginFormComponent = () => {
           <i className="feather-user" />
           <input
             type="text"
-            className="form-control"
-            placeholder="Email"
+            className={`form-control ${errors.email ? "border border-danger" : ""}`}
+            placeholder="Email or Username"
             {...register("email", {
-              required: "Email is required",
+              required: "Email or Username is required",
+              validate: (value) => {
+                // Regular expressions for email and username
+                const isEmail =
+                  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+                    value
+                  );
+                const isUsername = /^[a-zA-Z0-9]+$/.test(value);
+                return (
+                  isEmail ||
+                  isUsername ||
+                  "Enter a valid email or username (alphanumeric only)"
+                );
+              },
             })}
           />
-          {errors.emailOrUsername && (
-            <p className="error">{errors.emailOrUsername.message as string}</p>
+          {errors.email && errors.email?.type !== "required" && (
+            <p style={{ fontSize: "14px" }} className="text-danger">
+              {errors.email.message}
+            </p>
           )}
         </div>
       </div>
 
       <div className="form-group">
         <div className="pass-group group-img">
-          <i className={`toggle-password `} />
+          <i className="toggle-password feather-eye" />
           <input
-            type={"password"}
-            className="form-control pass-input"
+            type="password"
+            className={`form-control pass-input ${errors.password ? "border border-danger" : ""}`}
             placeholder="Password"
             {...register("password", {
               required: "Password is required",
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters long",
+              },
+              validate: {
+                hasUpperCase: (value) =>
+                  /[A-Z]/.test(value) ||
+                  "Password must contain at least one uppercase letter",
+                hasLowerCase: (value) =>
+                  /[a-z]/.test(value) ||
+                  "Password must contain at least one lowercase letter",
+                hasNumber: (value) =>
+                  /\d/.test(value) ||
+                  "Password must contain at least one number",
+                hasSpecialChar: (value) =>
+                  /[!@#$%^&*(),.?":{}|<>]/.test(value) ||
+                  "Password must contain at least one special character",
+              },
             })}
           />
-          {errors.password && (
-            <p className="error">{errors.password.message as string}</p>
+          {errors.password && errors.password?.type !== "required" && (
+            <p style={{ fontSize: "14px" }} className="text-danger">
+              {errors.password.message}
+            </p>
           )}
         </div>
       </div>

@@ -284,20 +284,22 @@ const CheckOutForm = ({
                 <Link to="terms-condition">Terms & Conditions.</Link>
               </label>
             </div>
-            <div className="d-flex align-items-center">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="dataConfirmation"
-                {...register("dataConfirmation")}
-              />
-              <label
-                className="form-check-label pt-0"
-                htmlFor="dataConfirmation"
-              >
-                Save the data for faster checkouts in future
-              </label>
-            </div>
+            {!isCourtAdmin && (
+              <div className="d-flex align-items-center">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="dataConfirmation"
+                  {...register("dataConfirmation")}
+                />
+                <label
+                  className="form-check-label pt-0"
+                  htmlFor="dataConfirmation"
+                >
+                  Save the data for faster checkouts in future
+                </label>
+              </div>
+            )}
           </div>
           {errors?.policy && (
             <p className="text-danger">{errors.policy.message}</p>

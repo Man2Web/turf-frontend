@@ -116,7 +116,10 @@ const Header = () => {
                         <li
                           className={`has-submenu ${mainMenus?.menu?.map((item) => item?.routes).includes(location.pathname) ? "active" : ""}`}
                         >
-                          <Link style={{ color: "white" }} to="#">
+                          <Link
+                            // style={{ color: "white" }}
+                            to="#"
+                          >
                             {mainMenus.tittle}{" "}
                             <i className="fas fa-chevron-down"></i>
                           </Link>

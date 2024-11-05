@@ -27,7 +27,7 @@ const Signin = () => {
                     <ImageWithBasePath
                       key={index}
                       className="full-width-image"
-                      src={`assets/img/gallery/gallery1/gallery-0${index + 1}.png`}
+                      src={`assets/img/gallery/gallery-thumb-0${index + 1}.jpg`}
                     />
                   ))}
                 </Slider>
@@ -39,8 +39,8 @@ const Signin = () => {
                       <header className="text-center">
                         <Link to={"route.home"}>
                           <ImageWithBasePath
-                            src="assets/img/logo-black.svg"
-                            className="img-fluid"
+                            src="assets/img/logo-black.png"
+                            className="logo-custom-img"
                             alt="Logo"
                           />
                         </Link>

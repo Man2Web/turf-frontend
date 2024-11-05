@@ -166,13 +166,13 @@ const HomePage = () => {
                 </div>
                 <div className="work-content">
                   <h5>
-                    <Link to={"routes.register"}>Join Us</Link>
+                    <Link to={routes.register}>Join Us</Link>
                   </h5>
                   <p>
                     Quick and Easy Registration: Get started on our software
                     platform with a simple account creation process.
                   </p>
-                  <Link className="btn" to={"routes.register"}>
+                  <Link className="btn" to={routes.register}>
                     Register Now <i className="feather-arrow-right" />
                   </Link>
                 </div>
@@ -214,13 +214,13 @@ const HomePage = () => {
                 </div>
                 <div className="work-content">
                   <h5>
-                    <Link to={"routes.coachDetails"}>Booking Process</Link>
+                    <Link to={routes.ListingList}>Booking Process</Link>
                   </h5>
                   <p>
                     Easily book, pay, and enjoy a seamless experience on our
                     user-friendly platform.
                   </p>
-                  <Link className="btn" to={"routes.coachDetails"}>
+                  <Link className="btn" to={routes.ListingList}>
                     Book Now <i className="feather-arrow-right" />
                   </Link>
                 </div>
@@ -245,31 +245,11 @@ const HomePage = () => {
         </div>
         <div className="container">
           <div className="convenient-content aos" data-aos="fade-up">
-            <h2>Convenient &amp; Flexible Scheduling</h2>
+            <h2>Convenient &amp; Flexible Bookings</h2>
             <p>
               Find and book coaches conveniently with our online system that
               matches your schedule and location.
             </p>
-          </div>
-          <div className="convenient-btns aos" data-aos="fade-up">
-            <Link
-              to={"routes.coachDetails"}
-              className="btn btn-primary d-inline-flex align-items-center"
-            >
-              Book a Training{" "}
-              <span className="lh-1">
-                <i className="feather-arrow-right-circle ms-2" />
-              </span>
-            </Link>
-            <Link
-              to={"routes.pricing"}
-              className="btn btn-secondary d-inline-flex align-items-center"
-            >
-              View Pricing Plan{" "}
-              <span className="lh-1">
-                <i className="feather-arrow-right-circle ms-2" />
-              </span>
-            </Link>
           </div>
         </div>
       </section>
@@ -282,65 +262,65 @@ const HomePage = () => {
             <div className="col-lg-6 d-flex align-items-center">
               <div className="start-your-journey aos" data-aos="fade-up">
                 <h2>
-                  Start Your Journey With{" "}
-                  <span className="active-sport">Dreamsports</span> Badminton
-                  Today.
+                  Start Your Journey With Us{" "}
+                  <span className="active-sport">Today.</span>
                 </h2>
                 <p>
-                  At DreamSports Badminton, we prioritize your satisfaction and
-                  value your feedback as we continuously improve and evolve our
-                  learning experiences.
+                  At [[company_name]], we prioritize your experience and welcome
+                  your feedback as we continuously enhance our platform to
+                  better serve our sports community.
                 </p>
                 <p>
-                  Our instructors utilize modern methods for effective badminton
-                  lessons, offering introductory sessions for beginners and
-                  personalized development plans to foster individual growth.
+                  Whether you’re a beginner, a seasoned player, or simply
+                  someone looking to stay active, our platform offers a simple
+                  and efficient way to discover and book sports facilities that
+                  match your needs.
                 </p>
                 <span className="stay-approach">
-                  Stay Ahead With Our Innovative Approach:
+                  Discover the Benefits of Our Platform:
                 </span>
                 <div className="journey-list">
                   <ul>
                     <li>
                       <i className="fa-solid fa-circle-check" />
-                      Skilled Professionals
+                      Easy-to-Use Booking System
                     </li>
                     <li>
                       <i className="fa-solid fa-circle-check" />
-                      Modern Techniques
+                      Access to a Variety of Sports Facilities
                     </li>
                     <li>
                       <i className="fa-solid fa-circle-check" />
-                      Intro Lesson
+                      Transparent Pricing
                     </li>
                   </ul>
                   <ul>
                     <li>
                       <i className="fa-solid fa-circle-check" />
-                      Personal Development
+                      Personalized Booking History
                     </li>
                     <li>
                       <i className="fa-solid fa-circle-check" />
-                      Advanced Equipment
+                      Reliable Customer Support
                     </li>
                     <li>
                       <i className="fa-solid fa-circle-check" />
-                      Interactive Classes For Easy Learning.
+                      Convenient for Individuals and Groups
                     </li>
                   </ul>
                 </div>
                 <div className="convenient-btns">
                   <Link
-                    to={"routes.register"}
+                    to={routes.register}
                     className="btn btn-primary d-inline-flex align-items-center"
                   >
                     <span>
                       <i className="feather-user-plus me-2" />
                     </span>
-                    Join With Us
+                    Join Us
                   </Link>
                   <Link
-                    to={"routes.aboutUs"}
+                    to={routes.aboutUs}
                     className="btn btn-secondary d-inline-flex align-items-center"
                   >
                     <span>
@@ -356,7 +336,7 @@ const HomePage = () => {
                 <ImageWithBasePath
                   src="assets/img/journey-01.png"
                   className="img-fluid"
-                  alt="User"
+                  alt="User Journey"
                 />
               </div>
             </div>
@@ -364,132 +344,6 @@ const HomePage = () => {
         </div>
       </section>
       {/* /Journey */}
-
-      {/* Earn Money */}
-      <section className="section earn-money">
-        <div className="cock-img cock-position">
-          <div className="cock-img-one ">
-            <ImageWithBasePath src="assets/img/icons/cock-01.svg" alt="Icon" />
-          </div>
-          <div className="cock-img-two">
-            <ImageWithBasePath src="assets/img/icons/cock-02.svg" alt="Icon" />
-          </div>
-          <div className="cock-circle">
-            <ImageWithBasePath src="assets/img/bg/cock-shape.png" alt="Icon" />
-          </div>
-        </div>
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6">
-              <div className="private-venue aos" data-aos="fade-up">
-                <div className="convenient-btns become-owner " role="tablist">
-                  <Link
-                    to="#"
-                    className="btn btn-primary become-venue d-inline-flex align-items-center nav-link active"
-                    id="nav-Recent-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#nav-Recent"
-                    role="tab"
-                    aria-controls="nav-Recent"
-                    aria-selected="true"
-                  >
-                    Become A Venue Member
-                  </Link>
-                </div>
-                <div className="tab-content">
-                  <div
-                    className="tab-pane fade show active"
-                    id="nav-Recent"
-                    role="tabpanel"
-                    aria-labelledby="nav-Recent-tab"
-                    tabIndex={0}
-                  >
-                    <h2>
-                      Earn Money Renting Out Your Private Coaches On Dreamsports
-                    </h2>
-                    <p>
-                      Join our network of private facility owners, offering
-                      rentals to local players, coaches, and teams.
-                    </p>
-                    <div className="earn-list">
-                      <ul>
-                        <li>
-                          <i className="fa-solid fa-circle-check " />
-                          $1,000,000 liability insurance{" "}
-                        </li>
-                        <li>
-                          <i className="fa-solid fa-circle-check " />
-                          Build of Trust
-                        </li>
-                        <li>
-                          <i className="fa-solid fa-circle-check " />
-                          Protected Environment for Your Activities{" "}
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="convenient-btns">
-                      <Link
-                        to={"routes.register"}
-                        className="btn btn-secondary d-inline-flex align-items-center"
-                      >
-                        <span className="lh-1">
-                          <i className="feather-user-plus me-2" />
-                        </span>
-                        Join With Us
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                <div className="tab-content">
-                  <div
-                    className="tab-pane fade show "
-                    id="nav-RecentCoaching"
-                    role="tabpanel"
-                    aria-labelledby="nav-Recent-tab"
-                    tabIndex={0}
-                  >
-                    <h2>
-                      Earn Money Renting Out Your Private Coaches On Dreamsports
-                    </h2>
-                    <p>
-                      Join our network of private facility owners, offering
-                      rentals to local players, coaches, and teams.
-                    </p>
-                    <div className="earn-list">
-                      <ul>
-                        <li>
-                          <i className="fa-solid fa-circle-check " />
-                          $1,000,000 liability insurance{" "}
-                        </li>
-                        <li>
-                          <i className="fa-solid fa-circle-check " />
-                          Build of Trust
-                        </li>
-                        <li>
-                          <i className="fa-solid fa-circle-check " />
-                          Protected Environment for Your Activities{" "}
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="convenient-btns">
-                      <Link
-                        to={"routes.register"}
-                        className="btn btn-secondary d-inline-flex align-items-center"
-                      >
-                        <span className="lh-1">
-                          <i className="feather-user-plus me-2" />
-                        </span>
-                        Join With Us
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      {/* /Earn Money */}
 
       {/* Testimonials */}
       <section className="section our-testimonials">

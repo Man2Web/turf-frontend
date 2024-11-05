@@ -148,7 +148,6 @@ const CourtCheckout = ({
         null,
       dataConfirmation,
     };
-    console.log(updatedData);
     if (policy && isValid) {
       try {
         setLoading(true);
@@ -228,6 +227,7 @@ const CourtCheckout = ({
         <BookingConfirmModal
           toggleModal={toggleModal}
           bookingData={adminBookingData}
+          closeModal={false}
         />
       )}
       <div className="container">
