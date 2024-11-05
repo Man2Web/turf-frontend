@@ -149,28 +149,28 @@ const CourtCheckout = ({
       dataConfirmation,
     };
     console.log(updatedData);
-    // if (policy && isValid) {
-    //   try {
-    //     setLoading(true);
-    //     const response = await axios.post(
-    //       `${process.env.REACT_APP_BACKEND_URL}payment`,
-    //       updatedData
-    //     );
+    if (policy && isValid) {
+      try {
+        setLoading(true);
+        const response = await axios.post(
+          `${process.env.REACT_APP_BACKEND_URL}payment`,
+          updatedData
+        );
 
-    //     const redirectUrl =
-    //       response.data?.data?.instrumentResponse?.redirectInfo?.url;
+        const redirectUrl =
+          response.data?.data?.instrumentResponse?.redirectInfo?.url;
 
-    //     if (redirectUrl) {
-    //       window.location.href = redirectUrl;
-    //     } else {
-    //       toast.error("Error booking slot");
-    //     }
-    //   } catch (error) {
-    //     console.error("Error during payment:", error);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // }
+        if (redirectUrl) {
+          window.location.href = redirectUrl;
+        } else {
+          toast.error("Error booking slot");
+        }
+      } catch (error) {
+        console.error("Error during payment:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
   };
 
   // Function to handle API call for CASH payment method

@@ -14,8 +14,8 @@ const Footer = () => {
           <div className="row">
             <div className="col-lg-6 col-md-6">
               <ImageWithBasePath
-                className="img-fluid"
-                src="assets/img/logo.svg"
+                className="logo-custom-img"
+                src="assets/img/logo.png"
               />
               <div className="mt-2 copyright-text">
                 <p className="mb-0 text-white text-start">

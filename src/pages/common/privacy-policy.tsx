@@ -5,74 +5,109 @@ import { all_routes } from "../../router/all_routes";
 const PrivacyPolicy = () => {
   const routes = all_routes;
   return (
-    <div>
-      <>
-        {/* Page Content */}
-        <div className="content">
-          <div className="container">
-            <h3>Title</h3>
-            <div className="condition-details">
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
-              <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-                quae ab illo inventore veritatis et quasi architecto beatae
-                vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia
-                voluptas sit aspernatur aut odit aut fugit, sed quia
-                consequuntur magni dolores eos qui ratione voluptatem sequi
-                nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor
-                sit amet, consectetur, adipisci velit, sed quia non numquam eius
-                modi tempora incidunt ut labore et dolore magnam aliquam quaerat
-                voluptatem. Ut enim ad minima veniam, quis nostrum
-                exercitationem ullam corporis suscipit laboriosam, nisi ut
-                aliquid ex ea commodi consequatur? Quis autem vel eum iure
-                reprehenderit qui in ea voluptate velit esse quam nihil
-                molestiae consequatur, vel illum qui dolorem eum fugiat quo
-                voluptas nulla pariatur? Sed ut perspiciatis unde omnis iste
-                natus error sit voluptatem accusantium doloremque laudantium,
-                totam rem aperiam, eaque ipsa quae ab illo inventore veritatis
-                et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
-                ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-                fugit, sed quia consequuntur magni dolores eos qui ratione
-                voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem
-                ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia
-                non numquam eius modi tempora incidunt ut labore et dolore
-                magnam aliquam quaerat voluptatem. Ut enim ad minima veniam,
-                quis nostrum exercitationem ullam corporis suscipit laboriosam,
-                nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum
-                iure reprehenderit qui in ea voluptate velit esse quam nihil
-                molestiae consequatur, vel illum qui dolorem eum fugiat quo
-                voluptas nulla pariatur?
-              </p>
-              <p>
-                At vero eos et accusamus et iusto odio dignissimos ducimus qui
-                blanditiis praesentium voluptatum deleniti atque corrupti quos
-                dolores et quas molestias excepturi sint occaecati cupiditate
-                non provident, similique sunt in culpa qui officia deserunt
-                mollitia animi, id est laborum et dolorum fuga. Et harum quidem
-                rerum facilis est et expedita distinctio. Nam libero tempore,
-                cum soluta nobis est eligendi optio cumque nihil impedit quo
-                minus id quod maxime placeat facere possimus, omnis voluptas
-                assumenda est, omnis dolor repellendus. Temporibus autem
-                quibusdam et aut officiis debitis aut rerum necessitatibus saepe
-                eveniet ut et voluptates repudiandae sint et molestiae non
-                recusandae. Itaque earum rerum hic tenetur a sapiente delectus,
-                ut aut reiciendis voluptatibus maiores alias consequatur aut
-                perferendis doloribus asperiores repellat.
-              </p>
-            </div>
-          </div>
+    <div className="content">
+      {/* Page Content */}
+      <div className="container">
+        <h3>Privacy Policy</h3>
+        <div className="condition-details">
+          <p>
+            Welcome to [Application Name]. Your privacy is important to us. This
+            Privacy Policy outlines the types of information we collect from
+            you, how we use it, and the measures we take to protect your data.
+          </p>
+
+          <h4>1. Information We Collect</h4>
+          <p>
+            We collect information from you when you register on our platform,
+            book a court, or otherwise use our services. This includes:
+          </p>
+          <ul className="mb-2">
+            <li>
+              <strong>Personal Information:</strong> Name, email address, phone
+              number, and payment details.
+            </li>
+            <li>
+              <strong>Usage Data:</strong> Information about how you use the
+              platform, such as booking history and search preferences.
+            </li>
+            <li>
+              <strong>Device Information:</strong> Device type, IP address, and
+              browser type, collected to improve user experience.
+            </li>
+          </ul>
+
+          <h4>2. How We Use Your Information</h4>
+          <p>The information we collect is used to:</p>
+          <ul className="mb-2">
+            <li>Facilitate and manage bookings on our platform.</li>
+            <li>Send notifications and updates related to your bookings.</li>
+            <li>
+              Improve our services and personalize your experience on the
+              platform.
+            </li>
+            <li>
+              Process payments securely and prevent fraudulent activities.
+            </li>
+          </ul>
+
+          <h4>3. Sharing Your Information</h4>
+          <p>
+            We may share your information with third-party service providers for
+            the purpose of processing payments, providing customer support, or
+            analyzing data. We ensure these providers comply with our data
+            protection standards.
+          </p>
+
+          <h4>4. Data Security</h4>
+          <p>
+            We implement various security measures to protect your personal
+            data. Access to your personal information is limited to authorized
+            personnel only, and all sensitive data is encrypted. However, please
+            note that no data transmission over the internet can be guaranteed
+            as fully secure.
+          </p>
+
+          <h4>5. Your Rights</h4>
+          <p>You have the right to:</p>
+          <ul>
+            <li>Access and review the information we hold about you.</li>
+            <li>
+              Request corrections to any inaccurate or outdated information.
+            </li>
+            <li>
+              Request deletion of your personal data, subject to legal and
+              contractual restrictions.
+            </li>
+          </ul>
+          <p>
+            To exercise these rights, please contact us at{" "}
+            <a href="mailto:[SupportEmail]">[SupportEmail]</a>.
+          </p>
+
+          <h4>6. Cookies</h4>
+          <p>
+            Our platform uses cookies to enhance user experience and gather
+            analytics data. You can choose to disable cookies in your browser
+            settings, though this may affect certain functionalities on our
+            platform.
+          </p>
+
+          <h4>7. Changes to This Privacy Policy</h4>
+          <p>
+            We reserve the right to update this Privacy Policy as needed. Any
+            changes will be posted on this page, and continued use of the
+            platform constitutes acceptance of these changes.
+          </p>
+
+          <h4>8. Contact Us</h4>
+          <p>
+            If you have any questions about this Privacy Policy or how we handle
+            your data, please contact us at{" "}
+            <a href="mailto:[SupportEmail]">[SupportEmail]</a>.
+          </p>
         </div>
-        {/* /Page Content */}
-      </>
+      </div>
+      {/* /Page Content */}
     </div>
   );
 };

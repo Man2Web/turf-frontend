@@ -29,7 +29,7 @@ const Header = () => {
   }, [userLocation]);
 
   const customStyle = {
-    background: location.pathname.includes(routes.home)
+    background: !location.pathname.includes(routes.home)
       ? "rgb(23, 124, 130)"
       : "#ffffff",
   };
@@ -63,15 +63,15 @@ const Header = () => {
               <Link to={routes.home} className="navbar-brand logo">
                 {location.pathname.includes("#") ? (
                   <ImageWithBasePath
-                    src="assets/img/logo.svg"
+                    src="assets/img/logo.png"
                     className="img-fluid"
                     alt="Logo"
                   />
                 ) : (
                   <ImageWithBasePath
-                    src="assets/img/logo-black.svg"
-                    className="img-fluid"
-                    alt="Another Image"
+                    src="assets/img/logo-black.png"
+                    className="logo-custom-img"
+                    alt="Logo"
                   />
                 )}
               </Link>
@@ -106,7 +106,7 @@ const Header = () => {
                           }
                         >
                           <Link
-                            style={{ color: "white" }}
+                            // style={{ color: "white" }}
                             to={mainMenus.routes}
                           >
                             {mainMenus.tittle}
@@ -164,7 +164,7 @@ const Header = () => {
                           }
                         >
                           <Link
-                            style={{ color: "white" }}
+                            // style={{ color: "white" }}
                             to={mainMenus.routes}
                           >
                             {mainMenus.tittle}
@@ -188,7 +188,7 @@ const Header = () => {
                           }
                         >
                           <Link
-                            style={{ color: "white" }}
+                            // style={{ color: "white" }}
                             to={mainMenus.routes}
                           >
                             {mainMenus.tittle}
