@@ -6,6 +6,7 @@ import axios from "axios";
 import { Collapse, Input } from "antd";
 import CouponsModal from "../../admin/coupons/coupons-modal";
 import Loader from "../loader/Loader";
+import { all_routes } from "../../../router/all_routes";
 
 interface CourtPrice {
   gstAmount: number;
@@ -279,9 +280,12 @@ const CheckOutForm = ({
               />
               <label className="form-check-label" htmlFor="policy">
                 By checking this box, I agree to the{" "}
-                <Link to="privacy-policy">Privacy Policy</Link>,{" "}
-                <Link to="terms-condition">Refund Policy</Link>, and{" "}
-                <Link to="terms-condition">Terms & Conditions.</Link>
+                <Link to={`${all_routes.privacyPolicy}`}>Privacy Policy</Link>,{" "}
+                <Link to={`${all_routes.termsCondition}`}>Refund Policy</Link>,
+                and{" "}
+                <Link to={`${all_routes.termsCondition}`}>
+                  Terms & Conditions.
+                </Link>
               </label>
             </div>
             {!isCourtAdmin && (
