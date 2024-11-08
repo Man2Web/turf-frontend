@@ -136,23 +136,23 @@ const TermsCondition = () => {
 
           <h4>8. Intellectual Property Rights</h4>
           <p>
-            All content on the platform is owned by [Company Name] or its
-            licensors. Users are granted a limited license to use the platform
-            in accordance with these Terms. Unauthorized use is prohibited.
+            All content on the platform is owned by Man2Web or its licensors.
+            Users are granted a limited license to use the platform in
+            accordance with these Terms. Unauthorized use is prohibited.
           </p>
 
           <h4>9. Disclaimers and Limitation of Liability</h4>
           <p>
             We strive to maintain platform availability but cannot guarantee
-            uninterrupted service. [Company Name] is not liable for any damages
-            arising from the use or inability to use the platform.
+            uninterrupted service. Man2Web is not liable for any damages arising
+            from the use or inability to use the platform.
           </p>
 
           <h4>10. Indemnification</h4>
           <p>
-            Users agree to indemnify [Company Name] and its affiliates from
-            claims, damages, and expenses arising from use of the platform,
-            misuse, or violation of these Terms.
+            Users agree to indemnify Man2Web and its affiliates from claims,
+            damages, and expenses arising from use of the platform, misuse, or
+            violation of these Terms.
           </p>
 
           <h4>11. Modifications to Terms</h4>

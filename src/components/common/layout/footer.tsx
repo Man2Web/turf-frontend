@@ -20,7 +20,7 @@ const Footer = () => {
               <div className="mt-2 copyright-text">
                 <p className="mb-0 text-white text-start">
                   © {new Date().getFullYear()}
-                  DreamSports - All rights reserved.
+                  Man2Web - All rights reserved.
                 </p>
               </div>
             </div>
@@ -31,11 +31,11 @@ const Footer = () => {
                 <div className="footer-address-blk">
                   <div className="footer-call">
                     <span>Toll free Customer Care</span>
-                    <p>+017 123 456 78</p>
+                    <p>+91 7010473833</p>
                   </div>
                   <div className="footer-call">
                     <span>Need Live Suppot</span>
-                    <p>dreamsports@example.com</p>
+                    <p>support@man2web.com</p>
                   </div>
                 </div>
                 <div className="social-icon">

@@ -22,7 +22,7 @@ const Faq = () => {
                         aria-expanded="true"
                         aria-controls="collapseOne"
                       >
-                        How can I book a court on [[company_name]]?
+                        How can I book a court on Man2Web?
                       </Link>
                     </h2>
                     <div
@@ -91,7 +91,7 @@ const Faq = () => {
                         aria-expanded="false"
                         aria-controls="collapseThree"
                       >
-                        Does [[company_name]] provide equipment rentals?
+                        Does Man2Web provide equipment rentals?
                       </Link>
                     </h2>
                     <div
@@ -103,10 +103,9 @@ const Faq = () => {
                       <div className="accordion-body">
                         <div className="accordion-content">
                           <p>
-                            [[company_name]] is a court booking platform only
-                            and does not currently offer equipment rentals.
-                            Please bring your own sports equipment for all
-                            bookings.
+                            Man2Web is a court booking platform only and does
+                            not currently offer equipment rentals. Please bring
+                            your own sports equipment for all bookings.
                           </p>
                         </div>
                       </div>
@@ -125,7 +124,7 @@ const Faq = () => {
                         aria-expanded="false"
                         aria-controls="collapseFour"
                       >
-                        Are coaching services available on [[company_name]]?
+                        Are coaching services available on Man2Web?
                       </Link>
                     </h2>
                     <div
@@ -137,9 +136,9 @@ const Faq = () => {
                       <div className="accordion-body">
                         <div className="accordion-content">
                           <p>
-                            As of now, [[company_name]] does not provide
-                            coaching services. Our platform is focused on
-                            facilitating court bookings for a variety of sports.
+                            As of now, Man2Web does not provide coaching
+                            services. Our platform is focused on facilitating
+                            court bookings for a variety of sports.
                           </p>
                         </div>
                       </div>
@@ -158,8 +157,7 @@ const Faq = () => {
                         aria-expanded="false"
                         aria-controls="collapseFive"
                       >
-                        Are leagues or tournaments offered through
-                        [[company_name]]?
+                        Are leagues or tournaments offered through Man2Web?
                       </Link>
                     </h2>
                     <div
@@ -171,8 +169,8 @@ const Faq = () => {
                       <div className="accordion-body">
                         <div className="accordion-content">
                           <p>
-                            Currently, [[company_name]] does not organize
-                            leagues or tournaments. Our focus is on providing an
+                            Currently, Man2Web does not organize leagues or
+                            tournaments. Our focus is on providing an
                             easy-to-use platform for booking courts across
                             various sports.
                           </p>

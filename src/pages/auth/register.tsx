@@ -46,9 +46,9 @@ const Signin = () => {
                         </Link>
                       </header>
                       <div className="shadow-card mb-0">
-                        <h2>Get Started With Dreamsports</h2>
+                        <h2>Get Started With Man2Web</h2>
                         <p>
-                          Ignite your sports journey with DreamSports and get
+                          Ignite your sports journey with Man2Web and get
                           started now.
                         </p>
                         <div className="tab-content" id="myTabContent">

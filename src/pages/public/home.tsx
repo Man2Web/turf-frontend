@@ -34,20 +34,7 @@ const HomePage = () => {
     slidesToScroll: 1,
   };
 
-  const options = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-  };
-
   const { userLocation, setUserLocation } = useAppContext();
-
-  const fetchCourts = (location: string) => {
-    setUserLocation(location);
-    navigate(routes.ListingList);
-  };
 
   useEffect(() => {
     AOS.init({ duration: 1200, once: true });
@@ -266,9 +253,9 @@ const HomePage = () => {
                   <span className="active-sport">Today.</span>
                 </h2>
                 <p>
-                  At [[company_name]], we prioritize your experience and welcome
-                  your feedback as we continuously enhance our platform to
-                  better serve our sports community.
+                  At Man2Web, we prioritize your experience and welcome your
+                  feedback as we continuously enhance our platform to better
+                  serve our sports community.
                 </p>
                 <p>
                   Whether you’re a beginner, a seasoned player, or simply
@@ -374,9 +361,9 @@ const HomePage = () => {
                       </div>
                       <h5>Personalized Attention</h5>
                       <p>
-                        DreamSports&apos; coaching services enhanced my
-                        badminton skills. Personalized attention from
-                        knowledgeable coaches propelled my game to new heights.
+                        Man2Web&apos; coaching services enhanced my badminton
+                        skills. Personalized attention from knowledgeable
+                        coaches propelled my game to new heights.
                       </p>
                     </div>
                     <div className="listing-venue-owner">
@@ -410,10 +397,9 @@ const HomePage = () => {
                       </div>
                       <h5>Quality Matters !</h5>
                       <p>
-                        DreamSports&apos; advanced badminton equipment has
-                        greatly improved my performance on the court. Their
-                        quality range of rackets and shoes made a significant
-                        impact.
+                        Man2Web&apos; advanced badminton equipment has greatly
+                        improved my performance on the court. Their quality
+                        range of rackets and shoes made a significant impact.
                       </p>
                     </div>
                     <div className="listing-venue-owner">
@@ -447,7 +433,7 @@ const HomePage = () => {
                       </div>
                       <h5>Excellent Professionalism !</h5>
                       <p>
-                        DreamSports&apos; unmatched professionalism and service
+                        Man2Web&apos; unmatched professionalism and service
                         excellence left a positive experience. Highly
                         recommended for court rentals and equipment purchases.
                       </p>
@@ -483,10 +469,9 @@ const HomePage = () => {
                       </div>
                       <h5>Quality Matters !</h5>
                       <p>
-                        DreamSports&apos; advanced badminton equipment has
-                        greatly improved my performance on the court. Their
-                        quality range of rackets and shoes made a significant
-                        impact.
+                        Man2Web&apos; advanced badminton equipment has greatly
+                        improved my performance on the court. Their quality
+                        range of rackets and shoes made a significant impact.
                       </p>
                     </div>
                     <div className="listing-venue-owner">

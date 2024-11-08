@@ -187,10 +187,9 @@ const AboutUs = () => {
                         </div>
                         <h5>Personalized Attention</h5>
                         <p>
-                          DreamSports&apos; coaching services enhanced my
-                          badminton skills. Personalized attention from
-                          knowledgeable coaches propelled my game to new
-                          heights.
+                          Man2Web&apos; coaching services enhanced my badminton
+                          skills. Personalized attention from knowledgeable
+                          coaches propelled my game to new heights.
                         </p>
                       </div>
                       <div className="listing-venue-owner">
@@ -223,10 +222,9 @@ const AboutUs = () => {
                         </div>
                         <h5>Quality Matters !</h5>
                         <p>
-                          DreamSports&apos; advanced badminton equipment has
-                          greatly improved my performance on the court. Their
-                          quality range of rackets and shoes made a significant
-                          impact.
+                          Man2Web&apos; advanced badminton equipment has greatly
+                          improved my performance on the court. Their quality
+                          range of rackets and shoes made a significant impact.
                         </p>
                       </div>
                       <div className="listing-venue-owner">
@@ -259,8 +257,8 @@ const AboutUs = () => {
                         </div>
                         <h5>Excellent Professionalism !</h5>
                         <p>
-                          DreamSports&apos; unmatched professionalism and
-                          service excellence left a positive experience. Highly
+                          Man2Web&apos; unmatched professionalism and service
+                          excellence left a positive experience. Highly
                           recommended for court rentals and equipment purchases.
                         </p>
                       </div>
@@ -294,10 +292,9 @@ const AboutUs = () => {
                         </div>
                         <h5>Quality Matters !</h5>
                         <p>
-                          DreamSports&apos; advanced badminton equipment has
-                          greatly improved my performance on the court. Their
-                          quality range of rackets and shoes made a significant
-                          impact.
+                          Man2Web&apos; advanced badminton equipment has greatly
+                          improved my performance on the court. Their quality
+                          range of rackets and shoes made a significant impact.
                         </p>
                       </div>
                       <div className="listing-venue-owner">
