@@ -204,16 +204,16 @@ const CourtTimeSlotsComponent = ({
       {/* Page Content */}
       <div className="container pt-0">
         <div className="row text-center">
-          <div className="col-12 col-sm-12 col-md-12 col-lg-8">
+          <div className="col-lg-8 col-md-12 col-sm-12">
             <div className="card time-date-card">
               <section className="booking-date">
-                <div className="list-unstyled owl-carousel date-slider owl-theme mb-40 px-5">
+                {/* Date Slider */}
+                <div className="date-slider owl-carousel owl-theme mb-4 px-2">
                   <Slider {...featuredVenuesSlider}>
                     {Array.from({ length: 30 }).map((_, idx) => {
                       const newDate = new Date();
                       newDate.setDate(newDate.getDate() + idx);
                       const date = newDate.getDate();
-
                       const month = monthNames[newDate.getMonth()];
                       const day = dayNames[newDate.getDay()];
                       return (
@@ -231,23 +231,23 @@ const CourtTimeSlotsComponent = ({
                     })}
                   </Slider>
                 </div>
+
+                {/* Time Slots */}
                 <div className="row">
                   <Loader
                     loader={slotsLoading}
                     loadingDescription="Fetching Slots..."
                   />
                   {!slotsLoading &&
-                  (timeSlots.length == 0 ||
+                  (timeSlots.length === 0 ||
                     timeSlots[0].time !== "No available slots") ? (
                     timeSlots.map((slot, index) => (
-                      <div key={index} className="col-12 col-sm-4 col-md-3">
+                      <div key={index} className="col-6 col-md-3 col-sm-4">
                         <div
-                          className={`time-slot ${slot.isChecked ? "checked" : ""} ${slot.isActive ? "active" : ""} ${slot.isBooked ? "cursor-none" : ""}`}
+                          className={`time-slot p-2 ${slot.isChecked ? "checked" : ""} ${slot.isActive ? "active" : ""} ${slot.isBooked ? "cursor-none" : ""}`}
                           onClick={() => handleTimeSlotClick(index)}
                         >
-                          <span>
-                            {`${formatTime(slot.time)} - ${formatEndTime(slot.time, courtDuration)}`}
-                          </span>
+                          <span>{`${formatTime(slot.time)} - ${formatEndTime(slot.time, courtDuration)}`}</span>
                         </div>
                       </div>
                     ))
@@ -258,15 +258,17 @@ const CourtTimeSlotsComponent = ({
               </section>
             </div>
           </div>
-          <CourtBookingSummaryComponent
-            totalPrice={
-              Number(courtData.pricing.starting_price) * selectedSlots.length
-            }
-            slots={selectedSlots}
-            courtDuration={courtDuration}
-            progress={progress}
-            setProgress={setProgress}
-          />
+          <div className="col-12 col-lg-4 mt-4 mt-lg-0">
+            <CourtBookingSummaryComponent
+              totalPrice={
+                Number(courtData.pricing.starting_price) * selectedSlots.length
+              }
+              slots={selectedSlots}
+              courtDuration={courtDuration}
+              progress={progress}
+              setProgress={setProgress}
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -81,6 +81,8 @@ const UserDetailsComponent = ({
     isValid,
   ]);
   autoFillFormData(reset);
+  console.log(numberOfGuests);
+  console.log(additionalNumberOfGuests);
   return (
     <div>
       <div className="container">
@@ -102,16 +104,13 @@ const UserDetailsComponent = ({
               })}
             >
               {/* Names */}
-              <div className="d-flex gap-2">
-                <div className="my-3 col-lg-6 col-md-12">
-                  <label htmlFor="fName" className="form-label">
-                    First Name
-                  </label>
+              <div className="d-md-flex gap-2">
+                <div className="my-3 col-md-6 col-12">
                   <input
                     type="text"
                     className={`form-control ${errors.fName?.message ? "border border-danger" : ""}`}
                     id="fName"
-                    placeholder="Enter Name"
+                    placeholder="First Name"
                     {...register("fName", {
                       required: "First name is required",
                       minLength: {
@@ -124,30 +123,24 @@ const UserDetailsComponent = ({
                     <p className="text-danger">{errors.fName.message}</p>
                   )}
                 </div>
-                <div className="my-3 col-lg-6 col-md-12 flex-wrap">
-                  <label htmlFor="lName" className="form-label">
-                    Last Name
-                  </label>
+                <div className="my-3 col-md-6 col-12">
                   <input
                     type="text"
                     className="form-control"
                     id="lName"
-                    placeholder="Enter Last Name"
+                    placeholder="Last Name"
                     {...register("lName")}
                   />
                 </div>
               </div>
-              <div className="d-flex gap-2">
+              <div className="d-md-flex gap-2">
                 {/* Email */}
-                <div className="mb-3 col-lg-6 col-md-12">
-                  <label htmlFor="email" className="form-label">
-                    Email
-                  </label>
+                <div className="mb-3 col-md-6 col-12">
                   <input
                     type="email"
                     className={`form-control ${errors.email?.message ? "border border-danger" : ""}`}
                     id="email"
-                    placeholder="Enter Email Address"
+                    placeholder="Email"
                     {...register("email", {
                       required: "Email is required",
                       pattern: {
@@ -161,15 +154,12 @@ const UserDetailsComponent = ({
                   )}
                 </div>
                 {/* Phone */}
-                <div className="mb-3 col-lg-6 col-md-12">
-                  <label htmlFor="phonenumber" className="form-label">
-                    Phone Number
-                  </label>
+                <div className="mb-3 col-md-6 col-12">
                   <input
                     type="text"
                     className={`form-control ${errors.phonenumber?.message ? "border border-danger" : ""}`}
                     id="phonenumber"
-                    placeholder="Enter Phone Number"
+                    placeholder="Phone Number"
                     {...register("phonenumber", {
                       required: "Phone number is required",
                       pattern: {
@@ -184,17 +174,14 @@ const UserDetailsComponent = ({
                 </div>
               </div>
               {/* City Country */}
-              <div className="d-flex gap-2">
+              <div className="d-md-flex gap-2">
                 {/* Address */}
-                <div className="col-lg-6 col-md-12">
-                  <label htmlFor="address" className="form-label">
-                    Your Address
-                  </label>
+                <div className="mb-3 col-md-6 col-12">
                   <input
                     type="text"
                     className={`form-control ${errors.address?.message ? "border border-danger" : ""}`}
                     id="address"
-                    placeholder="Enter Address"
+                    placeholder="Your Address"
                     {...register("address", {
                       required: "Address is required",
                       minLength: {
@@ -208,15 +195,12 @@ const UserDetailsComponent = ({
                   )}
                 </div>
                 {/* City */}
-                <div className="mb-3 col-lg-6 col-md-12">
-                  <label htmlFor="city" className="form-label">
-                    City
-                  </label>
+                <div className="mb-3 col-md-6 col-12">
                   <input
                     type="text"
                     className={`form-control ${errors.city?.message ? "border border-danger" : ""}`}
                     id="city"
-                    placeholder="Enter City"
+                    placeholder="City"
                     {...register("city", {
                       required: "City name is required",
                       minLength: {
@@ -230,17 +214,14 @@ const UserDetailsComponent = ({
                   )}
                 </div>
               </div>
-              <div className="d-flex gap-2">
+              <div className="d-md-flex gap-2">
                 {/* Pincode */}
-                <div className="col-lg-4 col-md-12">
-                  <label htmlFor="pincode" className="form-label">
-                    Pincode
-                  </label>
+                <div className="mb-3 col-md-4 col-12">
                   <input
                     type="text"
                     className={`form-control ${errors.pincode?.message ? "border border-danger" : ""}`}
                     id="pincode"
-                    placeholder="Enter pincode"
+                    placeholder="Pincode"
                     {...register("pincode", {
                       required: "Pincode is required",
                       minLength: {
@@ -265,10 +246,7 @@ const UserDetailsComponent = ({
                 </div>
 
                 {/* State */}
-                <div className="col-lg-4 col-md-12">
-                  <label htmlFor="state" className="form-label">
-                    State
-                  </label>
+                <div className="mb-3 col-md-4 col-12">
                   <Controller
                     name="state"
                     rules={{ required: "State is required" }}
@@ -280,7 +258,7 @@ const UserDetailsComponent = ({
                         options={statesList}
                         filter
                         optionLabel="name"
-                        placeholder="Select State"
+                        placeholder="State"
                         className={`select-bg w-100 list-sidebar-select ${errors.state?.message ? "border border-danger" : ""}`}
                       />
                     )}
@@ -291,10 +269,7 @@ const UserDetailsComponent = ({
                 </div>
 
                 {/* State */}
-                <div className="col-lg-4 col-md-12">
-                  <label htmlFor="country" className="form-label">
-                    Country
-                  </label>
+                <div className="mb-3 col-md-4 col-12">
                   <Controller
                     name="country"
                     control={control}
@@ -306,7 +281,7 @@ const UserDetailsComponent = ({
                         options={countriesList}
                         filter
                         optionLabel="name"
-                        placeholder="Select Country"
+                        placeholder="Country"
                         className="select-bg w-100 list-sidebar-select"
                       />
                     )}

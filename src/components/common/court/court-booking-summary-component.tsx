@@ -17,40 +17,36 @@ const CourtBookingSummaryComponent = ({
 }) => {
   const [slotsError, setSlotsError] = useState<boolean>(false);
   return (
-    <div className="col-12 col-sm-12 col-md-12 col-lg-4">
-      <aside className="card booking-details">
-        <h3 className="border-bottom">Booking Details</h3>
-        <ul>
-          <li>
-            <i className="feather-clock me-2" />
-            Total Hours : {Number(courtDuration) * slots.length} Hrs
-          </li>
-          <li>
-            <i className="text-success me-2">
-              <RupeeIcon />
-            </i>
-            Sub Total : ₹{decimalNumber(totalPrice)}
-          </li>
-        </ul>
-        {progress === 0 && (
-          <button
-            onClick={() => {
-              slots && slots.length !== 0
-                ? setProgress(1)
-                : setSlotsError(true);
-            }}
-            className="btn btn-primary"
-          >
-            Proceed
-          </button>
-        )}
-        {slotsError && (
-          <p className="text-danger mb-0">
-            You need to select atleaast one slots to book
-          </p>
-        )}
-      </aside>
-    </div>
+    <aside className="card booking-details">
+      <h3 className="border-bottom">Booking Details</h3>
+      <ul>
+        <li>
+          <i className="feather-clock me-2" />
+          Total Hours : {Number(courtDuration) * slots.length} Hrs
+        </li>
+        <li>
+          <i className="text-success me-2">
+            <RupeeIcon />
+          </i>
+          Sub Total : ₹{decimalNumber(totalPrice)}
+        </li>
+      </ul>
+      {progress === 0 && (
+        <button
+          onClick={() => {
+            slots && slots.length !== 0 ? setProgress(1) : setSlotsError(true);
+          }}
+          className="btn btn-primary"
+        >
+          Proceed
+        </button>
+      )}
+      {slotsError && (
+        <p className="text-danger mb-0">
+          You need to select atleaast one slots to book
+        </p>
+      )}
+    </aside>
   );
 };
 

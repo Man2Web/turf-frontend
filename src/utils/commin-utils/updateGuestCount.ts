@@ -14,10 +14,26 @@ export const updateGuestCount = (
         });
       }
     } else {
-      if (numberOfGuests < Number(courtData.pricing.guests)) {
-        setValue("numberOfGuests", numberOfGuests + 1, {
-          shouldValidate: true,
-        });
+      if (
+        numberOfGuests <
+        Number(
+          Number(courtData.pricing.guests) +
+            Number(courtData.pricing.additional_guests)
+        )
+      ) {
+        if (numberOfGuests < Number(courtData.pricing.guests)) {
+          setValue("numberOfGuests", numberOfGuests + 1, {
+            shouldValidate: true,
+          });
+        } else {
+          setValue(
+            "additionalNumberOfGuests",
+            Number(numberOfGuests + Number(courtData.pricing.guests)) - 1,
+            {
+              shouldValidate: true,
+            }
+          );
+        }
       }
     }
   } else if (movement === 1) {

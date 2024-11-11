@@ -14,7 +14,6 @@ const CourtBooking = () => {
   const { courtId } = useParams();
   const [loading, setLoading] = useState(false);
   const [courtData, setCourtData] = useState<CourtsData>();
-  // const [images, setImages] = useState<any>();
   const [progress, setProgress] = useState<number>(0);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedSlots, setSelectedSlots] = useState<any>([]);

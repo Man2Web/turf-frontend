@@ -132,7 +132,8 @@
       display: none;
       margin-right: 30px;
       @include respond-below(custom991) {
-        display: inline-block;
+        // display: inline-block;
+        display: none;
         line-height: 0;
       }
       @include respond-below(custom575) {
@@ -819,5 +820,108 @@ header {
   }
   > p {
     color: #707874;
+  }
+}
+
+// Booking Page
+
+/* Base styles */
+.header-sticky .court-info {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.header-sticky .court-details h4 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.header-sticky .location-info p,
+.header-sticky .booking-info p {
+  margin-bottom: 0;
+  font-size: 1rem;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .header-sticky {
+    padding: 1rem;
+  }
+
+  .main-menu-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .court-info {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .court-details h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .location-info p,
+  .booking-info p {
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+
+  /* Center-align on small screens */
+  .text-end.check {
+    text-align: left;
+    align-self: start;
+  }
+
+  .pricing-details {
+    justify-content: flex-start;
+  }
+
+  /* Hide extra booking slots on small screens, show more button if slots > 3 */
+  .booking-info p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Stack items vertically on very small screens */
+  .header-sticky .main-menu-wrapper,
+  .header-sticky .court-info {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-sticky .court-details h4 {
+    font-size: 1rem;
+  }
+
+  .header-sticky .location-info,
+  .header-sticky .booking-info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* Reduce font size for clarity */
+  .header-sticky .location-info p,
+  .header-sticky .booking-info p {
+    font-size: 0.85rem;
+  }
+
+  /* Adjust icon and text size */
+  .header-sticky .feather-map-pin,
+  .header-sticky .feather-clock,
+  .header-sticky .feather-calendar,
+  .header-sticky .feather-sun {
+    font-size: 1rem;
+  }
+
+  /* Button for 'show more' slots on mobile */
+  .header-sticky .booking-info button {
+    font-size: 0.85rem;
   }
 }

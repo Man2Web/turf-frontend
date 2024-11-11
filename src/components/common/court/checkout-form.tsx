@@ -270,7 +270,7 @@ const CheckOutForm = ({
           <div className="form-check d-flex flex-column gap-2 justify-content-start align-items-start policy m-0 mb-4">
             <div className="d-flex align-items-center">
               <input
-                className="form-check-input"
+                className={`form-check-input ${errors?.policy ? "border border-danger" : ""}`}
                 type="checkbox"
                 id="policy"
                 {...register("policy", {
@@ -305,9 +305,6 @@ const CheckOutForm = ({
               </div>
             )}
           </div>
-          {errors?.policy && (
-            <p className="text-danger">{errors.policy.message}</p>
-          )}
 
           <div className="d-grid btn-block">
             {isCourtAdmin && (

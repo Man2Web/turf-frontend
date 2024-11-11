@@ -33,9 +33,15 @@ const Header = () => {
       ? "rgb(23, 124, 130)"
       : "#ffffff",
   };
+  const closeToggleModal = () => setToggleModal(false);
   return (
     <>
-      {toggleModal && <LocationDataModal />}
+      {toggleModal && (
+        <LocationDataModal
+          toggleModal={toggleModal}
+          closeToggleModal={closeToggleModal}
+        />
+      )}
       <header
         className={
           location.pathname.includes("#")
@@ -260,9 +266,6 @@ const Header = () => {
               )}
               {!userLoggedIn && !adminLoggedIn && !superAdminLoggedIn && (
                 <li className="nav-item gap-2">
-                  <Link to={routes.ListingList} className="btn btn-primary">
-                    Book A Court
-                  </Link>
                   <div className="nav-link btn btn-white log-register">
                     <Link to={routes.login}>
                       <span>

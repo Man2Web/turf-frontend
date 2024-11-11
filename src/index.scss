@@ -36,6 +36,10 @@ button.slick-prev:before {
   z-index: 1 !important;
 }
 
+.slick-slider {
+  padding: 0 25px !important;
+}
+
 .slick-arrow.slick-next {
   height: 46px;
   width: 46px;
@@ -43,7 +47,7 @@ button.slick-prev:before {
   box-shadow:
     rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
     rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-  margin: auto -25px;
+  // margin: auto -25px;
   border-radius: 50%;
   -webkit-transition: all 0.5s ease;
   -ms-transition: all 0.5s ease;
@@ -57,7 +61,7 @@ button.slick-prev:before {
   box-shadow:
     rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
     rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-  margin: auto -25px;
+  // margin: auto -25px;
   border-radius: 50%;
   -webkit-transition: all 0.5s ease;
   -ms-transition: all 0.5s ease;

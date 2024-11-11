@@ -59,7 +59,6 @@ const AdminDetailsComponent = ({
     setUserDetails,
     isValid,
   ]);
-
   return (
     <div>
       <div className="container">
@@ -81,16 +80,13 @@ const AdminDetailsComponent = ({
               })}
             >
               {/* Names */}
-              <div className="d-flex gap-2">
-                <div className="my-3 col-lg-6 col-md-12">
-                  <label htmlFor="fName" className="form-label">
-                    First Name
-                  </label>
+              <div className="d-md-flex gap-2">
+                <div className="my-3 col-md-6 col-12">
                   <input
                     type="text"
                     className={`form-control ${errors.fName?.message ? "border border-danger" : ""}`}
                     id="fName"
-                    placeholder="Enter Name"
+                    placeholder="First Name"
                     {...register("fName", {
                       required: "First name is required",
                       minLength: {
@@ -99,35 +95,29 @@ const AdminDetailsComponent = ({
                       },
                     })}
                   />
-                  {errors.fName?.type === "minLength" && (
-                    <p className="text-danger">{errors.fName.message}</p>
+                  {errors.fName?.type !== "required" && (
+                    <p className="text-danger">{errors.fName?.message}</p>
                   )}
                 </div>
-                <div className="my-3 col-lg-6 col-md-12 flex-wrap">
-                  <label htmlFor="lName" className="form-label">
-                    Last Name
-                  </label>
+                <div className="my-3 col-md-6 col-12">
                   <input
                     type="text"
                     className="form-control"
                     id="lName"
-                    placeholder="Enter Last Name"
+                    placeholder="Last Name"
                     {...register("lName")}
                   />
                 </div>
               </div>
               {/* Email & Phone */}
-              <div className="d-flex gap-2">
+              <div className="d-md-flex gap-2">
                 {/* Email */}
-                <div className="my-3 col-lg-6 col-md-12">
-                  <label htmlFor="email" className="form-label">
-                    Email
-                  </label>
+                <div className="mb-3 col-md-6 col-12">
                   <input
                     type="email"
                     className="form-control"
                     id="email"
-                    placeholder="Enter Email Address"
+                    placeholder="Email"
                     {...register("email", {
                       pattern: {
                         value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -135,20 +125,17 @@ const AdminDetailsComponent = ({
                       },
                     })}
                   />
-                  {errors.email && (
-                    <p className="text-danger">{errors.email.message}</p>
+                  {errors.email?.type !== "required" && (
+                    <p className="text-danger">{errors.email?.message}</p>
                   )}
                 </div>
                 {/* Phone */}
-                <div className="my-3 col-lg-6 col-md-12">
-                  <label htmlFor="phonenumber" className="form-label">
-                    Phone Number
-                  </label>
+                <div className="mb-3 col-lg-6 col-md-12">
                   <input
                     type="text"
                     className="form-control"
                     id="phonenumber"
-                    placeholder="Enter Phone Number"
+                    placeholder="Phone Number"
                     {...register("phonenumber", {
                       pattern: {
                         value: /^[0-9]{10}$/,
@@ -156,8 +143,8 @@ const AdminDetailsComponent = ({
                       },
                     })}
                   />
-                  {errors.phonenumber && (
-                    <p className="text-danger">{errors.phonenumber.message}</p>
+                  {errors.phonenumber?.type !== "required" && (
+                    <p className="text-danger">{errors.phonenumber?.message}</p>
                   )}
                 </div>
               </div>

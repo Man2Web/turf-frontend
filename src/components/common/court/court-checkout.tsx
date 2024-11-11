@@ -233,7 +233,7 @@ const CourtCheckout = ({
       <div className="container">
         <section>
           <div className="row checkout">
-            <div className="d-flex">
+            <div className="d-md-flex">
               {/* Form Data collection */}
               <div className="col-12 col-sm-12 col-md-12 col-lg-7">
                 {isCourtAdmin ? (

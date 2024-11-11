@@ -10,7 +10,13 @@ import { Divider, Modal } from "antd";
 import Loader from "../loader/Loader";
 import { useAppContext } from "../../../context/app-context";
 
-const LocationDataModal = () => {
+const LocationDataModal = ({
+  toggleModal,
+  closeToggleModal,
+}: {
+  toggleModal?: boolean;
+  closeToggleModal?: () => void;
+}) => {
   const { control } = useForm();
   const [showModal, setShowModal] = useState(true);
   const [locationError, setlocationError] = useState<string>();
@@ -25,6 +31,13 @@ const LocationDataModal = () => {
   useEffect(() => {
     getCitiesData();
   }, []);
+
+  useEffect(() => {
+    if (toggleModal) {
+      setShowModal(true);
+    }
+    console.log(toggleModal);
+  }, [toggleModal]);
 
   const getCitiesData = async () => {
     const fetchedLocations = await citiesList();
@@ -67,9 +80,10 @@ const LocationDataModal = () => {
         .trim();
 
       if (locations.includes(userLocationInContext)) {
-        // setUserLocation(userLocationInContext);
         localStorage.setItem("userLocation", userLocationInContext);
         setUserLocation(userLocationInContext);
+        setShowModal(false);
+        closeModal();
         navigate(routes.ListingList);
       } else {
         toast.error(
@@ -93,8 +107,10 @@ const LocationDataModal = () => {
   // Function to hide the modal
   const closeModal = () => {
     setShowModal(false);
+    if (closeToggleModal) {
+      closeToggleModal();
+    }
   };
-
   return (
     <>
       <ToastContainer />
@@ -102,11 +118,10 @@ const LocationDataModal = () => {
         <Loader loader={loading} loadingDescription="Fetching User Location" />
       ) : (
         <Modal
-          title={<p className="text-center">Enter Your Location</p>}
           open={showModal}
           onCancel={closeModal}
           closable={false}
-          maskClosable={false}
+          maskClosable={userLocation ? true : false}
           footer={null}
           centered
         >
@@ -133,10 +148,11 @@ const LocationDataModal = () => {
                     render={({ field }) => (
                       <Dropdown
                         filter
-                        value={field.value}
+                        value={userLocation || field.value}
                         onChange={(e) => {
                           field.onChange(e.value);
                           setUserLocation(e.value);
+                          closeModal();
                         }}
                         options={locations}
                         optionLabel="userLocationInContext"

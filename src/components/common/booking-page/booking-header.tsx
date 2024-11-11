@@ -70,13 +70,13 @@ const BookingHeader = ({
   );
 
   return (
-    <header className={`header-sticky`} style={customStyle}>
+    <header className="header-sticky" style={customStyle}>
       <div className="container-fluid">
         <nav className="navbar navbar-expand-lg header-nav">
           <div className="main-menu-wrapper d-flex justify-content-between align-items-center w-100">
             {progress > 0 && (
               <button
-                className={`btn btn-icon btn-secondary px-2 py-2 me-3`}
+                className="btn btn-icon btn-secondary px-2 py-2 me-3 d-none d-md-block"
                 onClick={() => setProgress(0)}
               >
                 <i
@@ -85,69 +85,68 @@ const BookingHeader = ({
                 />
               </button>
             )}
+
             {/* Court Details */}
-            <div className="court-info d-flex justify-content-between w-100">
-              <div className="me-3">
+            <div className="court-info d-flex flex-column flex-lg-row justify-content-between w-100">
+              {/* Court Name & Location */}
+              <div className="me-3 court-details">
                 <h4>{courtData.court_name}</h4>
-                <div className="d-flex gap-2 fw-semibold">
+                <div className="d-flex flex-wrap gap-2 fw-semibold location-info">
                   <Link
                     target="_blank"
                     rel="noopener noreferrer"
                     to={courtData.location.location_link}
                   >
-                    <p className="mb-1 flex-shrink-0 text-capitalize">
+                    <p className="mb-1 text-capitalize">
                       <i className="feather-map-pin me-2 fw-bold" />
                       {courtData.location.city}, {courtData.location.country}
                     </p>
                   </Link>
-                  <p className="mb-1 flex-shrink-0">
+
+                  {/* Time Slots */}
+                  <p className="mb-1">
                     <i className="feather-clock me-2 fw-bold" />
-                    {`${formatTime(timeSlots?.start_time)} - ${formatTime(timeSlots?.end_time)} `}
+                    {`${formatTime(timeSlots?.start_time)} - ${formatTime(timeSlots?.end_time)}`}
                   </p>
-                  <p className="mb-1 flex-shrink-0">
+
+                  {/* Date Info */}
+                  <p className="mb-1">
                     <i className="feather-calendar me-2 fw-bold" />
                     {userSelectedDate} {month}, {year}
                   </p>
-                  <div className="booking-info">
+
+                  {/* Booking Slots */}
+                  <div className="booking-info d-flex flex-wrap">
                     {selectedSlots.length > 0 && (
-                      <>
-                        <p className="mb-0 d-flex justify-items-center">
-                          <i
-                            style={{
-                              lineHeight: "revert",
-                            }}
-                            className="feather-sun me-2 flex-shrink-0 fw-bold"
-                          />
-                          {slotsToShow.map(
-                            (
-                              slot: { time: string },
-                              index: React.Key | null | undefined
-                            ) => (
-                              <span key={index}>
-                                {`${formatTime(slot.time)} - ${formatEndTime(
-                                  slot.time,
-                                  courtDuration
-                                )}`}
-                                {index !== slotsToShow.length - 1 && " | "}
-                              </span>
-                            )
-                          )}
-                          {selectedSlots.length > 3 && (
-                            <button
-                              className="btn btn-link p-0"
-                              onClick={() => setShowAllSlots((prev) => !prev)}
-                            >
-                              {showAllSlots ? "Show Less" : "Show More"}
-                            </button>
-                          )}
-                        </p>
-                      </>
+                      <p className="mb-0 d-flex align-items-center gap-1">
+                        <i className="feather-sun me-2 fw-bold" />
+                        {slotsToShow.map(
+                          (
+                            slot: { time: string },
+                            index: React.Key | null | undefined
+                          ) => (
+                            <span key={index}>
+                              {`${formatTime(slot.time)} - ${formatEndTime(slot.time, courtDuration)}`}
+                              {index !== slotsToShow.length - 1 && " | "}
+                            </span>
+                          )
+                        )}
+                        {selectedSlots.length > 3 && (
+                          <button
+                            className="btn btn-link p-0"
+                            onClick={() => setShowAllSlots((prev) => !prev)}
+                          >
+                            {showAllSlots ? "Show Less" : "Show More"}
+                          </button>
+                        )}
+                      </p>
                     )}
                   </div>
                 </div>
               </div>
-              {/* Pricing details */}
-              <div className="text-end check d-flex gap-2">
+
+              {/* Pricing Details */}
+              <div className="text-end check d-flex gap-2 align-items-center pricing-details mt-3 mt-lg-0">
                 {userDetails && (
                   <>
                     <div className="d-flex align-items-center gap-1">
