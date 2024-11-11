@@ -9,6 +9,7 @@ import axios from "axios";
 import { saveAs } from "file-saver";
 import { Modal } from "antd";
 import Loader from "../loader/Loader";
+import { toast, ToastContainer } from "react-toastify";
 
 const BookingConfirmModal = ({
   toggleModal,
@@ -36,7 +37,7 @@ const BookingConfirmModal = ({
       const blob = new Blob([response.data], { type: "application/pdf" });
       saveAs(blob, `booking-confirmation-${transaction_id}.pdf`);
     } catch (error) {
-      console.log(error);
+      toast.error("Error Generating PDF");
     } finally {
       setButtonLoader(false);
     }
@@ -107,6 +108,7 @@ const BookingConfirmModal = ({
       footer={<ModalFooter />}
       centered
     >
+      <ToastContainer />
       <Loader loader={buttonLoader} loadingDescription="Generating PDF..." />
       <div className="modal-content w-100">
         <div className="modal-body">

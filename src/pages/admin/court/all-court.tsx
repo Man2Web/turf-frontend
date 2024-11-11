@@ -114,7 +114,6 @@ const AllCourt = () => {
   );
 
   const renderStatus = ({ approved }: CourtsData) => {
-    console.log(approved);
     return (
       <div className="interset-btn">
         {approved ? (
@@ -161,7 +160,6 @@ const AllCourt = () => {
   ];
 
   const deleteCourt = async (courtId: string) => {
-    // console.log(courtId, Number(adminId));
     const response = await axios.post(
       `${process.env.REACT_APP_BACKEND_URL}admin/court/delete/${Number(adminId)}/${courtId}`
     );

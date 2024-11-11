@@ -171,7 +171,6 @@ const CourtTimeSlotsComponent = ({
       );
 
       const bookedTimeSlots = response.data.bookedTimeSlots;
-      console.log(response);
 
       if (
         bookedTimeSlots &&

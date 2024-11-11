@@ -117,8 +117,6 @@ const BookingCompleted = () => {
         prevData: SuccessBookingData[],
         newData: SuccessBookingData[]
       ) => {
-        console.log(prevData);
-        console.log(newData);
         if (newData.length > 0) {
           return newData?.filter(
             (newBooking) =>

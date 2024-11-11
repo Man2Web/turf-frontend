@@ -116,10 +116,7 @@ const ViewCourt = () => {
 
     if (navigator.share) {
       // Use the Web Share API
-      navigator
-        .share(shareData)
-        .then(() => console.log("Successful share"))
-        .catch((error) => console.log("Error sharing", error));
+      navigator.share(shareData);
     } else {
       // Fallback: you can create custom URLs for social media sharing
       alert("Sharing is not supported in this browser.");

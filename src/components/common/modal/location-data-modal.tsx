@@ -36,7 +36,6 @@ const LocationDataModal = ({
     if (toggleModal) {
       setShowModal(true);
     }
-    console.log(toggleModal);
   }, [toggleModal]);
 
   const getCitiesData = async () => {

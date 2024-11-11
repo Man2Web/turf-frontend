@@ -33,8 +33,6 @@
 //   //   }
 //   // }, [bookingData]);
 
-//   console.log(dataToggle);
-
 //   // Remove the curly braces from around the return statement
 //   return bookingData ? (
 //     <div

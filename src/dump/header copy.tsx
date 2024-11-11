@@ -26,8 +26,6 @@
 //   // Destructure properties from the context
 //   const { userLocationInContext } = context;
 
-//   // console.log(userLocationInContext, setUserLocationInContext);
-
 //   useEffect(() => {
 //     if (userLocation) {
 //       setUserLocation(userLocation);

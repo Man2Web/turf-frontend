@@ -132,10 +132,7 @@ const CourtDetails = () => {
 
     if (navigator.share) {
       // Use the Web Share API
-      navigator
-        .share(shareData)
-        .then(() => console.log("Successful share"))
-        .catch((error) => console.log("Error sharing", error));
+      navigator.share(shareData);
     } else {
       // Fallback: you can create custom URLs for social media sharing
       alert("Sharing is not supported in this browser.");
@@ -175,7 +172,6 @@ const CourtDetails = () => {
               <Slider {...imagesData} className="venue-space">
                 {images?.map(
                   (img: { url: string }, idx: React.Key | null | undefined) => {
-                    console.log(img);
                     return (
                       <div key={idx} className="gallery-widget-item">
                         <Link to="#" data-fancybox="gallery1">

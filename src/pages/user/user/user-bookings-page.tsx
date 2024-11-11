@@ -70,7 +70,6 @@ const UserBookingsPage = () => {
           },
         }
       );
-      console.log(response.data);
       if (response.data.upcomingBookings) {
         setUpcomingBooking(response.data.upcomingBookings);
       }
@@ -165,7 +164,6 @@ const UserBookingsPage = () => {
   const userBookingsSliderData = getUserBookingSliderData(
     upcomingBooking.length
   );
-  console.log(adminSelected);
   return (
     <div>
       {/* Dashboard Menu */}

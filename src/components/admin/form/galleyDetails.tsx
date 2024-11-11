@@ -11,7 +11,6 @@ const GalleryDetails = ({
   removeImg: any;
   images: any;
 }) => {
-  console.log(images);
   return (
     <div className="accordion-item mb-4" id="gallery">
       <h4 className="accordion-header" id="panelsStayOpen-gallery">

@@ -33,7 +33,6 @@ export const featuredVenuesSlider = {
 };
 
 export const getUserBookingSliderData = (upcomingBookingsCount: number) => {
-  console.log(upcomingBookingsCount);
   return {
     settings: {
       adaptiveHeight: false,

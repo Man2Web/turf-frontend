@@ -58,7 +58,7 @@ const BookingSuccess = () => {
       const blob = new Blob([response.data], { type: "application/pdf" });
       saveAs(blob, `booking-confirmation-${transaction_id}.pdf`);
     } catch (error) {
-      console.log(error);
+      toast.error("Error getting PDF");
     } finally {
       setLoading(false);
     }

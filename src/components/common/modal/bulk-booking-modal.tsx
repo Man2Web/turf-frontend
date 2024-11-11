@@ -20,7 +20,6 @@ const BulkBookingModal = () => {
 
   // Form submission handler
   const onSubmit = (data: FormInterface) => {
-    console.log("Form Data Submitted:", data);
     // Handle form submission here (e.g., send data to backend)
   };
 

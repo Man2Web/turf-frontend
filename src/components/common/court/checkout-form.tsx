@@ -77,7 +77,6 @@ const CheckOutForm = ({
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}court/coupon/get/${courtData.court_id}`
       );
-      console.log(response);
       if (response.status === 200) {
         setcourtCoupons(response.data.coupons);
       }
@@ -129,7 +128,6 @@ const CheckOutForm = ({
       showArrow: false,
     },
   ];
-  console.log(courtCoupons);
   return (
     <div className="col-12 col-sm-12 col-md-12 col-lg-12">
       <Loader

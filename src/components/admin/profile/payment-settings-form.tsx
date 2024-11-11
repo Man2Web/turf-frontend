@@ -40,14 +40,12 @@ const PaymentSettingsForm = () => {
   }, []);
 
   const onSubmit = async (data: PaymentSettingsInput) => {
-    //   console.log("Form Data: ", data);
     try {
       setLoading(true);
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}user/update/mid/${adminId}`,
         data
       );
-      console.log(response);
       if (response.status === 200) {
         toast.success(response.data.message);
         getMerchantId();

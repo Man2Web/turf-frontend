@@ -57,7 +57,6 @@ const CourtsDataComponent = () => {
       getCourtsData();
     } catch (error) {
       toast.error("Error updating court");
-      console.log(error);
     }
   };
 
@@ -70,7 +69,6 @@ const CourtsDataComponent = () => {
       getCourtsData();
     } catch (error) {
       toast.error("Error updating court");
-      console.log(error);
     }
   };
 

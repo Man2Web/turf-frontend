@@ -7,13 +7,6 @@ import { AppContextProvider } from "./context/app-context";
 
 // Create the main App component
 export const App = () => {
-  const userLocationInStorage = localStorage.getItem("userLocation");
-
-  // console.log(userLocationInStorage);
-  const [userLocationInContext, setUserLocationInContext] = useState<
-    string | null
-  >(userLocationInStorage || null);
-
   return (
     <AppContextProvider>
       <BrowserRouter basename={base_path}>

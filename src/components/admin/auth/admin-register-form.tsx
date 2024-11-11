@@ -18,14 +18,12 @@ const AdminRegistrationForm = () => {
   } = useForm();
 
   const onSubmit = async (data: any) => {
-    console.log(data);
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}admin/addAdmin`,
         data
       );
       toast.success(response.data.message);
-      console.log(response);
     } catch (error: any) {
       toast.error(error.response.data.message);
       console.error("Error posting data:", error);

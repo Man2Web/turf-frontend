@@ -54,7 +54,6 @@ const AddCourt = () => {
   });
 
   const onSubmit = async (data: CourtFormDataType) => {
-    // console.log("Clicked");
     const userId = localStorage.getItem("adminId");
     // setLoading(true);
 
@@ -91,7 +90,6 @@ const AddCourt = () => {
         formData,
         { headers: { "Content-Type": "multipart/form-data" } } // Important header for file uploads
       );
-      console.log(response);
       response.status === 201
         ? toast.success(response.data.message)
         : toast.error(response.data.message);

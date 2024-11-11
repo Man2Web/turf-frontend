@@ -121,7 +121,6 @@ const ListingList = () => {
           `${process.env.REACT_APP_BACKEND_URL}user/wishlist/update/${userId}`,
           { wishList }
         );
-        console.log(response.data);
       } catch (error) {
         console.error(error);
         toast.error("Error Updating Wishlist");

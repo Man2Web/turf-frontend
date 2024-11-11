@@ -116,9 +116,6 @@ const AvailabilityDetails = ({
   ) => {
     updateDayHours(day.toLowerCase(), "endTime", timeString);
   };
-  console.log(selectedHours);
-  console.log(timeSlots);
-  console.log(selectedDays);
   dayjs.extend(customParseFormat);
   return (
     <div className="accordion-item mb-4" id="availability">

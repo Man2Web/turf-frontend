@@ -112,7 +112,6 @@ const CourtCheckout = ({
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}admin/court/fetch/${adminId}/${courtData.court_id}`
       );
-      console.log(response.data);
       response.status === 404 ? setIsCourtAdmin(false) : setIsCourtAdmin(true);
     } catch (error) {
       console.error(error);
@@ -196,7 +195,6 @@ const CourtCheckout = ({
           cashData
         );
         if (response.status === 200) {
-          console.log(response.data.transaction_id);
           const transaction_id = response.data.transaction_id;
 
           try {

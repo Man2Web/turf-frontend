@@ -50,8 +50,6 @@ const AddCoupon = () => {
   const userId = localStorage.getItem("adminId");
   const couponType = watch("couponType");
 
-  console.log(couponType);
-
   useEffect(() => {
     getAdminCourtsData();
   }, [userId]);
@@ -88,7 +86,6 @@ const AddCoupon = () => {
       startTime: data.timeRange[0] || "",
       endTime: data.timeRange[1] || "",
     };
-    console.log(updatedData);
     try {
       setLoading(true);
       const response = await axios.post(

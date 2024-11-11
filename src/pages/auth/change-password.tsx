@@ -67,7 +67,6 @@ const ChangePassword = () => {
         }, 3000);
       }
     } catch (error) {
-      console.log(error);
       if (error instanceof Error && "response" in error) {
         const response = error.response as {
           status: number;

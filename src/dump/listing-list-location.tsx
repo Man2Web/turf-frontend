@@ -51,7 +51,6 @@
 //           (a: CourtsData, b: CourtsData) =>
 //             Number(a.pricing.starting_price) - Number(b.pricing.starting_price)
 //         );
-//         console.log(sortedData);
 //       } else if (sortOption === "Price High - Low") {
 //         sortedData.sort(
 //           (a: CourtsData, b: CourtsData) =>
@@ -86,7 +85,6 @@
 //         `${process.env.REACT_APP_BACKEND_URL}court/fetch/all/${userLocation}`
 //       );
 
-//       console.log(response.data);
 //       setCourtsData(response.data.courtsData);
 
 //       // Fetch court images
@@ -95,7 +93,7 @@
 //           // Access the courtImagesData directly since it's an object
 //           const image = court.courtImagesData;
 //           const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${court.user_id}/${court.id}/${image.image_url}`;
-//           console.log(imageUrl);
+//
 
 //           const getImage = await axios.get(imageUrl, {
 //             responseType: "arraybuffer", // Expect binary data
@@ -123,8 +121,6 @@
 //       setLoading(false);
 //     }
 //   };
-
-//   // console.log(images);
 
 //   const LocationComponent = () => (
 //     <div className="d-flex justify-content-center align-items-center bg-light">

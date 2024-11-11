@@ -252,8 +252,6 @@ const EditCourt = () => {
       formData.append("userId", userId);
     }
 
-    console.log(images);
-
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}court/edit/${adminId}/${courtId}`,
@@ -311,7 +309,6 @@ const EditCourt = () => {
     setImages(images.filter((_: any, i: number) => i !== index));
   };
 
-  console.log(images);
   return (
     <div>
       <ToastContainer />

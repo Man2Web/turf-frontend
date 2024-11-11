@@ -34,7 +34,6 @@ const ChangePasswordComponent = () => {
         `${process.env.REACT_APP_BACKEND_URL}user/pass/update/${userId}`,
         data
       );
-      console.log(response.data);
       response.status === 200
         ? toast.success(response.data.message)
         : toast.error(response.data.message);
