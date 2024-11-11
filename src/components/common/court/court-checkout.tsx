@@ -219,7 +219,6 @@ const CourtCheckout = ({
       }
     }
   };
-
   return (
     <div>
       <ToastContainer />

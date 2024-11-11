@@ -150,7 +150,7 @@ const AdminDetailsComponent = ({
               </div>
 
               {/* Guests */}
-              <div className="select-guest">
+              <div className="select-guest mt-4">
                 <h5>Select Guest</h5>
                 <div className="d-md-flex gap-4 align-items-center">
                   {/* Guests limit */}
@@ -174,6 +174,10 @@ const AdminDetailsComponent = ({
                     <input
                       type="number"
                       readOnly={true}
+                      value={
+                        watch("numberOfGuests") +
+                        watch("additionalNumberOfGuests")
+                      }
                       className="form-control text-center"
                       {...register("numberOfGuests", {
                         required: "Number of Guests is required",
@@ -208,71 +212,6 @@ const AdminDetailsComponent = ({
                     <label htmlFor="adults">
                       <span className="dark-text">Guests</span>
                     </label>
-                    {errors.numberOfGuests && (
-                      <p className="text-danger">
-                        {errors.numberOfGuests.message}
-                      </p>
-                    )}
-                  </div>
-                  {/* Additional guests limit */}
-                  <div className="qty-item text-center">
-                    <Link
-                      to="#"
-                      onClick={() => {
-                        updateGuestCount(
-                          1,
-                          0,
-                          numberOfGuests,
-                          additionalNumberOfGuests,
-                          courtData,
-                          setValue
-                        );
-                      }}
-                      className="dec d-flex justify-content-center align-items-center"
-                    >
-                      <i className="feather-minus-circle" />
-                    </Link>
-                    <input
-                      type="number"
-                      readOnly={true}
-                      className="form-control text-center"
-                      {...register("additionalNumberOfGuests", {
-                        min: {
-                          value: 0,
-                          message: "",
-                        },
-                        max: {
-                          value: courtData.pricing.additional_guests,
-                          message: `Max additional guests of ${courtData.pricing.additional_guests} allowed`,
-                        },
-                      })}
-                      name="qty"
-                      id="children"
-                    />
-                    <Link
-                      to="#"
-                      onClick={() => {
-                        updateGuestCount(
-                          1,
-                          1,
-                          numberOfGuests,
-                          additionalNumberOfGuests,
-                          courtData,
-                          setValue
-                        );
-                      }}
-                      className="inc d-flex justify-content-center align-items-center"
-                    >
-                      <i className="feather-plus-circle" />
-                    </Link>
-                    <label htmlFor="children">
-                      <span className="dark-text">Additional Guests</span>
-                    </label>
-                    {errors.additionalNumberOfGuests && (
-                      <p className="text-danger">
-                        {errors.additionalNumberOfGuests.message}
-                      </p>
-                    )}
                   </div>
                 </div>
               </div>

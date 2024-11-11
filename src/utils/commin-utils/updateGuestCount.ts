@@ -6,59 +6,43 @@ export const updateGuestCount = (
   courtData: CourtsData,
   setValue: any
 ) => {
+  const maxGuests =
+    Number(courtData.pricing.guests) +
+    Number(courtData.pricing.additional_guests);
+  const totalGuests = numberOfGuests + additionalNumberOfGuests;
+
   if (movement === 0) {
+    // Decrease guests
     if (direction === 0) {
-      if (numberOfGuests > 1) {
+      // First, decrease additional guests if they are greater than 0
+      if (additionalNumberOfGuests > 0) {
+        setValue("additionalNumberOfGuests", additionalNumberOfGuests - 1, {
+          shouldValidate: true,
+        });
+      }
+      // Then, decrease the main number of guests, but ensure it doesn't go below 1
+      else if (numberOfGuests > 1) {
         setValue("numberOfGuests", numberOfGuests - 1, {
           shouldValidate: true,
         });
       }
-    } else {
-      if (
-        numberOfGuests <
-        Number(
-          Number(courtData.pricing.guests) +
-            Number(courtData.pricing.additional_guests)
-        )
-      ) {
-        if (numberOfGuests < Number(courtData.pricing.guests)) {
-          setValue("numberOfGuests", numberOfGuests + 1, {
-            shouldValidate: true,
-          });
-        } else {
-          setValue(
-            "additionalNumberOfGuests",
-            Number(numberOfGuests + Number(courtData.pricing.guests)) - 1,
-            {
-              shouldValidate: true,
-            }
-          );
+    }
+    // Increase guests
+    else {
+      // First, increment the numberOfGuests until it hits the pricing.guests limit
+      if (numberOfGuests < Number(courtData.pricing.guests)) {
+        if (totalGuests + 1 <= maxGuests) {
+          setValue("numberOfGuests", numberOfGuests + 1);
         }
       }
-    }
-  } else if (movement === 1) {
-    if (direction === 0) {
-      if (additionalNumberOfGuests > 0) {
-        setValue(
-          "additionalNumberOfGuests",
-          Number(additionalNumberOfGuests) - 1,
-          {
-            shouldValidate: true,
-          }
-        );
-      }
-    } else {
-      if (
-        Number(additionalNumberOfGuests) <
-        Number(courtData.pricing.additional_guests)
+      // If the numberOfGuests exceeds pricing.guests, increment additionalNumberOfGuests until pricing.additional_guests limit
+      else if (
+        numberOfGuests >= Number(courtData.pricing.guests) &&
+        additionalNumberOfGuests < Number(courtData.pricing.additional_guests)
       ) {
-        setValue(
-          "additionalNumberOfGuests",
-          Number(additionalNumberOfGuests) + 1,
-          {
-            shouldValidate: true,
-          }
-        );
+        if (totalGuests + 1 <= maxGuests) {
+          setValue("additionalNumberOfGuests", additionalNumberOfGuests + 1);
+        }
       }
     }
   }

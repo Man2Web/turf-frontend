@@ -81,8 +81,6 @@ const UserDetailsComponent = ({
     isValid,
   ]);
   autoFillFormData(reset);
-  console.log(numberOfGuests);
-  console.log(additionalNumberOfGuests);
   return (
     <div>
       <div className="container">
@@ -316,6 +314,10 @@ const UserDetailsComponent = ({
                     <input
                       type="number"
                       readOnly={true}
+                      value={
+                        watch("numberOfGuests") +
+                        watch("additionalNumberOfGuests")
+                      }
                       className="form-control text-center"
                       {...register("numberOfGuests", {
                         required: "Number of Guests is required",
@@ -350,71 +352,6 @@ const UserDetailsComponent = ({
                     <label htmlFor="adults">
                       <span className="dark-text">Guests</span>
                     </label>
-                    {errors.numberOfGuests && (
-                      <p className="text-danger">
-                        {errors.numberOfGuests.message}
-                      </p>
-                    )}
-                  </div>
-                  {/* Additional guests limit */}
-                  <div className="qty-item text-center">
-                    <Link
-                      to="#"
-                      onClick={() => {
-                        updateGuestCount(
-                          1,
-                          0,
-                          numberOfGuests,
-                          additionalNumberOfGuests,
-                          courtData,
-                          setValue
-                        );
-                      }}
-                      className="dec d-flex justify-content-center align-items-center"
-                    >
-                      <i className="feather-minus-circle" />
-                    </Link>
-                    <input
-                      type="number"
-                      readOnly={true}
-                      className="form-control text-center"
-                      {...register("additionalNumberOfGuests", {
-                        min: {
-                          value: 0,
-                          message: "",
-                        },
-                        max: {
-                          value: courtData.pricing.additional_guests,
-                          message: `Max additional guests of ${courtData.pricing.additional_guests} allowed`,
-                        },
-                      })}
-                      name="qty"
-                      id="children"
-                    />
-                    <Link
-                      to="#"
-                      onClick={() => {
-                        updateGuestCount(
-                          1,
-                          1,
-                          numberOfGuests,
-                          additionalNumberOfGuests,
-                          courtData,
-                          setValue
-                        );
-                      }}
-                      className="inc d-flex justify-content-center align-items-center"
-                    >
-                      <i className="feather-plus-circle" />
-                    </Link>
-                    <label htmlFor="children">
-                      <span className="dark-text">Additional Guests</span>
-                    </label>
-                    {errors.additionalNumberOfGuests && (
-                      <p className="text-danger">
-                        {errors.additionalNumberOfGuests.message}
-                      </p>
-                    )}
                   </div>
                 </div>
               </div>
