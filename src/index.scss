@@ -495,11 +495,14 @@ div.p-datepicker table td.p-datepicker-today > span:focus {
   height: 200px;
 }
 
-.ant-collapse .ant-collapse-content > .ant-collapse-content-box {
+.accordion-item
+  > .ant-collapse
+  .ant-collapse-content
+  > .ant-collapse-content-box {
   padding: 0;
 }
 
-.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+.accordion-item > .ant-collapse > .ant-collapse-item > .ant-collapse-header {
   padding: 0;
   color: #097e52;
   font-family: "Outfit", sans-serif;

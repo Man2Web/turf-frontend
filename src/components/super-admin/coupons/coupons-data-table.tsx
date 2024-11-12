@@ -25,7 +25,7 @@ const CouponsDataTable: React.FC = () => {
         setCouponsData(response.data.couponsData);
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }
@@ -44,7 +44,7 @@ const CouponsDataTable: React.FC = () => {
         toast.error("Could Not Delete Coupon");
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       toast.error("Error deleting coupon");
     }
   };

@@ -122,7 +122,7 @@ const EditCourt = () => {
               // Store the images as needed (e.g., in state)
               setImages(fetchedImages); // Assuming setImages stores the blob and url objects
             } catch (error) {
-              console.error("Error fetching and storing images:", error);
+              // console.error("Error fetching and storing images:", error);
             }
           };
           fetchAndStoreImages(fetchedCourtData);
@@ -182,7 +182,7 @@ const EditCourt = () => {
             },
           });
         } catch (error) {
-          console.error("Error fetching court data:", error);
+          // console.error("Error fetching court data:", error);
         }
       };
 
@@ -269,7 +269,7 @@ const EditCourt = () => {
       }
     } catch (error) {
       toast.error("Failed to update court");
-      console.error("Error updating court:", error);
+      // console.error("Error updating court:", error);
     } finally {
       setLoading(false);
     }

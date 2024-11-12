@@ -29,7 +29,7 @@ const PaymentSettingsForm = () => {
         merchantId: merchant_id,
       });
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }
@@ -53,7 +53,7 @@ const PaymentSettingsForm = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }

@@ -159,7 +159,7 @@ const BookingCompleted = () => {
         ]);
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }

@@ -72,7 +72,7 @@ const AddCoupon = () => {
         toast.success("Coupon Added Successfully");
       }
     } catch (error: unknown) {
-      console.error(error);
+      // console.error(error);
       // Check if error is an object and has a 'response' property
       if (typeof error === "object" && error !== null && "response" in error) {
         const err = error as { response: { status: number } };

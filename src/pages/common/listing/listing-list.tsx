@@ -107,7 +107,7 @@ const ListingList = () => {
       );
       setuniqueCourtsData(uniqueCourtsData);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
       setPageLoading(false);
@@ -122,7 +122,7 @@ const ListingList = () => {
           { wishList }
         );
       } catch (error) {
-        console.error(error);
+        // console.error(error);
         toast.error("Error Updating Wishlist");
       }
     }
@@ -135,7 +135,7 @@ const ListingList = () => {
       );
       setUserWishlist(response.data.user.wishlist);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 

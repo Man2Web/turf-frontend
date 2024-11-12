@@ -34,7 +34,7 @@ const UserProfileForm: React.FC = () => {
         zipcode: locationDetails?.pincode,
       });
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }
@@ -60,7 +60,7 @@ const UserProfileForm: React.FC = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }

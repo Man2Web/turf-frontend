@@ -134,7 +134,7 @@ const CourtTimeSlotsComponent = ({
       );
       setTimeSlots(timeSlotsData);
     } else {
-      console.error("Time slots data is missing or incomplete");
+      // console.error("Time slots data is missing or incomplete");
     }
   };
 
@@ -176,11 +176,12 @@ const CourtTimeSlotsComponent = ({
         bookedTimeSlots &&
         response.data.message === "Fetched the booked slots"
       ) {
+        console.log(bookedSlots);
         // Update booked slots state instead of directly updating timeSlots
         setBookedSlots(bookedTimeSlots);
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 

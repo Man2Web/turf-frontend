@@ -7,6 +7,6 @@ export const citiesList = async () => {
     );
     return response.data.locations;
   } catch (error) {
-    console.error(error);
+    // console.error(error);
   }
 };

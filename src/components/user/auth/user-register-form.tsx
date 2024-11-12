@@ -29,7 +29,7 @@ const UserRegisterForm = () => {
         : toast.error(response.data.message);
     } catch (error: any) {
       toast.error(error.response.data.message);
-      console.error("Error posting data:", error);
+      // console.error("Error posting data:", error);
     }
   };
 

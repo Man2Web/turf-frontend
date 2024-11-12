@@ -25,7 +25,7 @@ const AllCourt = () => {
         );
         setCourtsData(response.data.courtsData);
       } catch (error) {
-        console.error("Error fetching courts data:", error);
+        // console.error("Error fetching courts data:", error);
         toast.error("Failed to load courts data.");
       } finally {
         setLoading(false);

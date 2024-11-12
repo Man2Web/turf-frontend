@@ -95,7 +95,7 @@ const AddCourt = () => {
         : toast.error(response.data.message);
     } catch (error) {
       toast.error("Failed to add court");
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }

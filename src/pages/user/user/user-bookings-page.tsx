@@ -81,7 +81,7 @@ const UserBookingsPage = () => {
         setTotalPrevCount(Number(response.data.totalCount)); // Convert totalCount to number
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setInfiniteLoading(false);
     }
@@ -138,7 +138,7 @@ const UserBookingsPage = () => {
 
       setImages(imageUrls); // Just set the image URLs, no need to fetch the data as blobs
     } catch (error) {
-      console.error("Error fetching image URLs", error);
+      // console.error("Error fetching image URLs", error);
     }
   };
 

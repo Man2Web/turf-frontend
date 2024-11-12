@@ -70,7 +70,6 @@ const AddCoupon = () => {
         setAdminCourts(courtIds);
       }
     } catch (error) {
-      console.error(error);
       toast.error("Can not get admin courts data please try again later");
     } finally {
       setLoading(false);
@@ -98,7 +97,6 @@ const AddCoupon = () => {
         toast.success("Coupon Added Successfully");
       }
     } catch (error: unknown) {
-      console.error(error);
       // Check if error is an object and has a 'response' property
       if (typeof error === "object" && error !== null && "response" in error) {
         const err = error as { response: { status: number } };

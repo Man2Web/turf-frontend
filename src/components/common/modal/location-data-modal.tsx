@@ -59,7 +59,7 @@ const LocationDataModal = ({
         toast.error("Permission denied");
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }
@@ -90,7 +90,7 @@ const LocationDataModal = ({
         );
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       toast.error("Error fetching user location");
     } finally {
       setLoading(false);

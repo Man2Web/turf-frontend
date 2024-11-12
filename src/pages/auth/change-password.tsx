@@ -38,7 +38,7 @@ const ChangePassword = () => {
         setStatus(true);
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       if (error instanceof Error && "response" in error) {
         const response = error.response as {
           status: number;

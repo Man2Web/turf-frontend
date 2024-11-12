@@ -45,7 +45,7 @@ const AdminProfileForm: React.FC = () => {
         zipcode: locationDetails?.zipcode,
       });
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }
@@ -71,7 +71,7 @@ const AdminProfileForm: React.FC = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }

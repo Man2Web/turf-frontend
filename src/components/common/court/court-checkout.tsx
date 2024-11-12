@@ -114,7 +114,7 @@ const CourtCheckout = ({
       );
       response.status === 404 ? setIsCourtAdmin(false) : setIsCourtAdmin(true);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }
@@ -203,14 +203,14 @@ const CourtCheckout = ({
             );
             setAdminBookingData(response.data);
           } catch (error) {
-            console.error(error);
+            // console.error(error);
           }
           setToggleModal(true);
         } else {
           toast.error("Error processing cash booking.");
         }
       } catch (error) {
-        console.error("Error during CASH payment:", error);
+        // console.error("Error during CASH payment:", error);
         toast.error("Error processing cash booking.");
       } finally {
         setAdminLoading(false);

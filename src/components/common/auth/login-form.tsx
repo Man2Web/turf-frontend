@@ -40,7 +40,7 @@ const LoginFormComponent = () => {
       }
     } catch (error: any) {
       toast.error(error.response?.data?.message || "An error occurred");
-      console.error("Error posting data:", error);
+      // console.error("Error posting data:", error);
     } finally {
       setLoading(false);
     }

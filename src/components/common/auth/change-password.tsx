@@ -40,7 +40,7 @@ const ChangePasswordComponent = () => {
       reset();
     } catch (error: any) {
       toast.error("Please check the credentials and try again");
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     } // Handle password update logic here

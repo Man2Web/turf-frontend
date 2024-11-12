@@ -40,7 +40,7 @@ const CourtDetails = () => {
         );
         setUserWishlist(data.user.wishlist);
       } catch (error) {
-        console.error("Error fetching user wishlist", error);
+        // console.error("Error fetching user wishlist", error);
       }
     };
 
@@ -71,7 +71,7 @@ const CourtDetails = () => {
         setImages(fetchedImages);
         setCourtData(fetchedCourtData);
       } catch (error) {
-        console.error("Error fetching court info", error);
+        // console.error("Error fetching court info", error);
       } finally {
         setLoading(false);
       }
@@ -92,7 +92,7 @@ const CourtDetails = () => {
           { wishList }
         );
       } catch (error) {
-        console.error("Error updating wishlist", error);
+        // console.error("Error updating wishlist", error);
         toast.error("Error Updating Wishlist");
       }
     },

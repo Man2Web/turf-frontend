@@ -81,7 +81,7 @@ const CheckOutForm = ({
         setcourtCoupons(response.data.coupons);
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 
@@ -286,22 +286,24 @@ const CheckOutForm = ({
                 </Link>
               </label>
             </div>
-            {!isCourtAdmin && (
-              <div className="d-flex align-items-center">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="dataConfirmation"
-                  {...register("dataConfirmation")}
-                />
-                <label
-                  className="form-check-label pt-0"
-                  htmlFor="dataConfirmation"
-                >
-                  Save the data for faster checkouts in future
-                </label>
-              </div>
-            )}
+            {!isCourtAdmin &&
+              (localStorage.getItem("userId") ||
+                localStorage.getItem("adminId")) && (
+                <div className="d-flex align-items-center">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="dataConfirmation"
+                    {...register("dataConfirmation")}
+                  />
+                  <label
+                    className="form-check-label pt-0"
+                    htmlFor="dataConfirmation"
+                  >
+                    Save the data for faster checkouts in future
+                  </label>
+                </div>
+              )}
           </div>
 
           <div className="d-grid btn-block">

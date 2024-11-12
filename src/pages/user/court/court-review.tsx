@@ -54,7 +54,7 @@ const CourtReview = () => {
         setReviewData(data);
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }
@@ -74,7 +74,7 @@ const CourtReview = () => {
       const fetchedCourtData = response.data.courtData;
       setCourtData(fetchedCourtData);
     } catch (error) {
-      console.error("Error fetching court info", error);
+      // console.error("Error fetching court info", error);
     } finally {
       setLoading(false);
     }
@@ -92,7 +92,7 @@ const CourtReview = () => {
 
       setReviewData(response.data);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }

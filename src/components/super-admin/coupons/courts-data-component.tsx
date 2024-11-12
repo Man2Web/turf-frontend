@@ -41,7 +41,7 @@ const CourtsDataComponent = () => {
         : setCurrentData(response.data.approvedCourts);
     } catch (error) {
       toast.error("Error fetching courts data");
-      console.error(error);
+      // console.error(error);
     } finally {
       setLoading(false);
     }
