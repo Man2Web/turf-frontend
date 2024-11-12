@@ -52,7 +52,6 @@ const AddCourt = () => {
     saturday: [],
     sunday: [],
   });
-
   const onSubmit = async (data: CourtFormDataType) => {
     const userId = localStorage.getItem("adminId");
     // setLoading(true);

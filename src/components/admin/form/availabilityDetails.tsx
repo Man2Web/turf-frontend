@@ -151,7 +151,13 @@ const AvailabilityDetails = ({
                             type="checkbox"
                             id={`select_days_${day.id}`}
                             checked={selectedDays[index + 1]}
-                            onChange={() => handleDayChange(index + 1)}
+                            onChange={() => {
+                              if (index === 6) {
+                                handleDayChange(0);
+                              } else {
+                                handleDayChange(index + 1);
+                              }
+                            }}
                             name="day"
                           />
                           <label htmlFor={`select_days_${day.id}`}>

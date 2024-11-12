@@ -36,6 +36,7 @@ const UserAutofillForm = ({
       </div>
       <div className="col-2">
         <a
+          className="d-flex justify-content-end"
           onClick={() => {
             setUserDataExists(false);
           }}
