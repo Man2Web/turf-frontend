@@ -41,7 +41,14 @@ const ListingList = () => {
     if (userLocation) {
       SubmitHandler();
     }
-  }, [userLocation, offset, userWishlist]);
+  }, [offset, userWishlist]);
+
+  useEffect(() => {
+    if (userLocation) {
+      setCourtsData([]);
+      SubmitHandler();
+    }
+  }, [userLocation]);
 
   useEffect(() => {
     if (userId) {

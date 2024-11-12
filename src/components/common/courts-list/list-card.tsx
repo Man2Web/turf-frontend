@@ -112,14 +112,20 @@ const ListCard = ({
                     <i>{getIconBySport(court.court_type)}</i>
                     {`${court.court_type}`}
                   </span>
-                  <span>
-                    <i className="feather-clock fw-bold" />
-                    {`${courtDurationData && courtDurationData.duration} Hrs`}
-                  </span>
-                  <span>
-                    <i className="feather-sun fw-bold" />
-                    {`${formatTime(courtDurationData && courtDurationData.start_time)} - ${formatTime(courtDurationData && courtDurationData.end_time)}`}
-                  </span>
+                  {courtDurationData &&
+                    Number(courtDurationData.duration) !== 0 && (
+                      <span>
+                        <i className="feather-clock fw-bold" />
+                        {`${courtDurationData && courtDurationData.duration} Hrs`}
+                      </span>
+                    )}
+                  {courtDurationData &&
+                    Number(courtDurationData.duration) !== 0 && (
+                      <span>
+                        <i className="feather-sun fw-bold" />
+                        {`${formatTime(courtDurationData.start_time)} - ${formatTime(courtDurationData.end_time)}`}
+                      </span>
+                    )}
                   <span className="text-capitalize">
                     <i className="feather-map-pin fw-bold" />
                     {`${court.location.city}, ${court.location.country}`}
