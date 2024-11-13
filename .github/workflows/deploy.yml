@@ -1,0 +1,44 @@
+name: Deploy React App to VPS
+
+on:
+  push:
+    branches:
+      - main  # Change this if your default branch is different (e.g., 'master')
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the code from the GitHub repository
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Set up Node.js environment
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # Use the appropriate Node.js version for your project
+
+    # Install dependencies
+    - name: Install dependencies
+      run: npm install
+
+    # Build the React app
+    - name: Build React App
+      run: npm run build
+
+    # Deploy to VPS via SSH
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        port: 22  # Adjust if you are using a custom port
+        script: |
+          cd /var/www/front-end/turf-frontend
+          git pull origin main  # Pull latest changes from GitHub
+          rm -rf build  # Remove the old build directory
+          mv build /var/www/front-end/turf-frontend/  # Move the newly built app to the correct directory
+          sudo systemctl restart nginx  # Restart Nginx to serve the new build
