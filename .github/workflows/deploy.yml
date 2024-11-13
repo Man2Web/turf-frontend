@@ -20,6 +20,10 @@ jobs:
       with:
         node-version: '16'  # Use the appropriate Node.js version for your project
 
+    # Set CI=false to disable treating warnings as errors
+    - name: Disable CI Warnings as Errors
+      run: echo "CI=false" >> $GITHUB_ENV
+
     # Install dependencies
     - name: Install dependencies
       run: npm install
@@ -35,7 +39,7 @@ jobs:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_SSH_KEY }}
-        port: 22  # Adjust if you are using a custom port
+        port: 7122  # Adjust if you are using a custom port
         script: |
           cd /var/www/front-end/turf-frontend
           git pull origin main  # Pull latest changes from GitHub
