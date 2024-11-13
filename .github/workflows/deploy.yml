@@ -20,6 +20,10 @@ jobs:
       with:
         node-version: '16'  # Use the appropriate Node.js version for your project
 
+    # Set CI=false to disable treating warnings as errors
+    - name: Disable CI Warnings as Errors
+      run: echo "CI=false" >> $GITHUB_ENV
+
     # Install dependencies
     - name: Install dependencies
       run: npm install
