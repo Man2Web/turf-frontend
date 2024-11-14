@@ -3,7 +3,7 @@ name: Deploy React App to VPS
 on:
   push:
     branches:
-      - main  # Change this if your default branch is different (e.g., 'master')
+      - main  # Adjust if your default branch is different
 
 jobs:
   build-and-deploy:
@@ -39,10 +39,12 @@ jobs:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USER }}
         key: ${{ secrets.VPS_SSH_KEY }}
-        port: 7122  # Adjust if you are using a custom port
+        port: 7122  # Adjust if using a custom SSH port
         script: |
           cd /var/www/front-end/turf-frontend
-          git pull origin main  # Pull latest changes from GitHub
-          rm -rf build  # Remove the old build directory
-          npm run build
+          git pull origin main  # Pull the latest changes (if this is a Git repo)
+          rm -rf build  # Remove the existing build directory on the server
+          mkdir build  # Create a new build directory
+          # Copy the build files from GitHub Actions to the server
+          rsync -avz --delete build/ /var/www/front-end/turf-frontend/build/
           sudo systemctl restart nginx  # Restart Nginx to serve the new build
