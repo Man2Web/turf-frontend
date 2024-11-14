@@ -44,5 +44,5 @@ jobs:
           cd /var/www/front-end/turf-frontend
           git pull origin main  # Pull latest changes from GitHub
           rm -rf build  # Remove the old build directory
-          mv build /var/www/front-end/turf-frontend/  # Move the newly built app to the correct directory
+          npm run build
           sudo systemctl restart nginx  # Restart Nginx to serve the new build
