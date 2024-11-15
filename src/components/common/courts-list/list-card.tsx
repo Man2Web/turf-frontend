@@ -11,10 +11,15 @@ import {
   TennisBallIcon,
   Basketball01Icon,
   CricketBatIcon,
+  IndianRupee,
+  ClockIcon,
+  LocationPin,
 } from "../../../utils/icons/icons";
 import { formatTime } from "../../../utils/commin-utils/formatTime";
 import { handleWishListUpdate } from "../../../utils/commin-utils/handleWishlistUpdate";
 import { getCourtDuration } from "../../../utils/court-utils/getCourtDuration";
+import { Badge, Button, Card, Divider, List } from "antd";
+import Meta from "antd/es/card/Meta";
 
 export const getIconBySport = (sport: string) => {
   switch (sport) {
@@ -51,35 +56,44 @@ const ListCard = ({
   const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${court.admin_id}/${court.court_id}/${court.images[0]}`;
   return (
     <div key={idx} className="col-lg-12 col-md-12 mb-2">
-      <div className="featured-venues-item venue-list-item">
-        <div className="listing-item listing-item-grid">
-          <div className="listing-img">
-            <Link to={`${routes.courtDetailsLink}/${court.court_id}`}>
-              <img
-                style={{
-                  height: "225px",
-                  width: "400px",
-                }}
-                src={imageUrl}
-                alt="court img"
-              />
-            </Link>
-            <div className="fav-item-venues">
-              {court.featured && <span className="tag tag-blue">Featured</span>}
-              <h5 className="tag tag-primary">
-                ₹{decimalNumber(court.pricing.starting_price)}
-              </h5>
-            </div>
-          </div>
-          <div className="listing-content">
-            <div className="d-flex justify-content-between align-items-center">
-              <h5 className="listing-title m-0">
-                <Link to={`${routes.courtDetailsLink}/${court.court_id}`}>
-                  {court.court_name}
-                </Link>
-              </h5>
-              <div className="list-reviews">
+      <List
+        className="shadow-sm hover-shadow-lg rounded"
+        itemLayout="horizontal"
+      >
+        <List.Item>
+          <List.Item.Meta
+            avatar={
+              <Link
+                to={`${routes.courtDetailsLink}/${court.court_id}/booking`}
+                className="position-relative d-none d-md-block"
+              >
+                {court.featured && (
+                  <Badge.Ribbon text="Featured" color="primary" />
+                )}
+                <img
+                  alt="example"
+                  src={imageUrl}
+                  className="object-fit-cover"
+                  style={{
+                    width: "350px",
+                    borderTopLeftRadius: "5px",
+                    borderBottomLeftRadius: "5px",
+                  }}
+                />
+              </Link>
+            }
+            title={
+              <div className="d-flex justify-content-between align-items-center py-2">
                 <Link
+                  to={`${routes.courtDetailsLink}/${court.court_id}/booking`}
+                  className="mb-0"
+                >
+                  <p className="text-black">{court.court_name}</p>
+                </Link>
+                <Link
+                  style={{
+                    paddingRight: "10px",
+                  }}
                   to="#"
                   key={1}
                   onClick={() =>
@@ -98,56 +112,48 @@ const ListCard = ({
                   )}
                 </Link>
               </div>
-            </div>
-            <div
-              style={{ fontWeight: "200" }}
-              className="listing-details-group"
-            >
-              <ul
-                style={{ fontWeight: "200" }}
-                className="listing-details-info"
-              >
-                <li className="mb-2">
-                  <span>
-                    <i>{getIconBySport(court.court_type)}</i>
-                    {`${court.court_type}`}
-                  </span>
-                  {courtDurationData &&
-                    Number(courtDurationData.duration) !== 0 && (
-                      <span>
-                        <i className="feather-clock fw-bold" />
-                        {`${courtDurationData && courtDurationData.duration} Hrs`}
-                      </span>
-                    )}
-                  {courtDurationData &&
-                    Number(courtDurationData.duration) !== 0 && (
-                      <span>
-                        <i className="feather-sun fw-bold" />
-                        {`${formatTime(courtDurationData.start_time)} - ${formatTime(courtDurationData.end_time)}`}
-                      </span>
-                    )}
-                  <span className="text-capitalize">
-                    <i className="feather-map-pin fw-bold" />
-                    {`${court.location.city}, ${court.location.country}`}
-                  </span>
-                </li>
-              </ul>
-            </div>
-            <div className="listing-button">
-              <div className="listing-venue-owner d-flex align-items-center"></div>
-              <Link
-                to={`${routes.courtDetailsLink}/${court.court_id}/booking`}
-                className="user-book-now btn btn-primary text-white"
-              >
-                <span>
-                  <i className="feather-calendar me-2 text-white" />
-                </span>
-                Reserve Now
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+            }
+            description={
+              <div>
+                <p className="mb-0 d-flex align-items-center gap-2">
+                  {getIconBySport(court.court_type)}
+                  {court.court_type}
+                </p>
+                <p className="mb-0 d-flex align-items-center gap-2">
+                  <IndianRupee />
+                  {decimalNumber(court.pricing.starting_price)} /{" "}
+                  {`${courtDurationData && courtDurationData.duration} Hrs`}
+                </p>
+                {Number(courtDurationData?.duration) !== 0 && (
+                  <p className="mb-0 d-flex align-items-center gap-2">
+                    <ClockIcon />
+                    {`${formatTime(courtDurationData?.start_time)} - ${formatTime(courtDurationData?.end_time)}`}
+                  </p>
+                )}
+                <p className="text-capitalize mb-0 d-flex align-items-center gap-2">
+                  <LocationPin />
+                  {`${court.location.city}, ${court.location.country}`}
+                </p>
+                <Divider />
+                <div className="d-flex justify-content-end">
+                  <Link
+                    style={{
+                      paddingRight: "10px",
+                    }}
+                    className="justify-content-end"
+                    to={`${routes.courtDetailsLink}/${court.court_id}/booking`}
+                    key={idx}
+                  >
+                    <Button className="w-100" type="primary">
+                      Book Now
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            }
+          />
+        </List.Item>
+      </List>
     </div>
   );
 };

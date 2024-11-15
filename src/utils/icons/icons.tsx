@@ -64,11 +64,14 @@ export const RupeeIcon = () => (
 export const CricketBatIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
     viewBox="0 0 24 24"
-    width={18}
-    height={18}
-    color={"#A0A0A0"}
-    fill={"none"}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
     {...props}
   >
     <path
@@ -103,11 +106,14 @@ export const CricketBatIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export const Basketball01Icon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
     viewBox="0 0 24 24"
-    width={18}
-    height={18}
-    color={"#A0A0A0"}
-    fill={"none"}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
     {...props}
   >
     <path
@@ -177,11 +183,14 @@ export const BounceBasketball01Icon = (
 export const TennisBallIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
     viewBox="0 0 24 24"
-    width={18}
-    height={18}
-    color={"#A0A0A0"}
-    fill={"none"}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
     {...props}
   >
     <path
@@ -205,11 +214,14 @@ export const TennisBallIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export const BadmintonIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
     viewBox="0 0 24 24"
-    width={18}
-    height={18}
-    color={"#A0A0A0"}
-    fill={"none"}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
     {...props}
   >
     <path
@@ -239,11 +251,14 @@ export const BadmintonIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export const FootballIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
     viewBox="0 0 24 24"
-    width={18}
-    height={18}
-    color={"#A0A0A0"}
-    fill={"none"}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
     {...props}
   >
     <path
@@ -325,5 +340,62 @@ export const AiStarsIcon = () => (
       strokeWidth="1.5"
       strokeLinejoin="round"
     />
+  </svg>
+);
+
+export const IndianRupee = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="lucide lucide-indian-rupee"
+  >
+    <path d="M6 3h12" />
+    <path d="M6 8h12" />
+    <path d="m6 13 8.5 8" />
+    <path d="M6 13h3" />
+    <path d="M9 13c6.667 0 6.667-10 0-10" />
+  </svg>
+);
+
+export const ClockIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="lucide lucide-clock-8"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <polyline points="12 6 12 12 8 14" />
+  </svg>
+);
+
+export const LocationPin = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="lucide lucide-map-pin"
+  >
+    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+    <circle cx="12" cy="10" r="3" />
   </svg>
 );

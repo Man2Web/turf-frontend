@@ -2,11 +2,19 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
 import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
-import { HeartFilledIcon, HeartIcon } from "../../../utils/icons/icons";
+import {
+  ClockIcon,
+  HeartFilledIcon,
+  HeartIcon,
+  IndianRupee,
+  LocationPin,
+} from "../../../utils/icons/icons";
 import { getIconBySport } from "./list-card";
 import { formatTime } from "../../../utils/commin-utils/formatTime";
 import { handleWishListUpdate } from "../../../utils/commin-utils/handleWishlistUpdate";
 import { getCourtDuration } from "../../../utils/court-utils/getCourtDuration";
+import { Badge, Button, Card } from "antd";
+import Meta from "antd/es/card/Meta";
 
 const GridCard = ({
   showFilters,
@@ -31,35 +39,37 @@ const GridCard = ({
       key={idx}
       className={`${showFilters ? "col-lg-6" : "col-lg-4"} col-md-6 mb-4`}
     >
-      <div className="wrapper">
-        <div className="listing-item listing-item-grid">
-          <div className="listing-img">
-            <Link to={`${routes.courtDetailsLink}/${court.court_id}`}>
-              <img
-                style={{
-                  height: "250px",
-                  width: "415px",
-                }}
-                src={imageUrl}
-                alt="court img"
-              />
-            </Link>
-            <div className="fav-item-venues">
-              {court.featured && <span className="tag tag-blue">Featured</span>}
-              <h5 className="tag tag-primary">
-                ₹{decimalNumber(court.pricing.starting_price)}
-              </h5>
-            </div>
-          </div>
-          <div className="listing-content">
-            <div className="list-reviews d-flex justify-content-between align-items-center">
-              <div className="d-flex align-items-center">
-                <h5 className="listing-title d-flex align-items-center m-0">
-                  <Link to={`${routes.courtDetailsLink}/${court.court_id}`}>
-                    {court.court_name}
-                  </Link>
-                </h5>
-              </div>
+      <Card
+        hoverable
+        actions={[
+          <Link
+            to={`${routes.courtDetailsLink}/${court.court_id}/booking`}
+            key={idx}
+          >
+            <Button className="w-100" type="primary">
+              Book Now
+            </Button>
+          </Link>,
+        ]}
+        cover={
+          <Link
+            to={`${routes.courtDetailsLink}/${court.court_id}/booking`}
+            className="position-relative"
+          >
+            {court.featured && <Badge.Ribbon text="Featured" color="primary" />}
+            <img alt="example" src={imageUrl} className="rounded-top" />
+          </Link>
+        }
+      >
+        <Meta
+          title={
+            <div className="d-flex justify-content-between align-items-center">
+              <Link
+                to={`${routes.courtDetailsLink}/${court.court_id}/booking`}
+                className="mb-0"
+              >
+                <p className="text-black">{court.court_name}</p>
+              </Link>
               <Link
                 to="#"
                 key={1}
@@ -79,51 +89,32 @@ const GridCard = ({
                 )}
               </Link>
             </div>
-            <div className="listing-details-group">
-              <ul
-                style={{ fontWeight: "200" }}
-                className="listing-details-info"
-              >
-                <li className="mb-2">
-                  <span>
-                    <i>{getIconBySport(court.court_type)}</i>
-                    {`${court.court_type}`}
-                  </span>
-                  {courtDurationData &&
-                    Number(courtDurationData.duration) !== 0 && (
-                      <span>
-                        <i className="feather-clock fw-bold" />
-                        {`${courtDurationData && courtDurationData.duration} Hrs`}
-                      </span>
-                    )}
-                  {courtDurationData &&
-                    Number(courtDurationData.duration) !== 0 && (
-                      <span>
-                        <i className="feather-sun fw-bold" />
-                        {`${formatTime(courtDurationData.start_time)} - ${formatTime(courtDurationData.end_time)}`}
-                      </span>
-                    )}
-                  <span className="text-capitalize">
-                    <i className="feather-map-pin fw-bold" />
-                    {`${court.location.city}, ${court.location.country}`}
-                  </span>
-                </li>
-              </ul>
+          }
+          description={
+            <div>
+              <p className="mb-0 d-flex align-items-center gap-2">
+                {getIconBySport(court.court_type)}
+                {court.court_type}
+              </p>
+              <p className="mb-0 d-flex align-items-center gap-2">
+                <IndianRupee />
+                {decimalNumber(court.pricing.starting_price)} /{" "}
+                {`${courtDurationData && courtDurationData.duration} Hrs`}
+              </p>
+              {Number(courtDurationData?.duration) !== 0 && (
+                <p className="mb-0 d-flex align-items-center gap-2">
+                  <ClockIcon />
+                  {`${formatTime(courtDurationData?.start_time)} - ${formatTime(courtDurationData?.end_time)}`}
+                </p>
+              )}
+              <p className="text-capitalize mb-0 d-flex align-items-center gap-2">
+                <LocationPin />
+                {`${court.location.city}, ${court.location.country}`}
+              </p>
             </div>
-            <div className="listing-button">
-              <Link
-                to={`${routes.courtDetailsLink}/${court.court_id}/booking`}
-                className="user-book-now btn btn-primary text-white w-100 justify-content-center"
-              >
-                <span>
-                  <i className="feather-calendar me-2 text-white" />
-                </span>
-                Reserve Now
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+          }
+        />
+      </Card>
     </div>
   );
 };
