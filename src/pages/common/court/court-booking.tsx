@@ -37,11 +37,12 @@ const CourtBooking = () => {
       setLoading(false);
     }
   }, []);
-
   useEffect(() => {
     if (courtData && courtData.availability && selectedDate) {
-      const matchedSlot = getCourtDuration(courtData.availability);
-
+      const matchedSlot = getCourtDuration(
+        courtData.availability,
+        selectedDate
+      );
       if (matchedSlot) {
         setCourtDuration(matchedSlot.duration || "N/A");
       } else {

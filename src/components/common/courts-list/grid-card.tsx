@@ -26,7 +26,6 @@ const GridCard = ({
   const routes = all_routes;
   const courtDurationData = getCourtDuration(court.availability);
   const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${court.admin_id}/${court.court_id}/${court.images[0]}`;
-  console.log(court.court_type);
   return (
     <div
       key={idx}

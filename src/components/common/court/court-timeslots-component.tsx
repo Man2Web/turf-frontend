@@ -65,6 +65,7 @@ const CourtTimeSlotsComponent = ({
   const [slotsLoading, setSlotsLoading] = useState<boolean>(false);
 
   useEffect(() => {
+    setTimeSlots([]);
     generateTimeSlots();
     setSelectedSlots([]);
   }, [selectedDate]);
@@ -122,10 +123,8 @@ const CourtTimeSlotsComponent = ({
           isActive: true,
         });
       }
-
       return allTimeSlots;
     };
-
     if (timeSlots?.start_time && timeSlots?.end_time && timeSlots?.duration) {
       const timeSlotsData = generateTimeSlots(
         timeSlots.start_time,
@@ -176,7 +175,6 @@ const CourtTimeSlotsComponent = ({
         bookedTimeSlots &&
         response.data.message === "Fetched the booked slots"
       ) {
-        console.log(bookedSlots);
         // Update booked slots state instead of directly updating timeSlots
         setBookedSlots(bookedTimeSlots);
       }
@@ -197,7 +195,6 @@ const CourtTimeSlotsComponent = ({
       );
     }
   }, [bookedSlots]);
-
   return (
     <div>
       <ToastContainer />
@@ -238,9 +235,7 @@ const CourtTimeSlotsComponent = ({
                     loader={slotsLoading}
                     loadingDescription="Fetching Slots..."
                   />
-                  {!slotsLoading &&
-                  (timeSlots.length === 0 ||
-                    timeSlots[0].time !== "No available slots") ? (
+                  {timeSlots.length > 0 ? (
                     timeSlots.map((slot, index) => (
                       <div key={index} className="col-6 col-md-3 col-sm-4">
                         <div

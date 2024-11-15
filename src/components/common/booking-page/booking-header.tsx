@@ -104,10 +104,12 @@ const BookingHeader = ({
                   </Link>
 
                   {/* Time Slots */}
-                  <p className="mb-1">
-                    <i className="feather-clock me-2 fw-bold" />
-                    {`${formatTime(timeSlots?.start_time)} - ${formatTime(timeSlots?.end_time)}`}
-                  </p>
+                  {Number(timeSlots?.duration) !== 0 && (
+                    <p className="mb-1">
+                      <i className="feather-clock me-2 fw-bold" />
+                      {`${formatTime(timeSlots?.start_time)} - ${formatTime(timeSlots?.end_time)}`}
+                    </p>
+                  )}
 
                   {/* Date Info */}
                   <p className="mb-1">

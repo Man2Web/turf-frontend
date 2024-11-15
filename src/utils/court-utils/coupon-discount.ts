@@ -3,8 +3,9 @@ export const couponDiscount = (
   coupon: Coupon
 ): { totalPrice: number; discountedPrice: number } => {
   let discountedPrice = 0;
-  if (coupon.coupon_type) {
+  if (!coupon.coupon_type) {
     if (totalPrice >= Number(coupon.min_amount)) {
+      console.log("Here");
       // Subtract the fixed discount amount from the total price
       totalPrice = totalPrice - Number(coupon.amount);
       discountedPrice = Number(coupon.amount);
