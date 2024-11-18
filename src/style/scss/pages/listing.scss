@@ -13,12 +13,22 @@
       padding: 20px;
     }
     .count-search {
+      @include respond-below(custom1199) {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      @include respond-below(custom767) {
+        flex-direction: column;
+        align-items: start;
+        gap: 6px;
+      }
       p {
         font-weight: $__medium;
         color: $__secondarycolor;
         margin-bottom: 0;
         @include respond-below(custom991) {
-          text-align: center;
+          text-align: left;
         }
         span {
           color: $__primarycolor;
@@ -30,7 +40,7 @@
       @extend %justify-content-end;
       flex-wrap: $__wrap;
       @include respond-below(custom991) {
-        justify-content: $__center;
+        justify-content: space-between;
         @include margin-padding(20px 0 0, null);
       }
       @include respond-below(custom767) {

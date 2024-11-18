@@ -140,13 +140,28 @@ const CourtDetails = () => {
       // window.open(`https://twitter.com/share?url=${encodeURIComponent(window.locationdata.href)}&text=${encodeURIComponent(shareData.text)}`);
     }
   };
+
   const imagesData = {
     dots: false,
     infinite: true,
-    arrows: true,
+    arrows: false,
     speed: 500,
     slidesToShow: images.length < 3 ? images.length : 3,
     slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024, // for screens smaller than 1024px
+        settings: {
+          slidesToShow: images.length < 2 ? images.length : 2,
+        },
+      },
+      {
+        breakpoint: 768, // for screens smaller than 768px
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
   };
 
   const settings = {
@@ -202,7 +217,7 @@ const CourtDetails = () => {
                   <h1 className="d-flex align-items-center justify-content-start">
                     {courtData?.court_name}
                   </h1>
-                  <ul className="d-sm-flex justify-content-start align-items-center">
+                  <ul className="d-flex flex-column flex-md-row justify-content-start align-items-start">
                     <li>
                       <a
                         className="d-flex align-items-center justify-content-center" // Add align-items-center
@@ -227,7 +242,9 @@ const CourtDetails = () => {
                         {/* Add margin to the paragraph */}
                       </a>
                     </li>
-                    <li>
+                    <li
+                      className="d-flex align-items-center justify-content-center" // Add align-items-center
+                    >
                       <i className="feather-mail" />
                       <Link to={`mailto:${courtData.email}`}>
                         {" "}
@@ -267,7 +284,7 @@ const CourtDetails = () => {
                     <p className="d-inline-block me-2 mb-0">Starts From :</p>
                     <h3 className="primary-text mb-0 d-inline-block">
                       ₹{decimalNumber(courtData?.pricing.starting_price)}
-                      <span>/ slot</span>
+                      <span>/ {courtDurationData?.duration} Hrs</span>
                     </h3>
                   </div>
                 </div>
@@ -441,7 +458,7 @@ const CourtDetails = () => {
                         aria-labelledby="panelsStayOpen-amenities"
                       >
                         <div className="accordion-body">
-                          <ul className="d-md-flex gap-4 align-items-center">
+                          <ul className="d-flex flex-column flex-md-row gap-4 align-items-center">
                             {courtData?.amenities.map((item, index) => (
                               <li key={index}>
                                 <i
@@ -480,7 +497,7 @@ const CourtDetails = () => {
                       >
                         <div className="accordion-body">
                           <div className="owl-carousel gallery-slider owl-theme">
-                            <Slider {...settings}>
+                            <Slider {...imagesData}>
                               {images?.map(
                                 (
                                   img: { url: string },
@@ -630,17 +647,26 @@ const CourtDetails = () => {
                       >
                         <li className="facebook">
                           <Link to="#">
-                            <i className="mr-0 fa-brands fa-facebook-f" />
+                            <i
+                              style={{ marginRight: "0px" }}
+                              className="fa-brands fa-facebook-f"
+                            />
                           </Link>
                         </li>
                         <li className="instagram">
                           <Link to="#">
-                            <i className="mr-0 fa-brands fa-instagram" />
+                            <i
+                              style={{ marginRight: "0px" }}
+                              className="fa-brands fa-instagram"
+                            />
                           </Link>
                         </li>
                         <li className="twitter">
                           <Link to="#">
-                            <i className="mr-0 fa-brands fa-twitter" />
+                            <i
+                              style={{ marginRight: "0px" }}
+                              className="fa-brands fa-twitter"
+                            />
                           </Link>
                         </li>
                       </ul>

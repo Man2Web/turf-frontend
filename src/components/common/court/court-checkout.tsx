@@ -230,9 +230,9 @@ const CourtCheckout = ({
       <div className="container">
         <section>
           <div className="row checkout">
-            <div className="d-md-flex">
+            <div className="d-lg-flex gap-lg-4">
               {/* Form Data collection */}
-              <div className="col-12 col-sm-12 col-md-12 col-lg-7">
+              <div className="col-12 col-lg-8">
                 {isCourtAdmin ? (
                   <AdminDetailsComponent
                     setIsValid={setIsValid}
@@ -247,7 +247,7 @@ const CourtCheckout = ({
                   />
                 )}
               </div>
-              <div>
+              <div className="col-12 col-lg-4">
                 {/* Original CheckOut */}
                 <CheckOutForm
                   courtData={courtData}

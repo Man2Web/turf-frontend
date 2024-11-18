@@ -12,6 +12,14 @@ import { getIconBySport } from "../../../components/common/courts-list/list-card
 import { getSlotDurationInHrs } from "../../../utils/court-utils/slotDuration";
 import { getUserBookingSliderData } from "../../../utils/data-list/slidersData";
 import BookingConfirmModal from "../../../components/common/modal/booking-confirm";
+import GridCard from "../../../components/common/courts-list/grid-card";
+import { Badge, Button, Card, List } from "antd";
+import Meta from "antd/es/card/Meta";
+import {
+  ClockIcon,
+  IndianRupee,
+  LocationPin,
+} from "../../../utils/icons/icons";
 
 const UserBookingsPage = () => {
   const routes = all_routes;
@@ -22,15 +30,14 @@ const UserBookingsPage = () => {
   const [upcomingBooking, setUpcomingBooking] = useState<SuccessBookingData[]>(
     []
   );
-  const [images, setImages] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false);
   const [infiniteLoading, setInfiniteLoading] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
   const [adminSelected, setAdminSelected] = useState<SuccessBookingData>();
   const [totalPrevCount, setTotalPrevCount] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(20);
   const [offset, setOffset] = useState<number>(0);
-  const [prevBookingImages, setPrevBookingImages] = useState<string[]>([]);
+
+  const limit = 20;
 
   // Reference for the element that will trigger the loading when it appears in view
   const loadMoreRef = useRef(null);
@@ -130,37 +137,6 @@ const UserBookingsPage = () => {
     };
   }, [handleObserver]);
 
-  const fetchImages = async () => {
-    try {
-      const imageUrls = upcomingBooking.map((bookingData) => {
-        return `${process.env.REACT_APP_BACKEND_URL}court/uploads/${bookingData.court_info.admin_id}/${bookingData.court_info.court_id}/${bookingData.court_details.images[0]}`;
-      });
-
-      setImages(imageUrls); // Just set the image URLs, no need to fetch the data as blobs
-    } catch (error) {
-      // console.error("Error fetching image URLs", error);
-    }
-  };
-
-  useEffect(() => {
-    if (previousBooking.length > 0) {
-      const imageUrls = previousBooking
-        .map((booking: SuccessBookingData) => {
-          const imageUrl = booking.court_details.images[0]; // Get the first image
-          if (imageUrl) {
-            return `${process.env.REACT_APP_BACKEND_URL}court/uploads/${booking.court_info.admin_id}/${booking.court_info.court_id}/${imageUrl}`;
-          }
-          return null; // Return null if there's no image
-        })
-        .filter(Boolean); // Remove any null values from the array
-
-      setPrevBookingImages(imageUrls as string[]); // Set the image URLs directly
-    }
-  }, [previousBooking]);
-
-  useEffect(() => {
-    fetchImages();
-  }, [upcomingBooking]);
   const userBookingsSliderData = getUserBookingSliderData(
     upcomingBooking.length
   );
@@ -194,9 +170,10 @@ const UserBookingsPage = () => {
                       >
                         {upcomingBooking?.map(
                           (booking: SuccessBookingData, idx: number) => {
+                            const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${booking.admin_id}/${booking.court_info.court_id}/${booking.court_details.images[0]}`;
                             return (
                               <div key={idx} className="h-6 mb-4 px-2">
-                                <div className="wrapper">
+                                {/* <div className="wrapper">
                                   <div className="listing-item listing-item-grid">
                                     <div className="listing-img">
                                       <Link
@@ -204,7 +181,7 @@ const UserBookingsPage = () => {
                                       >
                                         <img
                                           className="card-img-top"
-                                          src={images && images[idx]}
+                                          src={imageUrl}
                                           alt="court img"
                                         />
                                       </Link>
@@ -279,7 +256,83 @@ const UserBookingsPage = () => {
                                       </div>
                                     </div>
                                   </div>
-                                </div>
+                                </div> */}
+                                <Card
+                                  hoverable
+                                  actions={[
+                                    <Link
+                                      to="#"
+                                      onClick={() => {
+                                        setAdminSelected(booking);
+                                        setToggle(true);
+                                      }}
+                                      key={idx}
+                                    >
+                                      <Button className="w-100" type="primary">
+                                        View Details
+                                      </Button>
+                                    </Link>,
+                                  ]}
+                                  cover={
+                                    <Link
+                                      to={`${routes.courtDetailsLink}/${booking.court_id}`}
+                                      className="position-relative"
+                                    >
+                                      {booking.court_info.featured && (
+                                        <Badge.Ribbon
+                                          text="Featured"
+                                          color="primary"
+                                        />
+                                      )}
+                                      <img
+                                        alt="example"
+                                        src={imageUrl}
+                                        className="rounded-top"
+                                      />
+                                    </Link>
+                                  }
+                                >
+                                  <Meta
+                                    title={
+                                      <div className="d-flex justify-content-between align-items-center">
+                                        <Link
+                                          to={`${routes.courtDetailsLink}/${booking.court_id}`}
+                                          className="mb-0"
+                                        >
+                                          <p className="text-black">
+                                            {booking.court_info.court_name}
+                                          </p>
+                                        </Link>
+                                      </div>
+                                    }
+                                    description={
+                                      <div>
+                                        <p className="mb-0 d-flex align-items-center gap-2">
+                                          {getIconBySport(
+                                            booking.court_info.court_type
+                                          )}
+                                          {booking.court_info.court_type}
+                                        </p>
+                                        <p className="mb-0 d-flex align-items-center gap-2">
+                                          <IndianRupee />
+                                          {decimalNumber(
+                                            booking.pay_required
+                                          )}{" "}
+                                          /- Payment Due
+                                        </p>
+                                        <p className="mb-0 d-flex align-items-center gap-2">
+                                          <ClockIcon />
+                                          {`${dateFormat(booking.booking_date)}, `}
+                                          {`${formatTime(booking.booking_time[0])} - ${formatTime(getSlotDurationInHrs(booking.booking_time[booking.booking_time.length - 1], Number(booking.duration)))}`}
+                                        </p>
+                                        <p className="text-capitalize mb-0 d-flex align-items-center gap-2">
+                                          <LocationPin />
+                                          {`${booking.court_details.city}`}
+                                        </p>
+                                      </div>
+                                    }
+                                  />
+                                </Card>
                               </div>
                             );
                           }
@@ -322,114 +375,234 @@ const UserBookingsPage = () => {
                         <div className="table-responsive">
                           {!loading && previousBooking.length !== 0 ? (
                             previousBooking.map(
-                              (bookingData: SuccessBookingData, index) => (
-                                <div
-                                  key={index}
-                                  className="col-lg-12 col-md-12 mb-2"
-                                >
-                                  <div className="featured-venues-item venue-list-item">
-                                    <div className="listing-item listing-item-grid">
-                                      <div className="listing-img d-none d-md-block">
-                                        <Link
-                                          to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}`}
-                                        >
-                                          <img
-                                            style={{
-                                              height: "200px",
-                                              width: "360px",
-                                            }}
-                                            src={
-                                              prevBookingImages &&
-                                              prevBookingImages[index]
-                                            }
-                                            alt="court img"
-                                          />
-                                        </Link>
-                                        <div className="fav-item-venues">
-                                          {bookingData.court_info.featured && (
-                                            <span className="tag tag-blue">
-                                              Featured
-                                            </span>
-                                          )}
-                                          <h5 className="tag tag-primary">
-                                            ₹
-                                            {decimalNumber(
-                                              bookingData.amount_paid
-                                            )}
-                                          </h5>
-                                        </div>
-                                      </div>
-                                      <div className="listing-content">
-                                        <div className="d-flex justify-content-between align-items-center">
-                                          <h5 className="listing-title m-0">
-                                            <Link
-                                              to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}`}
-                                            >
-                                              {
-                                                bookingData.court_info
-                                                  .court_name
-                                              }
-                                            </Link>
-                                          </h5>
-                                          <div className="list-reviews"></div>
-                                        </div>
-                                        <div
-                                          style={{ fontWeight: "200" }}
-                                          className="listing-details-group"
-                                        >
-                                          <ul
-                                            style={{ fontWeight: "200" }}
-                                            className="listing-details-info"
+                              (bookingData: SuccessBookingData, index) => {
+                                const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${bookingData.admin_id}/${bookingData.court_info.court_id}/${bookingData.court_details.images[0]}`;
+                                return (
+                                  <div
+                                    key={index}
+                                    className="col-lg-12 col-md-12 mb-2"
+                                  >
+                                    {/* <div className="featured-venues-item venue-list-item">
+                                      <div className="listing-item listing-item-grid">
+                                        <div className="listing-img d-none d-md-block">
+                                          <Link
+                                            to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}`}
                                           >
-                                            <li className="mb-2">
-                                              <span>
-                                                <i>
-                                                  {getIconBySport(
+                                            <img
+                                              style={{
+                                                height: "200px",
+                                                width: "360px",
+                                              }}
+                                              src={imageUrl}
+                                              alt="court img"
+                                            />
+                                          </Link>
+                                          <div className="fav-item-venues">
+                                            {bookingData.court_info
+                                              .featured && (
+                                              <span className="tag tag-blue">
+                                                Featured
+                                              </span>
+                                            )}
+                                            <h5 className="tag tag-primary">
+                                              ₹
+                                              {decimalNumber(
+                                                bookingData.amount_paid
+                                              )}
+                                            </h5>
+                                          </div>
+                                        </div>
+                                        <div className="listing-content">
+                                          <div className="d-flex justify-content-between align-items-center">
+                                            <h5 className="listing-title m-0">
+                                              <Link
+                                                to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}`}
+                                              >
+                                                {
+                                                  bookingData.court_info
+                                                    .court_name
+                                                }
+                                              </Link>
+                                            </h5>
+                                            <div className="list-reviews"></div>
+                                          </div>
+                                          <div
+                                            style={{ fontWeight: "200" }}
+                                            className="listing-details-group"
+                                          >
+                                            <ul
+                                              style={{ fontWeight: "200" }}
+                                              className="listing-details-info"
+                                            >
+                                              <li className="mb-2">
+                                                <span>
+                                                  <i>
+                                                    {getIconBySport(
+                                                      bookingData.court_info
+                                                        .court_type
+                                                    )}
+                                                  </i>
+                                                  {`${
                                                     bookingData.court_info
                                                       .court_type
-                                                  )}
-                                                </i>
+                                                  }`}
+                                                </span>
+                                                <span>
+                                                  <i className="feather-clock" />
+                                                  {`${dateFormat(bookingData.booked_on)}`}
+                                                </span>
+                                              </li>
+                                            </ul>
+                                          </div>
+                                          <div className="d-flex justify-content-end gap-2 flex-column flex-lg-row">
+                                            <Link
+                                              to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}/booking`}
+                                              className="user-book-now btn btn-primary text-white"
+                                            >
+                                              <span>
+                                                <i className="feather-calendar me-2 text-white" />
+                                              </span>
+                                              Book Again
+                                            </Link>
+                                            <Link
+                                              to="#"
+                                              onClick={() => {
+                                                setAdminSelected(bookingData);
+                                                setToggle(true);
+                                              }}
+                                              className="user-book-now btn btn-secondary text-white"
+                                            >
+                                              <span>
+                                                <i className="feather-search me-2 text-white" />
+                                              </span>
+                                              View Details
+                                            </Link>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div> */}
+                                    <List
+                                      className="shadow-sm hover-shadow-lg rounded"
+                                      itemLayout="horizontal"
+                                    >
+                                      <List.Item>
+                                        <List.Item.Meta
+                                          avatar={
+                                            <Link
+                                              to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}`}
+                                              className="position-relative d-none d-md-block"
+                                            >
+                                              {bookingData.court_info
+                                                .featured && (
+                                                <Badge.Ribbon
+                                                  text="Featured"
+                                                  color="primary"
+                                                />
+                                              )}
+                                              <img
+                                                alt="example"
+                                                src={imageUrl}
+                                                className="object-fit-cover"
+                                                style={{
+                                                  width: "250px",
+                                                  borderTopLeftRadius: "5px",
+                                                  borderBottomLeftRadius: "5px",
+                                                }}
+                                              />
+                                            </Link>
+                                          }
+                                          title={
+                                            <div className="d-flex justify-content-between align-items-center py-2">
+                                              <Link
+                                                to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}`}
+                                                className="mb-0"
+                                              >
+                                                <p className="text-black">
+                                                  {
+                                                    bookingData.court_info
+                                                      .court_name
+                                                  }
+                                                </p>
+                                              </Link>
+                                            </div>
+                                          }
+                                          description={
+                                            <div>
+                                              <p className="mb-0 d-flex align-items-center gap-2">
+                                                {getIconBySport(
+                                                  bookingData.court_info
+                                                    .court_type
+                                                )}
                                                 {`${
                                                   bookingData.court_info
                                                     .court_type
                                                 }`}
-                                              </span>
-                                              <span>
-                                                <i className="feather-clock" />
-                                                {`${dateFormat(bookingData.booked_on)}`}
-                                              </span>
-                                            </li>
-                                          </ul>
-                                        </div>
-                                        <div className="d-flex justify-content-end gap-2 flex-column flex-lg-row">
-                                          <Link
-                                            to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}/booking`}
-                                            className="user-book-now btn btn-primary text-white"
-                                          >
-                                            <span>
-                                              <i className="feather-calendar me-2 text-white" />
-                                            </span>
-                                            Book Again
-                                          </Link>
-                                          <Link
-                                            to="#"
-                                            onClick={() => {
-                                              setAdminSelected(bookingData);
-                                              setToggle(true);
-                                            }}
-                                            className="user-book-now btn btn-secondary text-white"
-                                          >
-                                            <span>
-                                              <i className="feather-search me-2 text-white" />
-                                            </span>
-                                            View Details
-                                          </Link>
-                                        </div>
-                                      </div>
-                                    </div>
+                                              </p>
+                                              <p className="mb-0 d-flex align-items-center gap-2">
+                                                <IndianRupee />
+                                                {decimalNumber(
+                                                  Number(
+                                                    bookingData.amount_paid
+                                                  ) +
+                                                    Number(
+                                                      bookingData.pay_required
+                                                    )
+                                                )}{" "}
+                                                /- Paid
+                                              </p>
+                                              <p className="mb-0 d-flex align-items-center gap-2">
+                                                <ClockIcon />
+                                                {`${dateFormat(bookingData.booking_date)}, `}
+                                                {`${formatTime(bookingData.booking_time[0])} - ${formatTime(getSlotDurationInHrs(bookingData.booking_time[bookingData.booking_time.length - 1], Number(bookingData.duration)))}`}
+                                              </p>
+                                              <p className="text-capitalize mb-0 d-flex align-items-center gap-2">
+                                                <LocationPin />
+                                                {`${bookingData.court_details.city}`}
+                                              </p>
+                                              <div className="py-2 d-flex justify-content-end">
+                                                <Link
+                                                  style={{
+                                                    paddingRight: "10px",
+                                                  }}
+                                                  className="justify-content-end"
+                                                  onClick={() => {
+                                                    setAdminSelected(
+                                                      bookingData
+                                                    );
+                                                    setToggle(true);
+                                                  }}
+                                                  to="#"
+                                                >
+                                                  <Button
+                                                    className="w-100"
+                                                    type="default"
+                                                  >
+                                                    View Details
+                                                  </Button>
+                                                </Link>
+                                                <Link
+                                                  style={{
+                                                    paddingRight: "10px",
+                                                  }}
+                                                  className="justify-content-end"
+                                                  to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}/booking`}
+                                                >
+                                                  <Button
+                                                    className="w-100"
+                                                    type="primary"
+                                                  >
+                                                    Book Again
+                                                  </Button>
+                                                </Link>
+                                              </div>
+                                            </div>
+                                          }
+                                        />
+                                      </List.Item>
+                                    </List>
                                   </div>
-                                </div>
-                              )
+                                );
+                              }
                             )
                           ) : (
                             <div className="d-flex justify-content-between align-items-center">

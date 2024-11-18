@@ -18,8 +18,7 @@ import {
 import { formatTime } from "../../../utils/commin-utils/formatTime";
 import { handleWishListUpdate } from "../../../utils/commin-utils/handleWishlistUpdate";
 import { getCourtDuration } from "../../../utils/court-utils/getCourtDuration";
-import { Badge, Button, Card, Divider, List } from "antd";
-import Meta from "antd/es/card/Meta";
+import { Badge, Button, List } from "antd";
 
 export const getIconBySport = (sport: string) => {
   switch (sport) {
@@ -64,7 +63,7 @@ const ListCard = ({
           <List.Item.Meta
             avatar={
               <Link
-                to={`${routes.courtDetailsLink}/${court.court_id}/booking`}
+                to={`${routes.courtDetailsLink}/${court.court_id}`}
                 className="position-relative d-none d-md-block"
               >
                 {court.featured && (
@@ -75,7 +74,7 @@ const ListCard = ({
                   src={imageUrl}
                   className="object-fit-cover"
                   style={{
-                    width: "350px",
+                    width: "250px",
                     borderTopLeftRadius: "5px",
                     borderBottomLeftRadius: "5px",
                   }}
@@ -85,7 +84,7 @@ const ListCard = ({
             title={
               <div className="d-flex justify-content-between align-items-center py-2">
                 <Link
-                  to={`${routes.courtDetailsLink}/${court.court_id}/booking`}
+                  to={`${routes.courtDetailsLink}/${court.court_id}`}
                   className="mb-0"
                 >
                   <p className="text-black">{court.court_name}</p>
@@ -134,7 +133,6 @@ const ListCard = ({
                   <LocationPin />
                   {`${court.location.city}, ${court.location.country}`}
                 </p>
-                <Divider />
                 <div className="d-flex justify-content-end">
                   <Link
                     style={{

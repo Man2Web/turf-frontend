@@ -44,7 +44,7 @@ const BookingConfirmModal = ({
   };
 
   const ModalFooter = () => (
-    <div className="d-flex justify-content-center my-4 gap-2">
+    <div className="d-flex flex-column flex-lg-row justify-content-center my-4 gap-2">
       <button
         onClick={() => {
           bookingData?.transaction_id && getPdf(bookingData?.transaction_id);

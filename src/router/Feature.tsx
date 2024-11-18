@@ -17,7 +17,7 @@ const Feature = () => {
   return (
     <>
       <div
-        className={`main-wrapper
+        className={`main-wrapper venue-coach-details
         ${
           page === "add-court"
             ? "add-court venue-coach-details"

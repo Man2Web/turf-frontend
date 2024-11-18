@@ -14,15 +14,33 @@ import { useAppContext } from "../../context/app-context";
 
 const HomePage = () => {
   const routes = all_routes;
-  const navigate = useNavigate();
   const [citiesData, setCitiesData] = useState<string[]>([]);
 
   const settings = {
     dots: false,
     infinite: true,
+    arrows: false,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024, // screens smaller than 1024px
+        settings: {
+          slidesToShow: 2, // show 2 slides
+          slidesToScroll: 1, // scroll 1 slide at a time
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 768, // screens smaller than 768px
+        settings: {
+          slidesToShow: 1, // show 1 slide
+          slidesToScroll: 1, // scroll 1 slide at a time
+          infinite: true,
+        },
+      },
+    ],
   };
 
   const images = {
@@ -32,6 +50,36 @@ const HomePage = () => {
     speed: 500,
     slidesToShow: 5,
     slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1200, // screens smaller than 1200px
+        settings: {
+          slidesToShow: 4, // show 4 slides
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 1024, // screens smaller than 1024px
+        settings: {
+          slidesToShow: 3, // show 3 slides
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768, // screens smaller than 768px
+        settings: {
+          slidesToShow: 2, // show 2 slides
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 480, // screens smaller than 480px
+        settings: {
+          slidesToShow: 1, // show 1 slide
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   const { userLocation, setUserLocation } = useAppContext();
@@ -47,6 +95,7 @@ const HomePage = () => {
 
   return (
     <>
+      {/* Main Home */}
       <section className="hero-section">
         <div className="banner-cock-one">
           <ImageWithBasePath
@@ -86,7 +135,7 @@ const HomePage = () => {
                   <div className="search-box">
                     <form className="container gap-2">
                       {/* <div className="search-input line"></div> */}
-                      <div className="col-8">
+                      <div className="col-12 col-md-8">
                         <div className="form-group mb-0">
                           <Dropdown
                             value={userLocation}
@@ -100,7 +149,7 @@ const HomePage = () => {
                       </div>
                       <Link
                         to={routes.ListingList}
-                        className="btn btn-primary col-4 d-flex gap-2 justify-content-center  align-items-center"
+                        className="btn btn-primary col-12 col-md-4 d-flex gap-2 justify-content-center  align-items-center mt-2 mt-md-0"
                       >
                         <span className="search-text">Search Courts</span>
                         <i className="feather-search" />
@@ -122,6 +171,9 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+      {/* Main Home */}
+
+      {/* How it works */}
       <section className="section work-section">
         <div className="work-cock-img">
           <ImageWithBasePath src="assets/img/icons/work-cock.svg" alt="Icon" />
@@ -216,6 +268,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+      {/* How it works */}
 
       {/* Convenient */}
       <section className="section convenient-section">
@@ -499,46 +552,53 @@ const HomePage = () => {
             <div className="brand-slider-group aos" data-aos="fade-up">
               <div className="owl-carousel testimonial-brand-slider owl-theme">
                 <Slider {...images}>
-                  <div className="brand-logos">
+                  <div className="brand-logos ">
                     <ImageWithBasePath
                       src="assets/img/testimonial-icon-01.svg"
                       alt="Brand"
+                      className="mx-auto"
                     />
                   </div>
-                  <div className="brand-logos">
+                  <div className="brand-logos ">
                     <ImageWithBasePath
                       src="assets/img/testimonial-icon-04.svg"
                       alt="Brand"
+                      className="mx-auto"
                     />
                   </div>
-                  <div className="brand-logos">
+                  <div className="brand-logos ">
                     <ImageWithBasePath
                       src="assets/img/testimonial-icon-03.svg"
                       alt="Brand"
+                      className="mx-auto"
                     />
                   </div>
-                  <div className="brand-logos">
+                  <div className="brand-logos ">
                     <ImageWithBasePath
                       src="assets/img/testimonial-icon-04.svg"
                       alt="Brand"
+                      className="mx-auto"
                     />
                   </div>
-                  <div className="brand-logos">
+                  <div className="brand-logos ">
                     <ImageWithBasePath
                       src="assets/img/testimonial-icon-05.svg"
                       alt="Brand"
+                      className="mx-auto"
                     />
                   </div>
-                  <div className="brand-logos">
+                  <div className="brand-logos ">
                     <ImageWithBasePath
                       src="assets/img/testimonial-icon-03.svg"
                       alt="Brand"
+                      className="mx-auto"
                     />
                   </div>
-                  <div className="brand-logos">
+                  <div className="brand-logos ">
                     <ImageWithBasePath
                       src="assets/img/testimonial-icon-04.svg"
                       alt="Brand"
+                      className="mx-auto"
                     />
                   </div>
                 </Slider>
@@ -851,6 +911,7 @@ const HomePage = () => {
         </div>
       </section>
       {/* /Latest News */}
+
       {/* Newsletter */}
       <section className="section newsletter-sport">
         <div className="container">

@@ -53,7 +53,7 @@ const GridCard = ({
         ]}
         cover={
           <Link
-            to={`${routes.courtDetailsLink}/${court.court_id}/booking`}
+            to={`${routes.courtDetailsLink}/${court.court_id}`}
             className="position-relative"
           >
             {court.featured && <Badge.Ribbon text="Featured" color="primary" />}
@@ -65,7 +65,7 @@ const GridCard = ({
           title={
             <div className="d-flex justify-content-between align-items-center">
               <Link
-                to={`${routes.courtDetailsLink}/${court.court_id}/booking`}
+                to={`${routes.courtDetailsLink}/${court.court_id}`}
                 className="mb-0"
               >
                 <p className="text-black">{court.court_name}</p>

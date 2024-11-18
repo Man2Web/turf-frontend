@@ -76,7 +76,7 @@ const BookingHeader = ({
           <div className="main-menu-wrapper d-flex justify-content-between align-items-center w-100">
             {progress > 0 && (
               <button
-                className="btn btn-icon btn-secondary px-2 py-2 me-3 d-none d-md-block"
+                className="btn btn-icon btn-secondary px-2 py-2 me-3 d-none d-lg-block"
                 onClick={() => setProgress(0)}
               >
                 <i
@@ -96,6 +96,7 @@ const BookingHeader = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     to={courtData.location.location_link}
+                    className="d-none d-lg-block"
                   >
                     <p className="mb-1 text-capitalize">
                       <i className="feather-map-pin me-2 fw-bold" />
@@ -105,7 +106,7 @@ const BookingHeader = ({
 
                   {/* Time Slots */}
                   {Number(timeSlots?.duration) !== 0 && (
-                    <p className="mb-1">
+                    <p className="mb-1 d-none d-lg-block">
                       <i className="feather-clock me-2 fw-bold" />
                       {`${formatTime(timeSlots?.start_time)} - ${formatTime(timeSlots?.end_time)}`}
                     </p>
@@ -148,7 +149,7 @@ const BookingHeader = ({
               </div>
 
               {/* Pricing Details */}
-              <div className="text-end check d-flex gap-2 align-items-center pricing-details mt-3 mt-lg-0">
+              <div className="text-end check pricing-details mt-3 mt-lg-0 d-none d-lg-flex gap-2 align-items-center">
                 {userDetails && (
                   <>
                     <div className="d-flex align-items-center gap-1">

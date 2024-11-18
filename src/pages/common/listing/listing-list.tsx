@@ -188,7 +188,7 @@ const ListingList = () => {
                       <div className="row d-flex align-items-center">
                         <div className="col-xl-4 col-lg-3 col-sm-12 col-12">
                           <div className="count-search">
-                            <p>
+                            <p className="font-bold">
                               Showing{" "}
                               <span>{Number(paginationData?.totalCount)}</span>{" "}
                               Locations in{" "}
@@ -208,7 +208,7 @@ const ListingList = () => {
                         </div>
                         <div className="col-xl-8 col-lg-9 col-sm-12 col-12">
                           <div className="sortby-filter-group">
-                            <div className="grid-listview">
+                            <div className="grid-listview d-none d-md-block">
                               <ul className="nav">
                                 <li>
                                   <span>View as</span>
