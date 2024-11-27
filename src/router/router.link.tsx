@@ -145,6 +145,11 @@ const publicRoutes = [
     route: Route,
   },
   {
+    path: routes.ListingListWithSport,
+    element: <ListingList />,
+    route: Route,
+  },
+  {
     path: routes.bookingSuccess,
     element: <BookingSuccess />,
     route: Route,

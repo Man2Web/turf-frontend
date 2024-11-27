@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Loader from "../../common/loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
+import { useAppContext } from "../../../context/app-context";
 
 type PaymentSettingsInput = {
   merchantId: string;
@@ -15,12 +16,12 @@ const PaymentSettingsForm = () => {
     formState: { errors },
     reset,
   } = useForm<PaymentSettingsInput>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { setLoading } = useAppContext();
   const adminId = localStorage.getItem("adminId");
 
   const getMerchantId = async () => {
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Adding Coupon..." });
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}user/get/${adminId}`
       );
@@ -31,7 +32,7 @@ const PaymentSettingsForm = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "" });
     }
   };
 
@@ -41,7 +42,7 @@ const PaymentSettingsForm = () => {
 
   const onSubmit = async (data: PaymentSettingsInput) => {
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Adding Coupon..." });
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}user/update/mid/${adminId}`,
         data
@@ -55,7 +56,7 @@ const PaymentSettingsForm = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "" });
     }
     // Handle form submission logic here
   };
@@ -63,10 +64,6 @@ const PaymentSettingsForm = () => {
   return (
     <div className="row">
       <ToastContainer />
-      <Loader
-        loader={loading}
-        loadingDescription="Fetching Payment Details Data..."
-      />
       <div className="col-sm-12">
         <div className="profile-detail-group">
           <div className="card">

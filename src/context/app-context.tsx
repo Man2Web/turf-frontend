@@ -1,6 +1,7 @@
 // AppContextProvider.tsx
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import Loader from "../components/common/loader/Loader";
 
 interface AppContextInterface {
   userLocation: string | null;
@@ -15,6 +16,18 @@ interface AppContextInterface {
   setIsUser: React.Dispatch<React.SetStateAction<boolean>>;
   isSuperAdmin: boolean;
   setIsSuperAdmin: React.Dispatch<React.SetStateAction<boolean>>;
+  isMenuOpen: boolean;
+  setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  loading: {
+    status: boolean;
+    description: string;
+  };
+  setLoading: React.Dispatch<
+    React.SetStateAction<{
+      status: boolean;
+      description: string;
+    }>
+  >;
 }
 
 // Create a context with default values
@@ -34,7 +47,11 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isSuperAdmin, setIsSuperAdmin] = useState<boolean>(false);
   const [theme, setTheme] = useState<string>("light");
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<{
+    status: boolean;
+    description: string;
+  }>({ status: false, description: "" });
   // Sync userLocation with local storage
   useEffect(() => {
     if (userLocation) {
@@ -59,8 +76,16 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({
         setIsUser,
         isSuperAdmin,
         setIsSuperAdmin,
+        isMenuOpen,
+        setIsMenuOpen,
+        loading,
+        setLoading,
       }}
     >
+      <Loader
+        loader={loading?.status}
+        loadingDescription={loading?.description}
+      />
       {children}
     </AppContext.Provider>
   );

@@ -21,7 +21,7 @@ const LocationDataModal = ({
   const [showModal, setShowModal] = useState(true);
   const [locationError, setlocationError] = useState<string>();
   const [locations, setLocations] = useState<string[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const { setLoading } = useAppContext();
   const routes = all_routes;
   const navigate = useNavigate();
 
@@ -45,7 +45,7 @@ const LocationDataModal = ({
 
   const getUserLocation = () => {
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Fetching User Location..." });
       if (navigator.geolocation) {
         const options = {
           enableHighAccuracy: true,
@@ -61,7 +61,7 @@ const LocationDataModal = ({
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "" });
     }
   };
 
@@ -70,7 +70,7 @@ const LocationDataModal = ({
     const longitude = position.coords.longitude;
 
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Fetching User Location..." });
       const response = await axios.get(
         `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
       );
@@ -93,7 +93,7 @@ const LocationDataModal = ({
       // console.error(error);
       toast.error("Error fetching user location");
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "" });
     }
   };
 
@@ -113,59 +113,55 @@ const LocationDataModal = ({
   return (
     <>
       <ToastContainer />
-      {loading ? (
-        <Loader loader={loading} loadingDescription="Fetching User Location" />
-      ) : (
-        <Modal
-          open={showModal}
-          onCancel={closeModal}
-          closable={false}
-          maskClosable={userLocation ? true : false}
-          footer={null}
-          centered
-        >
-          <div className="modal-body">
-            <div className="text-center">
-              <button
-                onClick={() => getUserLocation()}
-                className="btn btn-primary mb-4"
-              >
-                <div className="d-flex gap-2 align-items-center">
-                  <i className="feather-map-pin" />
-                  <p className="m-0">Get My Location</p>
-                </div>
-              </button>
-            </div>
-            {locationError && <p className="text-danger">{locationError}</p>}
-            <Divider orientation="center">Or</Divider>
-            <form autoComplete="off" className="w-100">
-              <div className="card-body-chat">
-                <div className="sorting-select">
-                  <Controller
-                    name="userLocationInContext"
-                    control={control}
-                    render={({ field }) => (
-                      <Dropdown
-                        filter
-                        value={userLocation || field.value}
-                        onChange={(e) => {
-                          field.onChange(e.value);
-                          setUserLocation(e.value);
-                          closeModal();
-                        }}
-                        options={locations}
-                        optionLabel="userLocationInContext"
-                        placeholder="Select Location"
-                        className="select-bg w-100 list-sidebar-select"
-                      />
-                    )}
-                  />
-                </div>
+      <Modal
+        open={showModal}
+        onCancel={closeModal}
+        closable={false}
+        maskClosable={userLocation ? true : false}
+        footer={null}
+        centered
+      >
+        <div className="modal-body">
+          <div className="text-center">
+            <button
+              onClick={() => getUserLocation()}
+              className="btn btn-primary mb-4"
+            >
+              <div className="d-flex gap-2 align-items-center">
+                <i className="feather-map-pin" />
+                <p className="m-0">Get My Location</p>
               </div>
-            </form>
+            </button>
           </div>
-        </Modal>
-      )}
+          {locationError && <p className="text-danger">{locationError}</p>}
+          <Divider orientation="center">Or</Divider>
+          <form autoComplete="off" className="w-100">
+            <div className="card-body-chat">
+              <div className="sorting-select">
+                <Controller
+                  name="userLocationInContext"
+                  control={control}
+                  render={({ field }) => (
+                    <Dropdown
+                      filter
+                      value={userLocation || field.value}
+                      onChange={(e) => {
+                        field.onChange(e.value);
+                        setUserLocation(e.value);
+                        closeModal();
+                      }}
+                      options={locations}
+                      optionLabel="userLocationInContext"
+                      placeholder="Select Location"
+                      className="select-bg w-100 list-sidebar-select"
+                    />
+                  )}
+                />
+              </div>
+            </div>
+          </form>
+        </div>
+      </Modal>
     </>
   );
 };

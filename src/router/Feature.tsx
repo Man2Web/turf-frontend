@@ -13,7 +13,7 @@ const Feature = () => {
     setPage(currentPath.split("/")[2]);
     setLast(currentPath.split("/")[3]);
   }, []);
-
+  // menu-opened -> We need to add this class to open the menu and to close we need to remove.
   return (
     <>
       <div

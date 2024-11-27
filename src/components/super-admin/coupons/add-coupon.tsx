@@ -6,6 +6,7 @@ import Loader from "../../common/loader/Loader";
 import Dropdown from "react-bootstrap/Dropdown";
 import { ConfigProvider, DatePicker, Radio, Select, Space } from "antd";
 import type { DatePickerProps, GetProps } from "antd";
+import { useAppContext } from "../../../context/app-context";
 type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
 const { RangePicker } = DatePicker;
 
@@ -35,7 +36,6 @@ const options = [
 const courtsData = [{ id: 0, name: "Site Wide" }];
 
 const AddCoupon = () => {
-  const [loading, setLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -47,7 +47,7 @@ const AddCoupon = () => {
       courtId: null,
     },
   });
-
+  const { setLoading } = useAppContext();
   const couponType = watch("couponType");
 
   // Function to handle form submission
@@ -61,7 +61,7 @@ const AddCoupon = () => {
     };
 
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Adding Coupon..." });
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}superadmin/coupon/add`,
         {
@@ -88,14 +88,13 @@ const AddCoupon = () => {
         toast.error("Something went wrong!");
       }
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "" });
     }
   };
 
   return (
     <>
       <ToastContainer />
-      <Loader loader={loading} loadingDescription="Adding Coupon..." />
       {/* Page Content */}
       <div className="container">
         <div className="row">

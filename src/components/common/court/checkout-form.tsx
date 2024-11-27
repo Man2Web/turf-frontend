@@ -28,7 +28,6 @@ const CheckOutForm = ({
   errors,
   trigger,
   policy,
-  loading,
   adminLoading,
   onCashPayment,
   onlinePay,
@@ -47,7 +46,6 @@ const CheckOutForm = ({
   errors: any;
   trigger: any;
   policy: boolean;
-  loading: boolean;
   adminLoading: boolean;
   onCashPayment: () => void;
   onlinePay: () => void;
@@ -130,10 +128,6 @@ const CheckOutForm = ({
   ];
   return (
     <div>
-      <Loader
-        loader={adminLoading || loading}
-        loadingDescription="Processing Booking..."
-      />
       <aside className="card payment-modes">
         <h3 className="border-bottom">Checkout</h3>
         <div className="px-2 d-flex justify-content-between align-items-center">

@@ -33,6 +33,7 @@ export const all_routes = {
   home: "/",
   courtDetails: "/court/:courtId",
   ListingList: "/courts",
+  ListingListWithSport: "/courts/:sportType",
   // ListingListWithCity: "/courts/:requestedLocation",
   courtBooking: "/court/:courtId/booking",
   aboutUs: "/about",

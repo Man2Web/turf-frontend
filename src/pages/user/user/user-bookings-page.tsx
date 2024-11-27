@@ -8,11 +8,9 @@ import UserMenuComponent from "../../../components/user/profile/userMenu";
 import { formatTime } from "../../../utils/commin-utils/formatTime";
 import Slider from "react-slick";
 import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
-import { getIconBySport } from "../../../components/common/courts-list/list-card";
 import { getSlotDurationInHrs } from "../../../utils/court-utils/slotDuration";
 import { getUserBookingSliderData } from "../../../utils/data-list/slidersData";
 import BookingConfirmModal from "../../../components/common/modal/booking-confirm";
-import GridCard from "../../../components/common/courts-list/grid-card";
 import { Badge, Button, Card, List } from "antd";
 import Meta from "antd/es/card/Meta";
 import {
@@ -20,6 +18,7 @@ import {
   IndianRupee,
   LocationPin,
 } from "../../../utils/icons/icons";
+import { getIconsBySport } from "../../../utils/icons/getIconsBySport";
 
 const UserBookingsPage = () => {
   const routes = all_routes;
@@ -308,7 +307,7 @@ const UserBookingsPage = () => {
                                     description={
                                       <div>
                                         <p className="mb-0 d-flex align-items-center gap-2">
-                                          {getIconBySport(
+                                          {getIconsBySport(
                                             booking.court_info.court_type
                                           )}
                                           {booking.court_info.court_type}
@@ -529,7 +528,7 @@ const UserBookingsPage = () => {
                                           description={
                                             <div>
                                               <p className="mb-0 d-flex align-items-center gap-2">
-                                                {getIconBySport(
+                                                {getIconsBySport(
                                                   bookingData.court_info
                                                     .court_type
                                                 )}

@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
 import Loader from "../loader/Loader";
 import axios from "axios";
+import { useAppContext } from "../../../context/app-context";
 
 const LoginFormComponent = () => {
   const routes = all_routes;
@@ -15,11 +16,11 @@ const LoginFormComponent = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginProfileForm>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { setLoading } = useAppContext();
 
   const onSubmit = async (data: any) => {
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Logging In..." });
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}admin/auth`, // Assuming you updated the backend route
         data
@@ -42,13 +43,12 @@ const LoginFormComponent = () => {
       toast.error(error.response?.data?.message || "An error occurred");
       // console.error("Error posting data:", error);
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "" });
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Loader loader={loading} loadingDescription="Logging In..." />
       <div className="form-group">
         <div className="group-img">
           <i className="feather-user" />

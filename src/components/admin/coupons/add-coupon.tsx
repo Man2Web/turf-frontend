@@ -6,6 +6,7 @@ import Loader from "../../common/loader/Loader";
 import Dropdown from "react-bootstrap/Dropdown";
 import { ConfigProvider, DatePicker, Radio, Space } from "antd";
 import type { DatePickerProps, GetProps } from "antd";
+import { useAppContext } from "../../../context/app-context";
 type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
 const { RangePicker } = DatePicker;
 
@@ -33,7 +34,7 @@ const options = [
 ];
 
 const AddCoupon = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const { setLoading } = useAppContext();
   const [adminCourts, setAdminCourts] = useState<ModalCourtsData[]>([]);
   const {
     register,
@@ -56,7 +57,7 @@ const AddCoupon = () => {
 
   const getAdminCourtsData = async () => {
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Adding Coupon..." });
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}admin/court/fetch/${userId}`
       );
@@ -72,7 +73,7 @@ const AddCoupon = () => {
     } catch (error) {
       toast.error("Can not get admin courts data please try again later");
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "" });
     }
   };
 
@@ -86,7 +87,7 @@ const AddCoupon = () => {
       endTime: data.timeRange[1] || "",
     };
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Adding Coupon..." });
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}court/coupon/add`,
         {
@@ -112,7 +113,7 @@ const AddCoupon = () => {
         toast.error("Something went wrong!");
       }
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "" });
     }
   };
 
@@ -121,7 +122,6 @@ const AddCoupon = () => {
       <ToastContainer />
       {/* Page Content */}
       <div className="container">
-        <Loader loader={loading} loadingDescription="Adding Coupon..." />
         <div className="row">
           <div className="col-sm-12">
             <div className="profile-detail-group">

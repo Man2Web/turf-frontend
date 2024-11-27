@@ -132,8 +132,7 @@
       display: none;
       margin-right: 30px;
       @include respond-below(custom991) {
-        // display: inline-block;
-        display: none;
+        display: inline-block;
         line-height: 0;
       }
       @include respond-below(custom575) {
@@ -846,7 +845,7 @@ header {
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .header-sticky {
-    padding: 1rem;
+    // padding: 1rem;
   }
 
   .main-menu-wrapper {

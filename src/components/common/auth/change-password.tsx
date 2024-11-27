@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import Loader from "../loader/Loader";
+import { useAppContext } from "../../../context/app-context";
 
 interface formDataType {
   oldPassword: string;
@@ -11,8 +12,7 @@ interface formDataType {
 }
 
 const ChangePasswordComponent = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-
+  const { setLoading } = useAppContext();
   const userId = localStorage.getItem("userId");
 
   // Initialize react-hook-form
@@ -29,7 +29,7 @@ const ChangePasswordComponent = () => {
   // Function to handle form submission
   const onSubmit = async (data: formDataType) => {
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Updating User Password..." });
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}user/pass/update/${userId}`,
         data
@@ -42,14 +42,13 @@ const ChangePasswordComponent = () => {
       toast.error("Please check the credentials and try again");
       // console.error(error);
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "" });
     } // Handle password update logic here
   };
 
   return (
     <div>
       <ToastContainer />
-      <Loader loader={loading} loadingDescription="Updating User Password..." />
       {/* Page Content */}
       <div className="container">
         <div className="row">

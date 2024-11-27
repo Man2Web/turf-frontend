@@ -15,12 +15,20 @@ import LocationDataModal from "../modal/location-data-modal";
 const Header = () => {
   const routes = all_routes;
   const location = useLocation();
-  const { userLocation, setUserLocation } = useAppContext();
-  const [toggleMenu, setToggleMenu] = useState(false);
+  const { userLocation, setUserLocation, setIsMenuOpen } = useAppContext();
   const [toggleModal, setToggleModal] = useState(false);
   const superAdminLoggedIn = localStorage.getItem("superAdminToken");
   const adminLoggedIn = localStorage.getItem("adminToken");
   const userLoggedIn = localStorage.getItem("userToken");
+
+  const onHandleMobileMenu = () => {
+    const root = document.getElementsByTagName("html")[0];
+    root.classList.add("menu-opened");
+  };
+  const onhandleCloseMenu = () => {
+    const root = document.getElementsByTagName("html")[0];
+    root.classList.remove("menu-opened");
+  };
 
   useEffect(() => {
     if (userLocation) {
@@ -55,7 +63,8 @@ const Header = () => {
             <div className="navbar-header">
               <Link
                 onClick={() => {
-                  setToggleMenu((prev) => !prev);
+                  setIsMenuOpen(true);
+                  onHandleMobileMenu();
                 }}
                 id="mobile_btn"
                 to="#"
@@ -82,18 +91,24 @@ const Header = () => {
                 )}
               </Link>
             </div>
-            <div
-              className={`main-menu-wrapper ${toggleMenu ? "menu-opened" : ""}`}
-            >
+            <div className={`main-menu-wrapper`}>
               <div className="menu-header">
                 <Link to={routes.home} className="menu-logo">
                   <ImageWithBasePath
-                    src="assets/img/logo-black.svg"
+                    src="assets/img/logo-black.png"
                     className="img-fluid"
                     alt="Logo"
                   />
                 </Link>
-                <Link id="menu_close" className="menu-close" to="#">
+                <Link
+                  id="menu_close"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    onhandleCloseMenu();
+                  }}
+                  className="menu-close"
+                  to="#"
+                >
                   {" "}
                   <i className="fas fa-times" />
                 </Link>

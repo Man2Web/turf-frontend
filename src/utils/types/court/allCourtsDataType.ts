@@ -17,6 +17,20 @@ interface CourtPriceData {
   advance_pay: string;
 }
 
+interface CouponData {
+  amount: number; // The maximum discount amount (e.g., 100)
+  status: boolean; // Whether the coupon is active or not
+  admin_id: number; // ID of the admin who created the coupon
+  end_time: string; // The end time of the coupon validity in ISO string format
+  created_at: string; // The timestamp when the coupon was created, in ISO string format
+  min_amount: number; // Minimum amount required to use the coupon (e.g., 2000)
+  percentage: number; // Discount percentage (e.g., 10%)
+  start_time: string; // The start time of the coupon validity in ISO string format
+  coupon_code: string; // The code for the coupon (e.g., "GET10")
+  coupon_type: boolean; // Type of coupon, false indicating a specific type
+  coupon_label: string; // Descriptive label for the coupon
+}
+
 interface CourtDurationData {
   id: number;
   court_id: number;
@@ -50,5 +64,6 @@ interface CourtsData {
   availability: string[][];
   includes: string[];
   amenities: string[];
-  images: courtImagesData[]; // Use `courtImagesData[]`, but only image_url is needed
+  images: string[]; // Use `courtImagesData[]`, but only image_url is needed
+  coupon_data?: CouponData;
 }

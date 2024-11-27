@@ -89,3 +89,13 @@ export const loginSliderSettings = {
   slidesToShow: 1,
   slidesToScroll: 1,
 };
+
+export const gridCardSliderSettings = {
+  dots: false,
+  infinite: true,
+  autoplay: false,
+  arrows: false,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+};

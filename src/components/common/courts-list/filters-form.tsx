@@ -25,18 +25,13 @@ interface AdvancedSearchForm {
 
 export const FilterForm = ({
   setFiltersLoading,
-  setCourtsData,
   userLocation,
   setUserLocation,
-  limit,
   offset,
 }: {
   setFiltersLoading: any;
-  setCourtsData: any;
   userLocation: any;
   setUserLocation: any;
-
-  limit: number;
   offset: number;
 }) => {
   const { register, handleSubmit, watch, reset, control } =
@@ -77,7 +72,7 @@ export const FilterForm = ({
     try {
       setFiltersApplied(true);
       setFiltersLoading(true);
-      setCourtsData([]);
+      // setCourtsData([]);
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}court/fetch/all/${userLocation}`,
         {
@@ -94,7 +89,7 @@ export const FilterForm = ({
           },
         }
       );
-      setCourtsData(response.data.updatedCourtsData);
+      // setCourtsData(response.data.updatedCourtsData);
     } catch (error) {
       // console.error(error);
     } finally {

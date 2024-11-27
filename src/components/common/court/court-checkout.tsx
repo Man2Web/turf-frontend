@@ -8,6 +8,7 @@ import AdminDetailsComponent from "./admin-details-component";
 import BookingConfirmModal from "../modal/booking-confirm";
 import CheckOutForm from "./checkout-form";
 import { couponDiscount } from "../../../utils/court-utils/coupon-discount";
+import { useAppContext } from "../../../context/app-context";
 
 interface CheckoutForm {
   policy: boolean;
@@ -44,7 +45,7 @@ const CourtCheckout = ({
   } = useForm<CheckoutForm>({
     mode: "onTouched",
   });
-  const [loading, setLoading] = useState<boolean>(false);
+  const { setLoading } = useAppContext();
   const [isValid, setIsValid] = useState<boolean>();
   const [adminLoading, setAdminLoading] = useState<boolean>(false);
   const [toggleModal, setToggleModal] = useState<boolean>(false);
@@ -108,7 +109,7 @@ const CourtCheckout = ({
 
   const checkIfCourtIsAdminCourt = async (adminId: string) => {
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Adding Coupon..." });
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}admin/court/fetch/${adminId}/${courtData.court_id}`
       );
@@ -116,7 +117,7 @@ const CourtCheckout = ({
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "" });
     }
   };
 
@@ -149,7 +150,7 @@ const CourtCheckout = ({
     };
     if (policy && isValid) {
       try {
-        setLoading(true);
+        setLoading({ status: true, description: "Processing Booking..." });
         const response = await axios.post(
           `${process.env.REACT_APP_BACKEND_URL}payment`,
           updatedData
@@ -166,7 +167,7 @@ const CourtCheckout = ({
       } catch (error) {
         console.error("Error during payment:", error);
       } finally {
-        setLoading(false);
+        setLoading({ status: false, description: "" });
       }
     }
   };
@@ -260,7 +261,6 @@ const CourtCheckout = ({
                   register={register}
                   handleSubmit={handleSubmit}
                   errors={errors}
-                  loading={loading}
                   adminLoading={adminLoading}
                   trigger={trigger}
                   control={control}

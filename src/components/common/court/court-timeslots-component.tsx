@@ -101,6 +101,7 @@ const CourtTimeSlotsComponent = ({
               : true,
         });
       }
+      console.log(allTimeSlots);
       return allTimeSlots;
     };
     if (timeSlots?.start_time && timeSlots?.end_time && timeSlots?.duration) {
@@ -146,9 +147,7 @@ const CourtTimeSlotsComponent = ({
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}court/availability/${courtData.court_id}/${date}`
       );
-
       const bookedTimeSlots = response.data.bookedTimeSlots;
-
       if (
         bookedTimeSlots &&
         response.data.message === "Fetched the booked slots"
@@ -164,12 +163,20 @@ const CourtTimeSlotsComponent = ({
   // Update timeSlots based on booked slots
   useEffect(() => {
     if (bookedSlots.length > 0) {
-      setTimeSlots((prevTimeSlots) =>
-        prevTimeSlots.map((slot) => ({
-          ...slot,
-          isActive: !bookedSlots.includes(`${slot.time}:00`),
-          isBooked: bookedSlots.includes(`${slot.time}:00`),
-        }))
+      setTimeSlots((prevTimeSlots: any) =>
+        prevTimeSlots.map((slot: TimeSlotInterface) => {
+          if (bookedSlots.includes(`${slot.time}:00`)) {
+            return {
+              ...slot,
+              isActive: false, // Assuming the slot should not be active when booked
+              isBooked: true, // The slot is booked
+            };
+          } else {
+            return {
+              ...slot,
+            };
+          }
+        })
       );
     }
   }, [bookedSlots]);

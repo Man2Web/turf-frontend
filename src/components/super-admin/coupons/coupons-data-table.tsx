@@ -5,9 +5,10 @@ import axios from "axios";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "antd";
+import { useAppContext } from "../../../context/app-context";
 
 const CouponsDataTable: React.FC = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const { setLoading } = useAppContext();
   const [couponsData, setCouponsData] = useState<Coupon[]>([]);
   const adminId = localStorage.getItem("superAdminId");
 
@@ -17,7 +18,7 @@ const CouponsDataTable: React.FC = () => {
 
   const getAdminCouponsData = async () => {
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Fetching Coupons..." });
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}superadmin/coupon/${adminId}`
       );
@@ -27,7 +28,7 @@ const CouponsDataTable: React.FC = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "" });
     }
   };
 
@@ -116,24 +117,21 @@ const CouponsDataTable: React.FC = () => {
   return (
     <>
       <ToastContainer />
-      <Loader loader={loading} loadingDescription="Fetching Coupons..." />
-      {!loading && (
-        <div className="row">
-          <div className="card col-sm-12">
-            <DataTable stripedRows value={couponsData}>
-              {columns.map((column, index) => (
-                <Column
-                  key={index}
-                  field={column.field}
-                  header={column.header}
-                  body={column.body}
-                  sortable={column.sortable}
-                />
-              ))}
-            </DataTable>
-          </div>
+      <div className="row">
+        <div className="card col-sm-12">
+          <DataTable stripedRows value={couponsData}>
+            {columns.map((column, index) => (
+              <Column
+                key={index}
+                field={column.field}
+                header={column.header}
+                body={column.body}
+                sortable={column.sortable}
+              />
+            ))}
+          </DataTable>
         </div>
-      )}
+      </div>
     </>
   );
 };

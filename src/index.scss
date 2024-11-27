@@ -36,8 +36,10 @@ button.slick-prev:before {
   z-index: 1 !important;
 }
 
-.slick-slider {
-  padding: 0 25px !important;
+.booking-date {
+  .slick-slider {
+    padding: 0 25px !important;
+  }
 }
 
 .slick-arrow.slick-next {

@@ -6,13 +6,13 @@ import Loader from "../loader/Loader";
 
 export const UserProfileHeader = () => {
   const { setUserLocation } = useAppContext();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { setLoading } = useAppContext();
   const navigate = useNavigate();
   const routes = all_routes;
 
   const logout = () => {
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Logging Out..." });
       localStorage.clear();
       setUserLocation(null);
       setTimeout(() => {
@@ -21,7 +21,7 @@ export const UserProfileHeader = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "" });
     }
   };
 
@@ -37,7 +37,6 @@ export const UserProfileHeader = () => {
 
   return (
     <div className="dropdown dropdown-action table-drop-action btn btn-primary">
-      <Loader loader={loading} loadingDescription="Logging Out..." />
       <Link
         to="#"
         className="action-item dropdown-toggle"
