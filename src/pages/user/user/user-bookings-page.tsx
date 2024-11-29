@@ -19,6 +19,7 @@ import {
   LocationPin,
 } from "../../../utils/icons/icons";
 import { getIconsBySport } from "../../../utils/icons/getIconsBySport";
+import { useAppContext } from "../../../context/app-context";
 
 const UserBookingsPage = () => {
   const routes = all_routes;
@@ -29,12 +30,12 @@ const UserBookingsPage = () => {
   const [upcomingBooking, setUpcomingBooking] = useState<SuccessBookingData[]>(
     []
   );
-  const [loading, setLoading] = useState<boolean>(false);
   const [infiniteLoading, setInfiniteLoading] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
   const [adminSelected, setAdminSelected] = useState<SuccessBookingData>();
   const [totalPrevCount, setTotalPrevCount] = useState<number>(0);
   const [offset, setOffset] = useState<number>(0);
+  const { setLoading, loading } = useAppContext();
 
   const limit = 20;
 
@@ -105,8 +106,16 @@ const UserBookingsPage = () => {
   );
 
   useEffect(() => {
-    setLoading(true);
-    getBookingData().finally(() => setLoading(false)); // Initial load
+    setLoading({
+      status: true,
+      description: "Fetching User Bookings Data...",
+    });
+    getBookingData().finally(() => {
+      setLoading({
+        status: false,
+        description: "Fetching User Bookings Data...",
+      });
+    }); // Initial load
   }, []); // Only run on mount
 
   useEffect(() => {
@@ -143,10 +152,6 @@ const UserBookingsPage = () => {
     <div>
       {/* Dashboard Menu */}
       <UserMenuComponent />
-      <Loader
-        loader={loading}
-        loadingDescription="Fetching User Bookings Data..."
-      />
       {/* /Dashboard Menu */}
       {/* Page Content */}
       <div className="content court-bg">
@@ -172,90 +177,6 @@ const UserBookingsPage = () => {
                             const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${booking.admin_id}/${booking.court_info.court_id}/${booking.court_details.images[0]}`;
                             return (
                               <div key={idx} className="h-6 mb-4 px-2">
-                                {/* <div className="wrapper">
-                                  <div className="listing-item listing-item-grid">
-                                    <div className="listing-img">
-                                      <Link
-                                        to={`${routes.courtDetailsLink}/${booking.court_info.court_id}`}
-                                      >
-                                        <img
-                                          className="card-img-top"
-                                          src={imageUrl}
-                                          alt="court img"
-                                        />
-                                      </Link>
-                                      <div className="fav-item-venues">
-                                        {booking.court_info.featured && (
-                                          <span className="tag tag-blue">
-                                            Featured
-                                          </span>
-                                        )}
-                                        <h5 className="tag tag-primary">
-                                          ₹{decimalNumber(booking.pay_required)}
-                                        </h5>
-                                      </div>
-                                    </div>
-                                    <div className="listing-content">
-                                      <div className="list-reviews d-flex justify-content-between align-items-center">
-                                        <div className="d-flex align-items-center">
-                                          <h5 className="listing-title d-flex align-items-center m-0">
-                                            <Link
-                                              to={`${routes.courtDetailsLink}/${booking.court_info.court_id}`}
-                                            >
-                                              {booking.court_info.court_name}
-                                            </Link>
-                                          </h5>
-                                        </div>
-                                      </div>
-                                      <div className="listing-details-group">
-                                        <ul
-                                          style={{ fontWeight: "200" }}
-                                          className="listing-details-info"
-                                        >
-                                          <li className="mb-2">
-                                            <span>
-                                              <i>
-                                                {getIconBySport(
-                                                  booking.court_info.court_type
-                                                )}
-                                              </i>
-                                              {`${booking.court_info.court_type}`}
-                                            </span>
-                                            <span>
-                                              <i className="feather-clock" />
-                                              {`${dateFormat(booking.booking_date)}`}
-                                            </span>
-                                            <span>
-                                              <i className="feather-sun" />
-                                              {`${formatTime(booking.booking_time[0])} - ${formatTime(getSlotDurationInHrs(booking.booking_time[booking.booking_time.length - 1], Number(booking.duration)))}`}
-                                            </span>
-                                          </li>
-                                        </ul>
-                                      </div>
-                                      <div className="listing-button d-flex flex-column gap-2">
-                                        <Link
-                                          to={`${routes.courtDetailsLink}/${booking.court_info.court_id}/booking`}
-                                          className="user-book-now btn btn-primary text-white justify-content-center w-100"
-                                        >
-                                          <span>
-                                            <i className="feather-calendar me-2 text-white" />
-                                          </span>
-                                          Reschedule
-                                        </Link>
-                                        <button
-                                          onClick={() => {
-                                            setAdminSelected(booking);
-                                            setToggle(true);
-                                          }}
-                                          className="user-book-now btn btn-secondary text-white justify-content-center w-100"
-                                        >
-                                          <i className="feather-search me-2 text-white" />
-                                          View Details
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div> */}
                                 <Card
                                   hoverable
                                   actions={[
@@ -381,105 +302,6 @@ const UserBookingsPage = () => {
                                     key={index}
                                     className="col-lg-12 col-md-12 mb-2"
                                   >
-                                    {/* <div className="featured-venues-item venue-list-item">
-                                      <div className="listing-item listing-item-grid">
-                                        <div className="listing-img d-none d-md-block">
-                                          <Link
-                                            to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}`}
-                                          >
-                                            <img
-                                              style={{
-                                                height: "200px",
-                                                width: "360px",
-                                              }}
-                                              src={imageUrl}
-                                              alt="court img"
-                                            />
-                                          </Link>
-                                          <div className="fav-item-venues">
-                                            {bookingData.court_info
-                                              .featured && (
-                                              <span className="tag tag-blue">
-                                                Featured
-                                              </span>
-                                            )}
-                                            <h5 className="tag tag-primary">
-                                              ₹
-                                              {decimalNumber(
-                                                bookingData.amount_paid
-                                              )}
-                                            </h5>
-                                          </div>
-                                        </div>
-                                        <div className="listing-content">
-                                          <div className="d-flex justify-content-between align-items-center">
-                                            <h5 className="listing-title m-0">
-                                              <Link
-                                                to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}`}
-                                              >
-                                                {
-                                                  bookingData.court_info
-                                                    .court_name
-                                                }
-                                              </Link>
-                                            </h5>
-                                            <div className="list-reviews"></div>
-                                          </div>
-                                          <div
-                                            style={{ fontWeight: "200" }}
-                                            className="listing-details-group"
-                                          >
-                                            <ul
-                                              style={{ fontWeight: "200" }}
-                                              className="listing-details-info"
-                                            >
-                                              <li className="mb-2">
-                                                <span>
-                                                  <i>
-                                                    {getIconBySport(
-                                                      bookingData.court_info
-                                                        .court_type
-                                                    )}
-                                                  </i>
-                                                  {`${
-                                                    bookingData.court_info
-                                                      .court_type
-                                                  }`}
-                                                </span>
-                                                <span>
-                                                  <i className="feather-clock" />
-                                                  {`${dateFormat(bookingData.booked_on)}`}
-                                                </span>
-                                              </li>
-                                            </ul>
-                                          </div>
-                                          <div className="d-flex justify-content-end gap-2 flex-column flex-lg-row">
-                                            <Link
-                                              to={`${routes.courtDetailsLink}/${bookingData.court_info.court_id}/booking`}
-                                              className="user-book-now btn btn-primary text-white"
-                                            >
-                                              <span>
-                                                <i className="feather-calendar me-2 text-white" />
-                                              </span>
-                                              Book Again
-                                            </Link>
-                                            <Link
-                                              to="#"
-                                              onClick={() => {
-                                                setAdminSelected(bookingData);
-                                                setToggle(true);
-                                              }}
-                                              className="user-book-now btn btn-secondary text-white"
-                                            >
-                                              <span>
-                                                <i className="feather-search me-2 text-white" />
-                                              </span>
-                                              View Details
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div> */}
                                     <List
                                       className="shadow-sm hover-shadow-lg rounded"
                                       itemLayout="horizontal"

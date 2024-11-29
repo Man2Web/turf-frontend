@@ -47,7 +47,7 @@ const AdminProfileForm: React.FC = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading({ status: false, description: "" });
+      setLoading({ status: false, description: "Fetching User Data..." });
     }
   };
 
@@ -59,7 +59,7 @@ const AdminProfileForm: React.FC = () => {
 
   const onSubmit = async (data: AdminProfileFormInputs) => {
     try {
-      setLoading({ status: true, description: "Fetching User Data..." });
+      setLoading({ status: true, description: "Updating User Data..." });
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}user/update/${adminId}`,
         data
@@ -73,7 +73,7 @@ const AdminProfileForm: React.FC = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading({ status: false, description: "" });
+      setLoading({ status: false, description: "Updating User Data..." });
     }
   };
 

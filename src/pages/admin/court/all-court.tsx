@@ -8,18 +8,19 @@ import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../../components/common/loader/Loader";
 import AdminMenuComponent from "../../../components/admin/profile/adminMenu";
 import { Badge } from "primereact/badge";
+import { useAppContext } from "../../../context/app-context";
 
 const AllCourt = () => {
   const routes = all_routes;
   const navigate = useNavigate();
   const [courtsData, setCourtsData] = useState<CourtsData[]>([]);
   const [searchInput, setSearchInput] = useState("");
-  const [loading, setLoading] = useState(true);
   const adminId = localStorage.getItem("adminId");
-
+  const { setLoading } = useAppContext();
   useEffect(() => {
     const apiCall = async () => {
       try {
+        setLoading({ status: true, description: "Fetching Courts Data..." });
         const response = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}admin/court/fetch/${adminId}`
         );
@@ -28,7 +29,7 @@ const AllCourt = () => {
         // console.error("Error fetching courts data:", error);
         toast.error("Failed to load courts data.");
       } finally {
-        setLoading(false);
+        setLoading({ status: false, description: "Fetching Courts Data..." });
       }
     };
 
@@ -174,7 +175,6 @@ const AllCourt = () => {
   return (
     <div>
       <ToastContainer />
-      <Loader loader={loading} loadingDescription="Fetching Courts Data..." />
       {/* Dashboard Menu */}
       <div className="dashboard-section coach-dash-section mb-10">
         <div className="container">

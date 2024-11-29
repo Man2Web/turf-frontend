@@ -42,7 +42,7 @@ const ChangePasswordComponent = () => {
       toast.error("Please check the credentials and try again");
       // console.error(error);
     } finally {
-      setLoading({ status: false, description: "" });
+      setLoading({ status: false, description: "Updating User Password..." });
     } // Handle password update logic here
   };
 

@@ -32,7 +32,7 @@ const PaymentSettingsForm = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading({ status: false, description: "" });
+      setLoading({ status: false, description: "Adding Coupon..." });
     }
   };
 
@@ -56,7 +56,7 @@ const PaymentSettingsForm = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading({ status: false, description: "" });
+      setLoading({ status: false, description: "Adding Coupon..." });
     }
     // Handle form submission logic here
   };

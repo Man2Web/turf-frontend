@@ -10,12 +10,13 @@ import { formatEndTime } from "../utils/commin-utils/formatEndTime";
 import Loader from "../components/common/loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
 import { Modal } from "antd";
+import { useAppContext } from "../context/app-context";
 
 const BookingSuccess = () => {
   const routes = all_routes;
   const { t_id } = useParams();
   const [bookingData, setBookingData] = useState<SuccessBookingData>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { loading, setLoading } = useAppContext();
 
   const getBookingData = async (id: string) => {
     const response = await axios.get(
@@ -48,7 +49,7 @@ const BookingSuccess = () => {
 
   const getPdf = async (transaction_id: string | undefined) => {
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Fetching Booking Data..." });
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}booking/download/${transaction_id}`,
         {
@@ -60,14 +61,13 @@ const BookingSuccess = () => {
     } catch (error) {
       toast.error("Error getting PDF");
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "Fetching Booking Data..." });
     }
   };
 
   return (
     <>
       <ToastContainer />
-      <Loader loader={loading} loadingDescription="Fetching Booking Data..." />
       {bookingData && (
         <div
           style={{ maxWidth: "80%" }}

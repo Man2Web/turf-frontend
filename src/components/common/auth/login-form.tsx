@@ -43,7 +43,7 @@ const LoginFormComponent = () => {
       toast.error(error.response?.data?.message || "An error occurred");
       // console.error("Error posting data:", error);
     } finally {
-      setLoading({ status: false, description: "" });
+      setLoading({ status: false, description: "Logging In..." });
     }
   };
 

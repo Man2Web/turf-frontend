@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
 import { Dropdown } from "primereact/dropdown";
-import Loader from "../../../components/common/loader/Loader";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FilterForm } from "../../../components/common/courts-list/filters-form";
@@ -26,93 +25,27 @@ const ListingList = () => {
   const [userWishlist, setUserWishlist] = useState<string[]>([]);
   const [offset, setOffset] = useState<number>(0);
   const [filtersLoading, setFiltersLoading] = useState(false);
+  const [filteringOptions, setFilteringOptions] =
+    useState<AdvancedSearchForm>();
   const userId =
     localStorage.getItem("adminId") || localStorage.getItem("userId");
   const { sportType } = useParams();
   const { userLocation, setUserLocation, setLoading } = useAppContext();
-
-  useEffect(() => {
-    if (userLocation) {
-      // SubmitHandler();
-    }
-  }, [offset, userWishlist]);
-
   useEffect(() => {
     if (userId) {
       getUserWishList();
     }
-    // setCourtsData((prevData) => {
-    //   const sortedData = [...prevData];
-    //   const sortOption = selectedSort.name;
-    //   if (sortOption === "Price Low - High") {
-    //     sortedData.sort(
-    //       (a: CourtsData, b: CourtsData) =>
-    //         Number(a.pricing.starting_price) - Number(b.pricing.starting_price)
-    //     );
-    //     // (sortedData);
-    //   } else if (sortOption === "Price High - Low") {
-    //     sortedData.sort(
-    //       (a: CourtsData, b: CourtsData) =>
-    //         Number(b.pricing.starting_price) - Number(a.pricing.starting_price)
-    //     );
-    //   } else if (sortOption === "Featured") {
-    //     sortedData.sort((a: CourtsData, b: CourtsData) =>
-    //       b.featured === true ? 1 : -1
-    //     );
-    //   }
-    //   return sortedData;
-    // });
   }, [selectedSort]);
-
-  // const SubmitHandler = async () => {
-  //   userLocation && setUserLocation(userLocation);
-
-  //   try {
-  //     setLoading(true);
-  //     setPageLoading(true);
-  //     // Fetch all courts based on user location
-  //     const response = await axios.get(
-  //       `${process.env.REACT_APP_BACKEND_URL}court/fetch/all/${userLocation}`,
-  //       {
-  //         params: {
-  //           limit,
-  //           offset,
-  //           sportType: sportType || null,
-  //         },
-  //       }
-  //     );
-  //     setCourtsData((prevData) => {
-  //       const combinedData = [...prevData, ...response.data.updatedCourtsData];
-
-  //       // Create a map to store courts by their unique `id`
-  //       const courtsMap = new Map();
-  //       combinedData.forEach((court) => courtsMap.set(court.court_id, court));
-
-  //       // Return only unique courts based on their `id`
-  //       return Array.from(courtsMap.values());
-  //     });
-
-  //     setPaginationData(response.data.pagination);
-  //     setLastPage(response.data.pagination.totalCount / limit);
-
-  //     // Filter the courtsData to remove duplicates based on court.id
-  //     const uniqueCourtsData = response.data.updatedCourtsData.filter(
-  //       (court: any, index: number, self: any[]) =>
-  //         index === self.findIndex((c) => c.id === court.id) // Keep only the first occurrence of each court.id
-  //     );
-  //     setuniqueCourtsData(uniqueCourtsData);
-  //   } catch (error) {
-  //     // console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //     setPageLoading(false);
-  //   }
-  // };
-
   const { courtsData, totalCount } = fetchCourtsByLocation(
     userLocation,
-    offset
+    offset,
+    filteringOptions,
+    selectedSort
   );
+
+  useEffect(() => {
+    setOffset(0);
+  }, [filteringOptions]);
 
   const observerTarget = useRef(null);
   useEffect(() => {
@@ -254,11 +187,10 @@ const ListingList = () => {
                   {/* Form */}
                   {showFilters && (
                     <FilterForm
-                      setFiltersLoading={setFiltersLoading}
-                      // setCourtsData={setCourtsData}
+                      filteringOptions={filteringOptions}
+                      setFilteringOptions={setFilteringOptions}
                       userLocation={userLocation}
                       setUserLocation={setUserLocation}
-                      offset={offset}
                     />
                   )}
                   <div className={`${showFilters ? "col-lg-8" : "col-lg-12"}`}>
@@ -300,7 +232,7 @@ const ListingList = () => {
 
                       {/* If not courts found show this */}
                       {courtsData.length === 0 && !filtersLoading && (
-                        <h1>No Data found</h1>
+                        <h1>No Courts Found</h1>
                       )}
                     </div>
                   </div>

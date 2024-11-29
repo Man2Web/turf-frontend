@@ -1,14 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { nanoid } from "nanoid";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
 import UserDetailsComponent from "./user-details-component";
 import AdminDetailsComponent from "./admin-details-component";
 import BookingConfirmModal from "../modal/booking-confirm";
 import CheckOutForm from "./checkout-form";
-import { couponDiscount } from "../../../utils/court-utils/coupon-discount";
 import { useAppContext } from "../../../context/app-context";
+import { getCourtPrice } from "../../../utils/court-utils/payment/getCourtPrice";
+import { useBookingContext } from "../../../context/booking-context";
 
 interface CheckoutForm {
   policy: boolean;
@@ -17,23 +16,7 @@ interface CheckoutForm {
   userDetailsForm: any;
 }
 
-const CourtCheckout = ({
-  courtData,
-  userDetails,
-  selectedDate,
-  selectedSlots,
-  courtId,
-  setUserDetails,
-  courtDuration,
-}: {
-  courtData: CourtsData;
-  userDetails: any;
-  selectedDate: any;
-  selectedSlots: any;
-  setUserDetails: any;
-  courtId: any;
-  courtDuration: any;
-}) => {
+const CourtCheckout = ({ courtData }: { courtData: CourtsData }) => {
   const {
     register,
     handleSubmit,
@@ -46,66 +29,30 @@ const CourtCheckout = ({
     mode: "onTouched",
   });
   const { setLoading } = useAppContext();
-  const [isValid, setIsValid] = useState<boolean>();
-  const [adminLoading, setAdminLoading] = useState<boolean>(false);
-  const [toggleModal, setToggleModal] = useState<boolean>(false);
-  const [isCourtAdmin, setIsCourtAdmin] = useState<boolean>(false);
-  const [adminBookingData, setAdminBookingData] =
-    useState<SuccessBookingData>();
-  const [userSelectedCoupon, setUserSelectedCoupon] = useState<Coupon>();
+  const {
+    toggleModal,
+    adminBookingData,
+    setIsCourtAdmin,
+    isCourtAdmin,
+    userSelectedCoupon,
+    selectedSlots,
+    userDetails,
+    setPolicy,
+    setDataConfirmation,
+  } = useBookingContext();
 
   const policy = watch("policy");
   const dataConfirmation = watch("dataConfirmation");
+  useEffect(() => {
+    setPolicy(policy);
+    setDataConfirmation(dataConfirmation);
+  }, [policy, dataConfirmation]);
 
   useEffect(() => {
-    getCourtPrice();
-  }, [userSelectedCoupon]);
-
-  const getCourtPrice = () => {
-    const gstCharge = Number(process.env.REACT_APP_GST_CHARGE) || 0; // Assume this is a percentage like 18 for 18%
-    const baseFee = Number(process.env.REACT_APP_BASE_FEE) || 0; // Ensure base fee defaults to 0 if not set
-    const additionalUserCharge =
-      (Number(userDetails?.additionalNumberOfGuests) || 0) *
-      (Number(courtData?.pricing?.price_of_additional_guests) || 0);
-    const startingPrice = Number(courtData.pricing.starting_price) || 0;
-    const selectedSlotCount = selectedSlots.length || 0;
-
-    const totalPriceWithoutGST =
-      startingPrice * selectedSlotCount + additionalUserCharge;
-
-    // Calculate GST and base amount
-    const gstAmount = (gstCharge / 100) * totalPriceWithoutGST;
-    const baseAmount = (baseFee / 100) * startingPrice * selectedSlotCount;
-
-    let totalPrice: number;
-    let discountedPrice: number;
-
-    // Calculate the total price
     if (userSelectedCoupon) {
-      const result = couponDiscount(
-        totalPriceWithoutGST + gstAmount + baseAmount,
-        userSelectedCoupon
-      );
-      totalPrice = result.totalPrice;
-      discountedPrice = result.discountedPrice;
-    } else {
-      totalPrice = totalPriceWithoutGST + gstAmount + baseAmount;
-      discountedPrice = 0;
+      getCourtPrice(userDetails, courtData, selectedSlots, userSelectedCoupon);
     }
-
-    // Calculate advance amount
-    const advanceAmount =
-      (Number(courtData.pricing.advance_pay) / 100) * totalPrice;
-
-    return {
-      gstAmount,
-      baseAmount,
-      additionalUserCharge,
-      totalPrice,
-      advanceAmount,
-      discountedPrice,
-    };
-  };
+  }, [userSelectedCoupon]);
 
   const checkIfCourtIsAdminCourt = async (adminId: string) => {
     try {
@@ -117,7 +64,7 @@ const CourtCheckout = ({
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading({ status: false, description: "" });
+      setLoading({ status: false, description: "Adding Coupon..." });
     }
   };
 
@@ -128,99 +75,8 @@ const CourtCheckout = ({
     }
   }, []);
 
-  const { totalPrice, advanceAmount } = getCourtPrice();
-
-  // Function to handle API call for default payment method
-  const onlinePay = async () => {
-    const updatedData = {
-      amount: advanceAmount,
-      amountTobePaid: Number(Math.round(totalPrice - advanceAmount)),
-      courtDuration: courtDuration,
-      MID: nanoid(10),
-      transactionId: nanoid(10),
-      userDetails,
-      selectedDate,
-      selectedSlots,
-      courtId,
-      user_id:
-        localStorage.getItem("adminId") ||
-        localStorage.getItem("userId") ||
-        null,
-      dataConfirmation,
-    };
-    if (policy && isValid) {
-      try {
-        setLoading({ status: true, description: "Processing Booking..." });
-        const response = await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}payment`,
-          updatedData
-        );
-
-        const redirectUrl =
-          response.data?.data?.instrumentResponse?.redirectInfo?.url;
-
-        if (redirectUrl) {
-          window.location.href = redirectUrl;
-        } else {
-          toast.error("Error booking slot");
-        }
-      } catch (error) {
-        console.error("Error during payment:", error);
-      } finally {
-        setLoading({ status: false, description: "" });
-      }
-    }
-  };
-
-  // Function to handle API call for CASH payment method
-  const onCashPayment = async () => {
-    const cashData = {
-      courtDuration: courtDuration,
-      amount: totalPrice,
-      paymentMethod: "CASH",
-      transactionId: nanoid(10),
-      userDetails,
-      selectedDate,
-      selectedSlots,
-      courtId,
-      user_id:
-        localStorage.getItem("adminId") ||
-        localStorage.getItem("userId") ||
-        null,
-    };
-    if (policy && isValid) {
-      try {
-        setAdminLoading(true);
-        const response = await axios.post(
-          `${process.env.REACT_APP_BACKEND_URL}payment/admin`,
-          cashData
-        );
-        if (response.status === 200) {
-          const transaction_id = response.data.transaction_id;
-
-          try {
-            const response = await axios.get(
-              `${process.env.REACT_APP_BACKEND_URL}booking/get/${transaction_id}`
-            );
-            setAdminBookingData(response.data);
-          } catch (error) {
-            // console.error(error);
-          }
-          setToggleModal(true);
-        } else {
-          toast.error("Error processing cash booking.");
-        }
-      } catch (error) {
-        // console.error("Error during CASH payment:", error);
-        toast.error("Error processing cash booking.");
-      } finally {
-        setAdminLoading(false);
-      }
-    }
-  };
   return (
     <div>
-      <ToastContainer />
       {toggleModal && (
         <BookingConfirmModal
           toggleModal={toggleModal}
@@ -235,39 +91,22 @@ const CourtCheckout = ({
               {/* Form Data collection */}
               <div className="col-12 col-lg-8">
                 {isCourtAdmin ? (
-                  <AdminDetailsComponent
-                    setIsValid={setIsValid}
-                    courtData={courtData}
-                    setUserDetails={setUserDetails}
-                  />
+                  <AdminDetailsComponent courtData={courtData} />
                 ) : (
-                  <UserDetailsComponent
-                    setIsValid={setIsValid}
-                    courtData={courtData}
-                    setUserDetails={setUserDetails}
-                  />
+                  <UserDetailsComponent courtData={courtData} />
                 )}
               </div>
               <div className="col-12 col-lg-4">
                 {/* Original CheckOut */}
                 <CheckOutForm
                   courtData={courtData}
-                  selectedSlots={selectedSlots}
-                  userDetails={userDetails}
-                  isCourtAdmin={isCourtAdmin}
-                  getCourtPrice={getCourtPrice}
-                  onlinePay={onlinePay}
-                  onCashPayment={onCashPayment}
                   register={register}
                   handleSubmit={handleSubmit}
                   errors={errors}
-                  adminLoading={adminLoading}
                   trigger={trigger}
                   control={control}
                   policy={policy}
                   setValue={setValue}
-                  setUserSelectedCoupon={setUserSelectedCoupon}
-                  userSelectedCoupon={userSelectedCoupon}
                 />
               </div>
             </div>

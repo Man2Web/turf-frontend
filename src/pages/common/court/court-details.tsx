@@ -8,22 +8,19 @@ import axios from "axios";
 import { all_routes } from "../../../router/all_routes";
 import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
 import { toast, ToastContainer } from "react-toastify";
-import Loader from "../../../components/common/loader/Loader";
-import { weekNames } from "../../../utils/data-list/weekNames";
 import BulkBookingModal from "../../../components/common/modal/bulk-booking-modal";
-import { getTimeSlotDuration } from "../../../utils/court-utils/getOperationalHours";
 import { HeartFilledIcon, HeartIcon } from "../../../utils/icons/icons";
 import { getCourtDuration } from "../../../utils/court-utils/getCourtDuration";
 import { formatTime } from "../../../utils/commin-utils/formatTime";
+import { useAppContext } from "../../../context/app-context";
 
 const CourtDetails = () => {
   const routes = all_routes;
   const { courtId } = useParams();
-  const [loading, setLoading] = useState<boolean>(false);
   const [images, setImages] = useState<any>([]);
   const [courtData, setCourtData] = useState<CourtsData>();
   const [userWishlist, setUserWishlist] = useState<string[]>([]);
-
+  const { setLoading } = useAppContext();
   const userId = useMemo(
     () => localStorage.getItem("adminId") || localStorage.getItem("userId"),
     []
@@ -50,7 +47,10 @@ const CourtDetails = () => {
   // Fetch court information when courtId changes
   useEffect(() => {
     const getCourtInfo = async (courtId: any) => {
-      setLoading(true); // Move setLoading inside the fetch
+      setLoading({
+        status: true,
+        description: "Fetching Court Data...",
+      });
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}court/fetch/${courtId}`
@@ -73,7 +73,10 @@ const CourtDetails = () => {
       } catch (error) {
         // console.error("Error fetching court info", error);
       } finally {
-        setLoading(false);
+        setLoading({
+          status: true,
+          description: "Fetching Court Data...",
+        });
       }
     };
 
@@ -178,7 +181,6 @@ const CourtDetails = () => {
     <div>
       <ToastContainer />
       <BulkBookingModal />
-      <Loader loader={loading} loadingDescription="Fetching Court Data..." />
       {courtData && (
         <div>
           {/*Galler Slider Section*/}

@@ -2,60 +2,32 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Dropdown } from "primereact/dropdown";
 import { Controller, useForm } from "react-hook-form";
-import axios from "axios";
 import { sportValues } from "../../../utils/data-list/sportsData";
 import { citiesList } from "../../../utils/data-list/citiesList";
 
-interface AdvancedSearchForm {
-  courtName: string; // for the court name input
-  minPrice?: string; // for the minimum price input (optional)
-  maxPrice?: string; // for the maximum price input (optional)
-  userLocation: string; // for the selected location
-  minGuest: string;
-  maxGuest: string;
-  sportType: string;
-  amenities: {
-    parking: boolean; // for the parking checkbox
-    drinkingWater: boolean; // for the drinking water checkbox
-    firstAid: boolean; // for the first aid checkbox
-    changeRoom: boolean; // for the change room checkbox
-    shower: boolean; // for the shower checkbox
-  };
-}
-
 export const FilterForm = ({
-  setFiltersLoading,
+  filteringOptions,
+  setFilteringOptions,
   userLocation,
   setUserLocation,
-  offset,
 }: {
-  setFiltersLoading: any;
+  filteringOptions: AdvancedSearchForm | undefined;
+  setFilteringOptions: any;
   userLocation: any;
   setUserLocation: any;
-  offset: number;
 }) => {
-  const { register, handleSubmit, watch, reset, control } =
+  const { register, handleSubmit, reset, control } =
     useForm<AdvancedSearchForm>();
   const [locations, setLocations] = useState<string[]>([]);
-  const [filtersApplied, setFiltersApplied] = useState<boolean>(false);
   const [updatedUserLocation, setUpdatedUserLocation] = useState(
     localStorage.getItem("userLocation")
   );
 
-  let courtName = watch("courtName");
-  const minPrice = watch("minPrice");
-  const maxPrice = watch("maxPrice");
-  const minGuest = watch("minGuest");
-  const maxGuest = watch("maxGuest");
-  const amenities = watch("amenities");
-  const sportType = watch("sportType");
-
-  const getCitiesData = async () => {
-    const data = await citiesList();
-    setLocations(data);
-  };
-
   useEffect(() => {
+    const getCitiesData = async () => {
+      const data = await citiesList();
+      setLocations(data);
+    };
     getCitiesData();
   }, []);
 
@@ -66,35 +38,8 @@ export const FilterForm = ({
     }
   }, [updatedUserLocation]);
 
-  courtName = courtName?.toLowerCase().trim();
-
   const onSubmit = async (data: AdvancedSearchForm) => {
-    try {
-      setFiltersApplied(true);
-      setFiltersLoading(true);
-      // setCourtsData([]);
-      const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}court/fetch/all/${userLocation}`,
-        {
-          params: {
-            courtName,
-            limit,
-            offset,
-            minPrice,
-            maxPrice,
-            minGuest,
-            maxGuest,
-            sportType,
-            amenities: JSON.stringify(amenities), // Convert to string if needed
-          },
-        }
-      );
-      // setCourtsData(response.data.updatedCourtsData);
-    } catch (error) {
-      // console.error(error);
-    } finally {
-      setFiltersLoading(false);
-    }
+    setFilteringOptions(data);
   };
 
   return (
@@ -110,16 +55,16 @@ export const FilterForm = ({
             {/* Name */}
             <div className="sidebar-heading">
               <h3>Filters</h3>
-              {filtersApplied && (
+              {filteringOptions && (
                 <p>
                   <Link
                     onClick={() => {
-                      setFiltersApplied(false);
                       reset();
+                      setFilteringOptions();
                     }}
                     to="#"
                   >
-                    Clear All
+                    Clear Filters
                   </Link>
                 </p>
               )}

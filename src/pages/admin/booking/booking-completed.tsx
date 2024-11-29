@@ -9,6 +9,7 @@ import { dateFormat } from "../../../utils/commin-utils/dateFormat";
 import { formatTime } from "../../../utils/commin-utils/formatTime";
 import { formatEndTime } from "../../../utils/commin-utils/formatEndTime";
 import BookingConfirmModal from "../../../components/common/modal/booking-confirm";
+import { useAppContext } from "../../../context/app-context";
 
 interface countData {
   todaysBookingsCount: string;
@@ -26,7 +27,6 @@ const BookingCompleted = () => {
     []
   );
   const [currentData, setCurrentData] = useState<SuccessBookingData[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
   const [dataToggle, setDataToggle] = useState<number>(1);
   const [adminSelected, setAdminSelected] = useState<SuccessBookingData>();
@@ -37,6 +37,7 @@ const BookingCompleted = () => {
   });
   const [countData, setCountData] = useState<countData>();
   const [searchInput, setSearchInput] = useState("");
+  const { loading, setLoading } = useAppContext();
 
   const limit = 18;
 
@@ -107,7 +108,7 @@ const BookingCompleted = () => {
       limit,
     };
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Fetching Bookings Data..." });
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}admin/booking/${adminId}`,
         { params: data }
@@ -161,7 +162,7 @@ const BookingCompleted = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading(false);
+      setLoading({ status: true, description: "Fetching Booking Data..." });
     }
   }, [adminId, bookingDataOffsets, limit, dataToggle]);
 
@@ -184,10 +185,6 @@ const BookingCompleted = () => {
       <>
         {/* Dashboard Menu */}
         <AdminMenuComponent />
-        <Loader
-          loader={loading}
-          loadingDescription="Fetching Bookings Data..."
-        />
         {/* /Dashboard Menu */}
         {/* Page Content */}
         <div className="content court-bg">

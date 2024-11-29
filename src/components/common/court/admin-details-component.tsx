@@ -1,19 +1,12 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { UserDetailsFormData } from "../../../utils/types/user/userDetailsBookingForm";
 import { AdminDetailsFormData } from "../../../utils/types/admin/adminDetailsBookingForm";
 import { updateGuestCount } from "../../../utils/commin-utils/updateGuestCount";
+import { useBookingContext } from "../../../context/booking-context";
 
-const AdminDetailsComponent = ({
-  courtData,
-  setUserDetails,
-  setIsValid,
-}: {
-  setUserDetails: (data: AdminDetailsFormData) => void;
-  courtData: CourtsData;
-  setIsValid: any;
-}) => {
+const AdminDetailsComponent = ({ courtData }: { courtData: CourtsData }) => {
+  const { setUserDetails, setIsValid } = useBookingContext();
   const {
     register,
     trigger,

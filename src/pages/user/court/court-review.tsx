@@ -6,14 +6,13 @@ import { toast, ToastContainer } from "react-toastify";
 import { useForm } from "react-hook-form";
 import Loader from "../../../components/common/loader/Loader";
 import { Card, Flex, Rate } from "antd";
+import { useAppContext } from "../../../context/app-context";
 
 const CourtReview = () => {
-  const routes = all_routes;
   const { courtId, transaction_id, booking_details_id } = useParams();
-  const [loading, setLoading] = useState<boolean>(false);
   const [courtData, setCourtData] = useState<CourtsData>();
   const [reviewData, setReviewData] = useState<any>();
-
+  const { setLoading, loading } = useAppContext();
   const {
     register,
     handleSubmit,
@@ -31,7 +30,10 @@ const CourtReview = () => {
     };
 
     try {
-      setLoading(true);
+      setLoading({
+        status: true,
+        description: "Adding Review...",
+      });
       if (reviewData) {
         // Update existing review
         const response = await axios.put(
@@ -56,7 +58,10 @@ const CourtReview = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading(false);
+      setLoading({
+        status: false,
+        description: "Adding Review...",
+      });
     }
   };
 
@@ -66,7 +71,10 @@ const CourtReview = () => {
   );
 
   const getCourtInfo = async (courtId: string) => {
-    setLoading(true);
+    setLoading({
+      status: true,
+      description: "Fetching Court Data...",
+    });
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}court/fetch/${courtId}`
@@ -76,12 +84,18 @@ const CourtReview = () => {
     } catch (error) {
       // console.error("Error fetching court info", error);
     } finally {
-      setLoading(false);
+      setLoading({
+        status: false,
+        description: "Fetching Court Data...",
+      });
     }
   };
 
   const getReviewData = async (courtId: string, transaction_id: string) => {
-    setLoading(true);
+    setLoading({
+      status: true,
+      description: "Fetching Reviews Data...",
+    });
     try {
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}user/review/${courtId}/${transaction_id}`
@@ -94,7 +108,10 @@ const CourtReview = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading(false);
+      setLoading({
+        status: false,
+        description: "Fetching Reviews Data...",
+      });
     }
   };
 
@@ -110,7 +127,6 @@ const CourtReview = () => {
   return (
     <div className="d-flex justify-content-center">
       <ToastContainer />
-      <Loader loader={loading} loadingDescription="Fetching Review Data..." />
       {!loading && (
         <div className="col-lg-4 col-md-12 mb-2 px-6 d-flex flex-column align-content-center">
           <h1>{reviewData ? "Update" : "Create"} Review</h1>

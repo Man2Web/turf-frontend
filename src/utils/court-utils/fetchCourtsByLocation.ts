@@ -1,19 +1,29 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAppContext } from "../../context/app-context";
+import { sortCourts } from "./sortCourts";
 
 export const fetchCourtsByLocation = (
   userLocation: string | null,
-  offset: number
+  offset: number,
+  filteringOptions?: AdvancedSearchForm,
+  sortOption?: string
 ) => {
   const { setLoading } = useAppContext();
   const [courtsData, setCourtsData] = useState<CourtsData[]>([]);
   const [totalCount, setTotalCount] = useState<number>();
   const limit = 20;
   useEffect(() => {
+    if (filteringOptions) {
+      setCourtsData([]);
+    }
     getCourtsData();
-  }, [userLocation, offset]);
-
+  }, [userLocation, offset, filteringOptions]);
+  useEffect(() => {
+    setCourtsData([]);
+  }, [userLocation]);
+  // Here we need to decide if the sort needs to work here or in the fetching part of the api call.
+  // sortCourts(sortOption, courtsData, setCourtsData);
   const getCourtsData = async () => {
     try {
       setLoading({ status: true, description: "Fetching Courts Data..." });
@@ -23,9 +33,11 @@ export const fetchCourtsByLocation = (
           params: {
             limit,
             offset,
+            ...filteringOptions,
           },
         }
       );
+      console.log(response.data);
       setTotalCount(response.data.pagination.totalCount);
       setCourtsData((prevData) => [
         ...prevData,

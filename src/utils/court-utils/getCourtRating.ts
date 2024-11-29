@@ -22,7 +22,7 @@ export const useCourtRatings = (courtId: string) => {
         console.error("Error fetching court ratings:", error);
         setReviewsData({ total_rating: 0, total_reviews: 0 }); // Fallback values
       } finally {
-        setLoading({ status: false, description: "" });
+        setLoading({ status: false, description: "Fetching court ratings..." });
       }
     };
 

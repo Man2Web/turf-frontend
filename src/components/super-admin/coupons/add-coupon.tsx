@@ -88,7 +88,7 @@ const AddCoupon = () => {
         toast.error("Something went wrong!");
       }
     } finally {
-      setLoading({ status: false, description: "" });
+      setLoading({ status: false, description: "Adding Coupon..." });
     }
   };
 

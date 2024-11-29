@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import Loader from "../../common/loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
+import { useAppContext } from "../../../context/app-context";
 
 const UserProfileForm: React.FC = () => {
   const {
@@ -11,13 +12,12 @@ const UserProfileForm: React.FC = () => {
     formState: { errors },
     reset,
   } = useForm<UserProfileFormInputs>();
-  const [loading, setLoading] = useState<boolean>(false);
-
+  const { loading, setLoading } = useAppContext();
   const userId = localStorage.getItem("userId");
 
   const getAdminDetails = async () => {
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Fetching Courts Data..." });
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}user/get/${userId}`
       );
@@ -36,7 +36,7 @@ const UserProfileForm: React.FC = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "Fetching Courts Data..." });
     }
   };
 
@@ -48,7 +48,7 @@ const UserProfileForm: React.FC = () => {
 
   const onSubmit = async (data: UserProfileFormInputs) => {
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Fetching Courts Data..." });
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}user/update/${userId}`,
         data
@@ -62,14 +62,13 @@ const UserProfileForm: React.FC = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "Fetching Courts Data..." });
     }
   };
 
   return (
     <>
       <ToastContainer />
-      <Loader loader={loading} loadingDescription="Fetching User Details..." />
       {!loading && (
         <div className="row">
           <div className="col-sm-12">

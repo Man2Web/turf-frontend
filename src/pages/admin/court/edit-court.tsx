@@ -17,6 +17,7 @@ import AmenitiesDetails from "../../../components/admin/form/amenitiesDetails";
 import GalleryDetails from "../../../components/admin/form/galleyDetails";
 import LocationDetails from "../../../components/admin/form/locationDetails";
 import moment from "moment";
+import { useAppContext } from "../../../context/app-context";
 
 const daysOfWeek = [
   { id: 1, label: "Mon" },
@@ -55,7 +56,6 @@ const EditCourt = () => {
   } = useForm<CourtFormDataType>();
 
   const [courtData, setCourtData] = useState<CourtsData>();
-  const [loading, setLoading] = useState(false);
   const [images, setImages] = useState<any>([]);
   const [deletedImages, setDeletedImages] = useState<string[]>([]);
   // State to store calculated time slots for each day
@@ -83,6 +83,7 @@ const EditCourt = () => {
   const [selectedDays, setSelectedDays] = useState(
     Array(daysOfWeek.length).fill(false)
   );
+  const { setLoading } = useAppContext();
 
   // useEffect to recalculate time slots whenever selectedHours changes
   useEffect(() => {
@@ -253,6 +254,7 @@ const EditCourt = () => {
     }
 
     try {
+      setLoading({ status: true, description: "Fetching Courts Data..." });
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}court/edit/${adminId}/${courtId}`,
         formData,
@@ -271,7 +273,7 @@ const EditCourt = () => {
       toast.error("Failed to update court");
       // console.error("Error updating court:", error);
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "Fetching Courts Data..." });
     }
   };
 
@@ -312,7 +314,6 @@ const EditCourt = () => {
   return (
     <div>
       <ToastContainer />
-      <Loader loader={loading} loadingDescription="Fetching Court Data..." />
       {/* Page Content */}
       <div className="content">
         <div className="container">

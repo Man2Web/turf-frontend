@@ -14,17 +14,12 @@ import LocationDataModal from "../../components/common/modal/location-data-modal
 import { Card } from "antd";
 import { courtOptions } from "../../utils/court-utils/courtOptions";
 import { getIconsBySport } from "../../utils/icons/getIconsBySport";
-import GridCard from "../../components/common/courts-list/grid-card";
-import Loader from "../../components/common/loader/Loader";
-import { fetchCourtsByLocation } from "../../utils/court-utils/fetchCourtsByLocation";
-import InfiniteLoadComponent from "../../components/common/courts-list/infinite-load";
 import FetchCourts from "../../components/common/home/fetch-courts";
 import RatedCourts from "../../components/common/home/rated-courts";
 
 const HomePage = () => {
   const routes = all_routes;
   const [citiesData, setCitiesData] = useState<string[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const { userLocation, setUserLocation } = useAppContext();
   const settings = {
     dots: false,
@@ -47,7 +42,6 @@ const HomePage = () => {
   return (
     <main className="main-homepage">
       {!userLocation && <LocationDataModal />}
-      <Loader loader={loading} loadingDescription="Fetching Courts Data..." />
       <section className="hero-section">
         <div className="container">
           <div className="home-banner">

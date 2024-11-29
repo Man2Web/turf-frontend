@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../components/common/loader/Loader";
+import { useAppContext } from "../../context/app-context";
 
 interface ResetForm {
   email: string;
@@ -17,12 +18,14 @@ const ForgotPassword = () => {
     register,
     formState: { errors },
   } = useForm<ResetForm>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { setLoading } = useAppContext();
   const routes = all_routes;
-
   const onSubmit = async (data: ResetForm) => {
     try {
-      setLoading(true);
+      setLoading({
+        status: true,
+        description: "Sending Update Password Link...",
+      });
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}user/forgot/${data.email}`
       );
@@ -46,17 +49,16 @@ const ForgotPassword = () => {
         toast.error("An unexpected error occurred.");
       }
     } finally {
-      setLoading(false);
+      setLoading({
+        status: false,
+        description: "Sending Update Password Link...",
+      });
     }
   };
 
   return (
     <div className="main-wrapper authendication-pages">
       <ToastContainer />
-      <Loader
-        loader={loading}
-        loadingDescription="Sending Update Password Link..."
-      />
       <div className="content blur-ellipses">
         <div className="container">
           <div className="row">

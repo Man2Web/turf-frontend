@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import Loader from "../../components/common/loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
+import { useAppContext } from "../../context/app-context";
 
 interface ResetPassword {
   newPassword: string;
@@ -21,8 +22,8 @@ const ChangePassword = () => {
     watch,
     formState: { errors },
   } = useForm<ResetPassword>();
-  const [loading, setLoading] = useState<boolean>(false);
   const [status, setStatus] = useState<boolean | null>(null);
+  const { setLoading } = useAppContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const ChangePassword = () => {
 
   const onSubmit = async (data: ResetPassword) => {
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Updating User Password..." });
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}user/password/reset`,
         {
@@ -77,14 +78,13 @@ const ChangePassword = () => {
         }
       }
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "Updating User Password..." });
     }
   };
 
   return (
     <div className="main-wrapper authendication-pages">
       <ToastContainer />
-      <Loader loader={loading} loadingDescription="Updating User Password..." />
       {/* Page Content */}
       <div className="content blur-ellipses login-password">
         <div className="container">

@@ -10,19 +10,18 @@ import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
 import { toast, ToastContainer } from "react-toastify";
 import Loader from "../../../components/common/loader/Loader";
 import { formatTime } from "../../../utils/commin-utils/formatTime";
-import { weekNames } from "../../../utils/data-list/weekNames";
 import BulkBookingModal from "../../../components/common/modal/bulk-booking-modal";
-import { getTimeSlotDuration } from "../../../utils/court-utils/getOperationalHours";
 import { HeartFilledIcon, HeartIcon } from "../../../utils/icons/icons";
 import { getCourtDuration } from "../../../utils/court-utils/getCourtDuration";
+import { useAppContext } from "../../../context/app-context";
 
 const ViewCourt = () => {
   const routes = all_routes;
   const { courtId } = useParams();
-  const [loading, setLoading] = useState<boolean>(false);
   const [images, setImages] = useState<any>([]);
   const [courtData, setCourtData] = useState<CourtsData>();
   const [userWishlist, setUserWishlist] = useState<string[]>([]);
+  const { setLoading } = useAppContext();
 
   const userId = useMemo(
     () =>
@@ -53,7 +52,10 @@ const ViewCourt = () => {
   // Fetch court information when courtId changes
   useEffect(() => {
     const getCourtInfo = async (courtId: any) => {
-      setLoading(true); // Move setLoading inside the fetch
+      setLoading({
+        status: true,
+        description: "Fetching Court Data...",
+      });
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}superAdmin/fetch/${courtId}`
@@ -70,7 +72,10 @@ const ViewCourt = () => {
       } catch (error) {
         // console.error("Error fetching court info", error);
       } finally {
-        setLoading(false);
+        setLoading({
+          status: true,
+          description: "Fetching Court Data...",
+        });
       }
     };
 
@@ -148,7 +153,6 @@ const ViewCourt = () => {
     <div>
       <ToastContainer />
       <BulkBookingModal />
-      <Loader loader={loading} loadingDescription="Fetching Court Data..." />
       {courtData && (
         <div>
           {/*Galler Slider Section*/}

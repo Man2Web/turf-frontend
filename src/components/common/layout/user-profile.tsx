@@ -21,7 +21,7 @@ export const UserProfileHeader = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading({ status: false, description: "" });
+      setLoading({ status: false, description: "Logging Out..." });
     }
   };
 

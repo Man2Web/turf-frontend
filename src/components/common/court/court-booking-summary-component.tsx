@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
 import { RupeeIcon } from "../../../utils/icons/icons";
+import { useBookingContext } from "../../../context/booking-context";
 
 const CourtBookingSummaryComponent = ({
-  progress,
-  setProgress,
-  slots,
   totalPrice,
-  courtDuration,
 }: {
-  progress: number;
-  setProgress: any;
-  slots: string[]; // Array of slot objects
   totalPrice: number;
-  courtDuration: string;
 }) => {
+  const { progress, selectedSlots, courtDuration, setProgress } =
+    useBookingContext();
   const [slotsError, setSlotsError] = useState<boolean>(false);
   return (
     <aside className="card booking-details">
@@ -22,7 +17,7 @@ const CourtBookingSummaryComponent = ({
       <ul>
         <li>
           <i className="feather-clock me-2" />
-          Total Hours : {Number(courtDuration) * slots.length} Hrs
+          Total Hours : {Number(courtDuration) * selectedSlots.length} Hrs
         </li>
         <li>
           <i className="text-success me-2">
@@ -34,7 +29,9 @@ const CourtBookingSummaryComponent = ({
       {progress === 0 && (
         <button
           onClick={() => {
-            slots && slots.length !== 0 ? setProgress(1) : setSlotsError(true);
+            selectedSlots && selectedSlots.length !== 0
+              ? setProgress(1)
+              : setSlotsError(true);
           }}
           className="btn btn-primary"
         >

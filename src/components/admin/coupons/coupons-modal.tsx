@@ -3,24 +3,24 @@ import React from "react";
 
 const CouponsModal = ({
   totalPrice,
-  toggleModal,
-  setToggleModal,
+  couponsModal,
+  setCouponsModal,
   couponsData,
   addCoupon,
 }: {
   totalPrice: number;
-  toggleModal: boolean;
-  setToggleModal: (data: boolean) => void;
+  couponsModal: boolean;
+  setCouponsModal: (data: boolean) => void;
   couponsData: Coupon[];
   addCoupon: (value: string) => void;
 }) => {
   return (
     <Modal
       title="Available Coupons"
-      open={toggleModal}
+      open={couponsModal}
       centered={true}
       footer={null}
-      onCancel={() => setToggleModal(false)}
+      onCancel={() => setCouponsModal(false)}
     >
       {couponsData.map((coupon, index) => (
         <Card
@@ -33,7 +33,7 @@ const CouponsModal = ({
               onClick={() => {
                 if (totalPrice >= Number(coupon.min_amount)) {
                   addCoupon(coupon.coupon_code);
-                  setToggleModal(false);
+                  setCouponsModal(false);
                 }
               }}
               color="primary"

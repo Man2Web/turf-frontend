@@ -73,7 +73,7 @@ const AddCoupon = () => {
     } catch (error) {
       toast.error("Can not get admin courts data please try again later");
     } finally {
-      setLoading({ status: false, description: "" });
+      setLoading({ status: false, description: "Adding Coupon..." });
     }
   };
 
@@ -113,7 +113,7 @@ const AddCoupon = () => {
         toast.error("Something went wrong!");
       }
     } finally {
-      setLoading({ status: false, description: "" });
+      setLoading({ status: false, description: "Adding Coupon..." });
     }
   };
 

@@ -6,6 +6,7 @@ import Loader from "../../common/loader/Loader";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { Badge } from "primereact/badge";
+import { useAppContext } from "../../../context/app-context";
 
 type Court = {
   courts: {
@@ -23,16 +24,15 @@ type Court = {
 
 const CourtsDataComponent = () => {
   const [dataToggle, setDataToggle] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(false);
   const [currentData, setCurrentData] = useState<Court[]>();
-
+  const { loading, setLoading } = useAppContext();
   useEffect(() => {
     getCourtsData();
   }, [dataToggle]);
 
   const getCourtsData = async () => {
     try {
-      setLoading(true);
+      setLoading({ status: true, description: "Fetching Courts Data..." });
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}superadmin/courts`
       );
@@ -43,7 +43,7 @@ const CourtsDataComponent = () => {
       toast.error("Error fetching courts data");
       // console.error(error);
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "Fetching Courts Data..." });
     }
   };
 
@@ -75,7 +75,6 @@ const CourtsDataComponent = () => {
   return (
     <div>
       <ToastContainer />
-      <Loader loader={loading} loadingDescription="Fetching Courts Data..." />
       <div className="content court-bg">
         <div className="container">
           {/* Sort By */}

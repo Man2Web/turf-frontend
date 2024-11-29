@@ -5,59 +5,59 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { Collapse, Input } from "antd";
 import CouponsModal from "../../admin/coupons/coupons-modal";
-import Loader from "../loader/Loader";
 import { all_routes } from "../../../router/all_routes";
+import { getCourtPrice } from "../../../utils/court-utils/payment/getCourtPrice";
+import { useBookingContext } from "../../../context/booking-context";
+import { onCashPayment } from "../../../utils/court-utils/payment/offlinePay";
+import { onlinePay } from "../../../utils/court-utils/payment/onlinePay";
+import { useAppContext } from "../../../context/app-context";
 
-interface CourtPrice {
-  gstAmount: number;
-  baseAmount: number;
-  additionalUserCharge: number;
-  totalPrice: number;
-  advanceAmount: number;
-  discountedPrice: number;
-}
+// interface CourtPrice {
+//   gstAmount: number;
+//   baseAmount: number;
+//   additionalUserCharge: number;
+//   totalPrice: number;
+//   advanceAmount: number;
+//   discountedPrice: number;
+// }
 
 const CheckOutForm = ({
   courtData,
-  selectedSlots,
-  userDetails,
-  isCourtAdmin,
   register,
   handleSubmit,
-  getCourtPrice,
   errors,
   trigger,
   policy,
-  adminLoading,
-  onCashPayment,
-  onlinePay,
   control,
   setValue,
-  setUserSelectedCoupon,
-  userSelectedCoupon,
 }: {
   courtData: CourtsData;
-  selectedSlots: any;
-  userDetails: any;
-  isCourtAdmin: boolean;
   register: any;
   handleSubmit: any;
-  getCourtPrice: () => CourtPrice;
   errors: any;
   trigger: any;
   policy: boolean;
-  adminLoading: boolean;
-  onCashPayment: () => void;
-  onlinePay: () => void;
   control: any;
   setValue: any;
-  setUserSelectedCoupon: (data: Coupon) => void;
-  userSelectedCoupon: Coupon | undefined;
 }) => {
   const [courtCoupons, setcourtCoupons] = useState<Coupon[]>([]);
   const [couponError, setCouponError] = useState<string>();
-  const [toggleModal, setToggleModal] = useState<boolean>(false);
+  const [couponsModal, setCouponsModal] = useState<boolean>(false);
+  const { setLoading } = useAppContext();
   const { Search } = Input;
+  const {
+    userDetails,
+    selectedSlots,
+    userSelectedCoupon,
+    isCourtAdmin,
+    setUserSelectedCoupon,
+    courtDuration,
+    selectedDate,
+    isValid,
+    dataConfirmation,
+    setAdminBookingData,
+    setToggleModal,
+  } = useBookingContext();
   const {
     gstAmount,
     baseAmount,
@@ -65,7 +65,7 @@ const CheckOutForm = ({
     totalPrice,
     advanceAmount,
     discountedPrice,
-  } = getCourtPrice();
+  } = getCourtPrice(userDetails, courtData, selectedSlots, userSelectedCoupon);
   useEffect(() => {
     getCoupons();
   }, [courtData]);
@@ -180,7 +180,7 @@ const CheckOutForm = ({
               <h6>Coupons</h6>
               <Link
                 to="#"
-                onClick={() => setToggleModal(true)}
+                onClick={() => setCouponsModal(true)}
                 className="text-success"
                 style={{ fontSize: "12px" }}
               >
@@ -210,8 +210,8 @@ const CheckOutForm = ({
               />
               <CouponsModal
                 totalPrice={totalPrice}
-                toggleModal={toggleModal}
-                setToggleModal={setToggleModal}
+                couponsModal={couponsModal}
+                setCouponsModal={setCouponsModal}
                 couponsData={courtCoupons}
                 addCoupon={addCoupon}
               />
@@ -305,7 +305,20 @@ const CheckOutForm = ({
               <button
                 type="submit"
                 onClick={() => {
-                  !policy ? trigger("policy") : onCashPayment();
+                  !policy
+                    ? trigger("policy")
+                    : onCashPayment(
+                        courtData,
+                        setLoading,
+                        userDetails,
+                        selectedSlots,
+                        courtDuration,
+                        selectedDate,
+                        isValid,
+                        policy,
+                        setAdminBookingData,
+                        setToggleModal
+                      );
                 }}
                 form="admin-form"
                 className="mb-2 btn btn-primary"
@@ -317,7 +330,19 @@ const CheckOutForm = ({
               <button
                 type="submit"
                 onClick={() => {
-                  !policy ? trigger("policy") : onlinePay();
+                  !policy
+                    ? trigger("policy")
+                    : onlinePay(
+                        courtData,
+                        setLoading,
+                        userDetails,
+                        selectedSlots,
+                        courtDuration,
+                        selectedDate,
+                        isValid,
+                        policy,
+                        dataConfirmation
+                      );
                 }}
                 form="user-form"
                 className="mb-2 btn btn-primary"

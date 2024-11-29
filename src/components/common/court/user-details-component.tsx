@@ -8,16 +8,10 @@ import { countriesList } from "../../../utils/data-list/countriesList";
 import { updateGuestCount } from "../../../utils/commin-utils/updateGuestCount";
 import { autoFillFormData } from "../../user/form/auto-fill-form";
 import UserAutofillForm from "../booking-page/user-autofill-form";
+import { useBookingContext } from "../../../context/booking-context";
 
-const UserDetailsComponent = ({
-  courtData,
-  setUserDetails,
-  setIsValid,
-}: {
-  setUserDetails: (data: UserDetailsFormData) => void;
-  courtData: CourtsData;
-  setIsValid: any;
-}) => {
+const UserDetailsComponent = ({ courtData }: { courtData: CourtsData }) => {
+  const { setUserDetails, setIsValid } = useBookingContext();
   const {
     register,
     trigger,

@@ -16,6 +16,7 @@ import RulesDetails from "../../../components/admin/form/rulesDetails";
 import AmenitiesDetails from "../../../components/admin/form/amenitiesDetails";
 import GalleryDetails from "../../../components/admin/form/galleyDetails";
 import LocationDetails from "../../../components/admin/form/locationDetails";
+import { useAppContext } from "../../../context/app-context";
 
 const AddCourt = () => {
   const {
@@ -26,9 +27,6 @@ const AddCourt = () => {
     formState: { errors },
   } = useForm<CourtFormDataType>();
   const navigate = useNavigate();
-
-  const [loading, setLoading] = useState(false);
-
   const [images, setImages] = useState<any>([]);
   const [rules, setRules] = useState<string[]>([]);
   const [includes, setIncludes] = useState<string[]>([]);
@@ -52,16 +50,14 @@ const AddCourt = () => {
     saturday: [],
     sunday: [],
   });
+  const { setLoading } = useAppContext();
+
   const onSubmit = async (data: CourtFormDataType) => {
     const userId = localStorage.getItem("adminId");
-    // setLoading(true);
-
     if (data.location && data.location.city) {
       data.location.city = data.location.city.toLowerCase().trim();
     }
-
     const formData = new FormData();
-
     // Append images to FormData
     images.forEach(async (image: { file: string | Blob }) => {
       formData.append("files", image.file);
@@ -84,6 +80,7 @@ const AddCourt = () => {
     }
 
     try {
+      setLoading({ status: true, description: "Fetching Court Data..." });
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}court/add`,
         formData,
@@ -96,7 +93,7 @@ const AddCourt = () => {
       toast.error("Failed to add court");
       // console.error(error);
     } finally {
-      setLoading(false);
+      setLoading({ status: false, description: "Fetching Court Data..." });
     }
 
     // Optionally reset form or navigate
@@ -143,7 +140,6 @@ const AddCourt = () => {
   return (
     <div>
       <ToastContainer />
-      <Loader loader={loading} loadingDescription="Fetching Court Data..." />
       {/* Page Content */}
       <div className="content">
         <div className="container">

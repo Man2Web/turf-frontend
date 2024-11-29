@@ -28,7 +28,7 @@ const CouponsDataTable: React.FC = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading({ status: false, description: "" });
+      setLoading({ status: false, description: "Fetching Coupons..." });
     }
   };
 

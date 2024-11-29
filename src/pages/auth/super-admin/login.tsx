@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
 import Loader from "../../../components/common/loader/Loader";
+import { useAppContext } from "../../../context/app-context";
 
 const SuperAdminLoginFormComponent = () => {
   const navigate = useNavigate();
@@ -15,11 +16,13 @@ const SuperAdminLoginFormComponent = () => {
     formState: { errors },
   } = useForm();
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState<boolean>(false);
-
+  const { setLoading } = useAppContext();
   const onSubmit = async (data: any) => {
     try {
-      setLoading(true);
+      setLoading({
+        status: true,
+        description: "Logging In...",
+      });
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}superadmin/auth`, // Assuming you updated the backend route
         data
@@ -39,13 +42,15 @@ const SuperAdminLoginFormComponent = () => {
       toast.error(error.response?.data?.message || "An error occurred");
       // console.error("Error posting data:", error);
     } finally {
-      setLoading(false);
+      setLoading({
+        status: false,
+        description: "Logging In...",
+      });
     }
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100">
-      <Loader loader={loading} loadingDescription="Logging In..." />
       <form
         className="w-50 d-flex flex-column gap-4"
         onSubmit={handleSubmit(onSubmit)}

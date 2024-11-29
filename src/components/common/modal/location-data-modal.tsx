@@ -61,7 +61,7 @@ const LocationDataModal = ({
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading({ status: false, description: "" });
+      setLoading({ status: false, description: "Fetching User Location..." });
     }
   };
 
@@ -93,7 +93,7 @@ const LocationDataModal = ({
       // console.error(error);
       toast.error("Error fetching user location");
     } finally {
-      setLoading({ status: false, description: "" });
+      setLoading({ status: false, description: "Fetching User Location..." });
     }
   };
 
