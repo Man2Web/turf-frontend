@@ -14,7 +14,7 @@ const UserMenuComponent = () => {
           <div className="col-lg-12">
             <div className="dashboard-menu coaurt-menu-dash">
               <ul>
-                <li>
+                {/* <li>
                   <Link
                     to={routes.userDashboard}
                     className={
@@ -27,7 +27,7 @@ const UserMenuComponent = () => {
                     />
                     <span>Dashboard</span>
                   </Link>
-                </li>
+                </li> */}
                 <li>
                   <Link
                     to={routes.userBookingsPage}

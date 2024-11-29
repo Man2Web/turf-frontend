@@ -35,6 +35,16 @@ export const UserProfileHeader = () => {
     }
   };
 
+  const bookingsPage = () => {
+    if (localStorage.getItem("userId")) {
+      return routes.userBookingsPage;
+    } else if (localStorage.getItem("adminId")) {
+      return routes.bookingCompleted;
+    } else {
+      return routes.SuperAdminDashboard;
+    }
+  };
+
   return (
     <div className="dropdown dropdown-action table-drop-action btn btn-primary">
       <Link
@@ -49,6 +59,10 @@ export const UserProfileHeader = () => {
         <Link className="dropdown-item" to={profilePage()}>
           <i className="feather-user-x" />
           Profile
+        </Link>
+        <Link className="dropdown-item" to={bookingsPage()}>
+          <i className="feather-calendar" />
+          Bookings
         </Link>
         <Link
           className="dropdown-item"

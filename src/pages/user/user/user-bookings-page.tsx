@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
-import axios from "axios";
-import Loader from "../../../components/common/loader/Loader";
 import { dateFormat } from "../../../utils/commin-utils/dateFormat";
 import UserMenuComponent from "../../../components/user/profile/userMenu";
 import { formatTime } from "../../../utils/commin-utils/formatTime";
@@ -20,131 +18,40 @@ import {
 } from "../../../utils/icons/icons";
 import { getIconsBySport } from "../../../utils/icons/getIconsBySport";
 import { useAppContext } from "../../../context/app-context";
+import { fetchUserBookings } from "../../../utils/user-utils/fetchUserBookings";
 
 const UserBookingsPage = () => {
   const routes = all_routes;
   const userId = localStorage.getItem("userId");
-  const [previousBooking, setPreviousBooking] = useState<SuccessBookingData[]>(
-    []
-  );
-  const [upcomingBooking, setUpcomingBooking] = useState<SuccessBookingData[]>(
-    []
-  );
-  const [infiniteLoading, setInfiniteLoading] = useState<boolean>(false);
   const [toggle, setToggle] = useState<boolean>(false);
   const [adminSelected, setAdminSelected] = useState<SuccessBookingData>();
-  const [totalPrevCount, setTotalPrevCount] = useState<number>(0);
   const [offset, setOffset] = useState<number>(0);
-  const { setLoading, loading } = useAppContext();
+  const { loading } = useAppContext();
+  const observerTarget = useRef(null);
 
-  const limit = 20;
-
-  // Reference for the element that will trigger the loading when it appears in view
-  const loadMoreRef = useRef(null);
-
-  const getBookingData = async () => {
-    const filterNewBookings = (
-      prevData: SuccessBookingData[],
-      newData: SuccessBookingData[],
-      upcoming: boolean
-    ) => {
-      if (!upcoming) {
-        return newData.filter(
-          (newBooking) =>
-            !prevData.some(
-              (prevBooking) =>
-                prevBooking.transaction_id === newBooking.transaction_id
-            )
-        );
-      } else {
-        return newData.filter(
-          (newBooking) =>
-            !prevData.some(
-              (prevBooking) =>
-                prevBooking.transaction_id === newBooking.transaction_id
-            )
-        );
-      }
-    };
-    try {
-      setInfiniteLoading(true);
-      const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}user/booking/${userId}`,
-        {
-          params: {
-            limit: limit,
-            offset: offset,
-          },
+  const { previousBooking, upcomingBooking, totalPrevCount } =
+    fetchUserBookings(userId, offset);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (
+          entries[0].isIntersecting &&
+          previousBooking.length < Number(totalPrevCount)
+        ) {
+          setOffset((prevData) => prevData + 20);
         }
-      );
-      if (response.data.upcomingBookings) {
-        setUpcomingBooking(response.data.upcomingBookings);
-      }
-      if (response.data.previousBookings) {
-        setPreviousBooking((prevData) => [
-          ...prevData,
-          ...filterNewBookings(prevData, response.data.previousBookings, false),
-        ]);
-        setTotalPrevCount(Number(response.data.totalCount)); // Convert totalCount to number
-      }
-    } catch (error) {
-      // console.error(error);
-    } finally {
-      setInfiniteLoading(false);
+      },
+      { threshold: 0.5 }
+    );
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
     }
-  };
-
-  // Intersection Observer callback
-  const handleObserver = useCallback(
-    (entries: any[]) => {
-      const target = entries[0];
-      if (target.isIntersecting && previousBooking.length < totalPrevCount) {
-        setOffset((prevOffset) => prevOffset + limit); // Load more data when the target is in view
-      }
-    },
-    [previousBooking.length, totalPrevCount, limit]
-  );
-
-  useEffect(() => {
-    setLoading({
-      status: true,
-      description: "Fetching User Bookings Data...",
-    });
-    getBookingData().finally(() => {
-      setLoading({
-        status: false,
-        description: "Fetching User Bookings Data...",
-      });
-    }); // Initial load
-  }, []); // Only run on mount
-
-  useEffect(() => {
-    if (offset > 0) {
-      getBookingData(); // Fetch more data when offset changes
-    }
-  }, [offset]); // Fetch more when offset changes
-
-  // Setup Intersection Observer
-  useEffect(() => {
-    const observer = new IntersectionObserver(handleObserver, {
-      root: null, // Observe the entire viewport
-      rootMargin: "200px", // Load data 200px before reaching the element
-      threshold: 1.0, // Trigger when the element is fully in view
-    });
-
-    const currentLoadMoreRef = loadMoreRef.current;
-
-    if (currentLoadMoreRef) {
-      observer.observe(currentLoadMoreRef); // Start observing the target element
-    }
-
     return () => {
-      if (currentLoadMoreRef) {
-        observer.unobserve(currentLoadMoreRef); // Stop observing on unmount
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
       }
     };
-  }, [handleObserver]);
-
+  }, [observerTarget, totalPrevCount, previousBooking]);
   const userBookingsSliderData = getUserBookingSliderData(
     upcomingBooking.length
   );
@@ -293,7 +200,7 @@ const UserBookingsPage = () => {
                         tabIndex={0}
                       >
                         <div className="table-responsive">
-                          {!loading && previousBooking.length !== 0 ? (
+                          {previousBooking.length > 0 ? (
                             previousBooking.map(
                               (bookingData: SuccessBookingData, index) => {
                                 const imageUrl = `${process.env.REACT_APP_BACKEND_URL}court/uploads/${bookingData.admin_id}/${bookingData.court_info.court_id}/${bookingData.court_details.images[0]}`;
@@ -440,9 +347,7 @@ const UserBookingsPage = () => {
                       </div>
                     </div>
                   </div>
-                  <div ref={loadMoreRef}>
-                    {infiniteLoading && <p>Loading more bookings...</p>}
-                  </div>
+                  <div ref={observerTarget} />
                 </div>
               </div>
             </div>

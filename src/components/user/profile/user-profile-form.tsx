@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import Loader from "../../common/loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
 import { useAppContext } from "../../../context/app-context";
 
@@ -12,12 +11,12 @@ const UserProfileForm: React.FC = () => {
     formState: { errors },
     reset,
   } = useForm<UserProfileFormInputs>();
-  const { loading, setLoading } = useAppContext();
+  const { setLoading } = useAppContext();
   const userId = localStorage.getItem("userId");
 
   const getAdminDetails = async () => {
     try {
-      setLoading({ status: true, description: "Fetching Courts Data..." });
+      setLoading({ status: true, description: "Fetching User Data..." });
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}user/get/${userId}`
       );
@@ -36,7 +35,7 @@ const UserProfileForm: React.FC = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading({ status: false, description: "Fetching Courts Data..." });
+      setLoading({ status: false, description: "Fetching User Data..." });
     }
   };
 
@@ -48,7 +47,7 @@ const UserProfileForm: React.FC = () => {
 
   const onSubmit = async (data: UserProfileFormInputs) => {
     try {
-      setLoading({ status: true, description: "Fetching Courts Data..." });
+      setLoading({ status: true, description: "Updating User Data..." });
       const response = await axios.put(
         `${process.env.REACT_APP_BACKEND_URL}user/update/${userId}`,
         data
@@ -62,202 +61,194 @@ const UserProfileForm: React.FC = () => {
     } catch (error) {
       // console.error(error);
     } finally {
-      setLoading({ status: false, description: "Fetching Courts Data..." });
+      setLoading({ status: false, description: "Updating User Data..." });
     }
   };
 
   return (
     <>
       <ToastContainer />
-      {!loading && (
-        <div className="row">
-          <div className="col-sm-12">
-            <div className="profile-detail-group">
-              <div className="card">
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div className="row">
-                    <div className="col-lg-4 col-md-6">
-                      <div className="input-space">
-                        <label htmlFor="name" className="form-label">
-                          Name
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="name"
-                          placeholder="Enter Name"
-                          {...register("name", {
-                            required: "Name is required",
-                          })}
-                        />
-                        {errors.name && (
-                          <p className="text-danger">{errors.name.message}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="col-lg-4 col-md-6">
-                      <div className="input-space">
-                        <label htmlFor="email" className="form-label">
-                          Email
-                        </label>
-                        <input
-                          type="email"
-                          className="form-control"
-                          id="email"
-                          placeholder="Enter Email Address"
-                          {...register("email", {
-                            required: "Email is required",
-                            pattern: {
-                              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                              message: "Invalid email address",
-                            },
-                          })}
-                        />
-                        {errors.email && (
-                          <p className="text-danger">{errors.email.message}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="col-lg-4 col-md-6">
-                      <div className="input-space">
-                        <label htmlFor="phone" className="form-label">
-                          Phone Number
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="phone"
-                          placeholder="Enter Phone Number"
-                          {...register("phone", {
-                            required: "Phone number is required",
-                          })}
-                        />
-                        {errors.phone && (
-                          <p className="text-danger">{errors.phone.message}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="address-form-head">
-                      <h4>Address</h4>
-                    </div>
-
-                    <div className="col-lg-12 col-md-12">
-                      <div className="input-space">
-                        <label htmlFor="address" className="form-label">
-                          Address
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="address"
-                          placeholder="Enter Address"
-                          {...register("address")}
-                        />
-                        {errors.address && (
-                          <p className="text-danger">
-                            {errors.address.message}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="col-lg-4 col-md-6">
-                      <div className="input-space">
-                        <label htmlFor="state" className="form-label">
-                          State
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="state"
-                          placeholder="Enter State"
-                          {...register("state")}
-                        />
-                        {errors.state && (
-                          <p className="text-danger">{errors.state.message}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="col-lg-4 col-md-6">
-                      <div className="input-space">
-                        <label htmlFor="city" className="form-label">
-                          City
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="city"
-                          placeholder="Enter City"
-                          {...register("city")}
-                        />
-                        {errors.city && (
-                          <p className="text-danger">{errors.city.message}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="col-lg-4 col-md-4">
-                      <div className="input-space">
-                        <label htmlFor="country" className="form-label">
-                          Country
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="country"
-                          placeholder="Enter Country"
-                          {...register("country")}
-                        />
-                        {errors.country && (
-                          <p className="text-danger">
-                            {errors.country.message}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="col-lg-4 col-md-6">
-                      <div className="input-space mb-0">
-                        <label htmlFor="pincode" className="form-label">
-                          Pincode
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="pincode"
-                          placeholder="Enter Zipcode"
-                          {...register("zipcode")}
-                        />
-                        {errors.zipcode && (
-                          <p className="text-danger">
-                            {errors.zipcode.message}
-                          </p>
-                        )}
-                      </div>
+      <div className="row">
+        <div className="col-sm-12">
+          <div className="profile-detail-group">
+            <div className="card">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div className="row">
+                  <div className="col-lg-4 col-md-6">
+                    <div className="input-space">
+                      <label htmlFor="name" className="form-label">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="name"
+                        placeholder="Enter Name"
+                        {...register("name", {
+                          required: "Name is required",
+                        })}
+                      />
+                      {errors.name && (
+                        <p className="text-danger">{errors.name.message}</p>
+                      )}
                     </div>
                   </div>
-                  <div className="save-changes text-end mt-3">
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={() => reset()}
-                    >
-                      Cancel
-                    </button>
-                    <button type="submit" className="btn btn-secondary ms-2">
-                      Update
-                    </button>
+
+                  <div className="col-lg-4 col-md-6">
+                    <div className="input-space">
+                      <label htmlFor="email" className="form-label">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        id="email"
+                        placeholder="Enter Email Address"
+                        {...register("email", {
+                          required: "Email is required",
+                          pattern: {
+                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            message: "Invalid email address",
+                          },
+                        })}
+                      />
+                      {errors.email && (
+                        <p className="text-danger">{errors.email.message}</p>
+                      )}
+                    </div>
                   </div>
-                </form>
-              </div>
+
+                  <div className="col-lg-4 col-md-6">
+                    <div className="input-space">
+                      <label htmlFor="phone" className="form-label">
+                        Phone Number
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="phone"
+                        placeholder="Enter Phone Number"
+                        {...register("phone", {
+                          required: "Phone number is required",
+                        })}
+                      />
+                      {errors.phone && (
+                        <p className="text-danger">{errors.phone.message}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="address-form-head">
+                    <h4>Address</h4>
+                  </div>
+
+                  <div className="col-lg-12 col-md-12">
+                    <div className="input-space">
+                      <label htmlFor="address" className="form-label">
+                        Address
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="address"
+                        placeholder="Enter Address"
+                        {...register("address")}
+                      />
+                      {errors.address && (
+                        <p className="text-danger">{errors.address.message}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="col-lg-4 col-md-6">
+                    <div className="input-space">
+                      <label htmlFor="state" className="form-label">
+                        State
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="state"
+                        placeholder="Enter State"
+                        {...register("state")}
+                      />
+                      {errors.state && (
+                        <p className="text-danger">{errors.state.message}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="col-lg-4 col-md-6">
+                    <div className="input-space">
+                      <label htmlFor="city" className="form-label">
+                        City
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="city"
+                        placeholder="Enter City"
+                        {...register("city")}
+                      />
+                      {errors.city && (
+                        <p className="text-danger">{errors.city.message}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="col-lg-4 col-md-4">
+                    <div className="input-space">
+                      <label htmlFor="country" className="form-label">
+                        Country
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="country"
+                        placeholder="Enter Country"
+                        {...register("country")}
+                      />
+                      {errors.country && (
+                        <p className="text-danger">{errors.country.message}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="col-lg-4 col-md-6">
+                    <div className="input-space mb-0">
+                      <label htmlFor="pincode" className="form-label">
+                        Pincode
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="pincode"
+                        placeholder="Enter Zipcode"
+                        {...register("zipcode")}
+                      />
+                      {errors.zipcode && (
+                        <p className="text-danger">{errors.zipcode.message}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="save-changes text-end mt-3">
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => reset()}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn btn-secondary ms-2">
+                    Update
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 };

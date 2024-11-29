@@ -7,7 +7,8 @@ export const fetchCourtsByLocation = (
   userLocation: string | null,
   offset: number,
   filteringOptions?: AdvancedSearchForm,
-  sortOption?: string
+  sortOption?: string,
+  sportType?: string | undefined
 ) => {
   const { setLoading } = useAppContext();
   const [courtsData, setCourtsData] = useState<CourtsData[]>([]);
@@ -34,6 +35,7 @@ export const fetchCourtsByLocation = (
             limit,
             offset,
             ...filteringOptions,
+            sportType: sportType,
           },
         }
       );

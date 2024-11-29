@@ -40,7 +40,8 @@ const ListingList = () => {
     userLocation,
     offset,
     filteringOptions,
-    selectedSort
+    selectedSort,
+    sportType
   );
 
   useEffect(() => {

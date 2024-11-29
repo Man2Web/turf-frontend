@@ -4,14 +4,6 @@ const routes = all_routes;
 
 export const superHeaderData = [
   {
-    tittle: "Home",
-    showAsTab: false,
-    separateRoute: true,
-    routes: routes.SuperAdminDashboard,
-    hasSubRoute: false,
-    showSubRoute: false,
-  },
-  {
     tittle: "Book A Court",
     showAsTab: false,
     separateRoute: true,
@@ -22,14 +14,6 @@ export const superHeaderData = [
 ];
 
 export const adminHeaderData = [
-  {
-    tittle: "Home",
-    showAsTab: false,
-    separateRoute: true,
-    routes: routes.adminDashboard,
-    hasSubRoute: false,
-    showSubRoute: false,
-  },
   {
     tittle: "Courts",
     showAsTab: false,
@@ -60,14 +44,6 @@ export const adminHeaderData = [
 ];
 
 export const userHeaderData = [
-  {
-    tittle: "Home",
-    showAsTab: false,
-    separateRoute: true,
-    routes: routes.userDashboard,
-    hasSubRoute: false,
-    showSubRoute: false,
-  },
   {
     tittle: "Book A Court",
     showAsTab: false,

@@ -4,7 +4,7 @@ import { all_routes } from "./all_routes";
 
 import Signin from "../pages/auth/register";
 import Login from "../pages/auth/login";
-import AdminDashboard from "../pages/admin/profile/admin-dashboard";
+import AdminDashboard from "../dump/admin-dashboard";
 import AddCourt from "../pages/admin/court/add-court";
 import EditCourt from "../pages/admin/court/edit-court";
 import AllCourt from "../pages/admin/court/all-court";
@@ -15,7 +15,7 @@ import BookingSuccess from "../dump/booking-success";
 import BookingFailure from "../components/common/court/booking-failure";
 import BookingCompleted from "../pages/admin/booking/booking-completed";
 import AdminProfile from "../pages/admin/profile/admin-profile";
-import UserDashboard from "../pages/user/user/user-dashboard";
+import UserDashboard from "../dump/user-dashboard";
 import UserBookingsPage from "../pages/user/user/user-bookings-page";
 import UserProfile from "../pages/user/user/user-profile";
 import HomePage from "../pages/public/home";

@@ -33,11 +33,11 @@ const LoginFormComponent = () => {
       if (role === "admin") {
         localStorage.setItem("adminToken", token);
         localStorage.setItem("adminId", userId);
-        navigate(route.adminDashboard); // Redirect to the admin dashboard
+        navigate(route.home); // Redirect to the admin dashboard
       } else if (role === "user") {
         localStorage.setItem("userToken", token);
         localStorage.setItem("userId", userId);
-        navigate(route.userDashboard); // Redirect to the user dashboard
+        navigate(route.home); // Redirect to the user dashboard
       }
     } catch (error: any) {
       toast.error(error.response?.data?.message || "An error occurred");
