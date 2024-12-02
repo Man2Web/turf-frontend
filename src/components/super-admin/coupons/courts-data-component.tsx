@@ -2,7 +2,6 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Loader from "../../common/loader/Loader";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { Badge } from "primereact/badge";

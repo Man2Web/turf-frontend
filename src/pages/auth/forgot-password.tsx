@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { all_routes } from "../../router/all_routes";
 import { Link } from "react-router-dom";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import Loader from "../../components/common/loader/Loader";
 import { useAppContext } from "../../context/app-context";
 
 interface ResetForm {

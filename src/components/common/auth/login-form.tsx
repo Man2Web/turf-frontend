@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
-import Loader from "../loader/Loader";
 import axios from "axios";
 import { useAppContext } from "../../../context/app-context";
 

@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
-import Loader from "../../../components/common/loader/Loader";
 import { useAppContext } from "../../../context/app-context";
 
 const SuperAdminLoginFormComponent = () => {
@@ -27,7 +26,6 @@ const SuperAdminLoginFormComponent = () => {
         `${process.env.REACT_APP_BACKEND_URL}superadmin/auth`, // Assuming you updated the backend route
         data
       );
-
       const { message, token, userId, role } = response.data;
 
       toast.success(message);

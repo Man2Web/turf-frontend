@@ -7,9 +7,7 @@ import { dateFormat } from "../utils/commin-utils/dateFormat";
 import { formatTime } from "../utils/commin-utils/formatTime";
 import { decimalNumber } from "../utils/commin-utils/decimalNumber";
 import { formatEndTime } from "../utils/commin-utils/formatEndTime";
-import Loader from "../components/common/loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
-import { Modal } from "antd";
 import { useAppContext } from "../context/app-context";
 
 const BookingSuccess = () => {

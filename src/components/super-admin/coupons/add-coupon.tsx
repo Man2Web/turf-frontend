@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import Loader from "../../common/loader/Loader";
-import Dropdown from "react-bootstrap/Dropdown";
-import { ConfigProvider, DatePicker, Radio, Select, Space } from "antd";
-import type { DatePickerProps, GetProps } from "antd";
+import { DatePicker, Radio, Select, Space } from "antd";
 import { useAppContext } from "../../../context/app-context";
-type RangePickerProps = GetProps<typeof DatePicker.RangePicker>;
 const { RangePicker } = DatePicker;
 
 interface formDataType {

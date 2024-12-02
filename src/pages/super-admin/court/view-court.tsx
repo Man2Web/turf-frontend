@@ -8,7 +8,6 @@ import axios from "axios";
 import { all_routes } from "../../../router/all_routes";
 import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
 import { toast, ToastContainer } from "react-toastify";
-import Loader from "../../../components/common/loader/Loader";
 import { formatTime } from "../../../utils/commin-utils/formatTime";
 import BulkBookingModal from "../../../components/common/modal/bulk-booking-modal";
 import { HeartFilledIcon, HeartIcon } from "../../../utils/icons/icons";

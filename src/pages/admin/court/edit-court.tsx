@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 import { all_routes } from "../../../router/all_routes";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import Loader from "../../../components/common/loader/Loader";
 import BasicDetails from "../../../components/admin/form/basicDetails";
 import PricingDetails from "../../../components/admin/form/pricingDetails";
 import AvailabilityDetails from "../../../components/admin/form/availabilityDetails";
@@ -28,18 +25,6 @@ const daysOfWeek = [
   { id: 6, label: "Sat" },
   { id: 7, label: "Sun" },
 ];
-
-const courtOptions = [
-  "Football",
-  "Cricket",
-  "Badminton",
-  "Basketball",
-  "Tennis",
-  "Swimming",
-  "Squash",
-];
-
-const hoursOptions = ["1 Hrs", "2 Hrs", "3 Hrs"];
 
 const EditCourt = () => {
   const { courtId } = useParams();

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
 import { citiesList } from "../../../utils/data-list/citiesList";
@@ -7,7 +7,6 @@ import { Dropdown } from "primereact/dropdown";
 import { useNavigate } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
 import { Divider, Modal } from "antd";
-import Loader from "../loader/Loader";
 import { useAppContext } from "../../../context/app-context";
 
 const LocationDataModal = ({

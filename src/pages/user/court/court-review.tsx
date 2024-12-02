@@ -1,10 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { all_routes } from "../../../router/all_routes";
 import { toast, ToastContainer } from "react-toastify";
 import { useForm } from "react-hook-form";
-import Loader from "../../../components/common/loader/Loader";
 import { Card, Flex, Rate } from "antd";
 import { useAppContext } from "../../../context/app-context";
 

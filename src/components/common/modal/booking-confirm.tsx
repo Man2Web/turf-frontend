@@ -8,8 +8,8 @@ import { decimalNumber } from "../../../utils/commin-utils/decimalNumber";
 import axios from "axios";
 import { saveAs } from "file-saver";
 import { Modal } from "antd";
-import Loader from "../loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
+import { useAppContext } from "../../../context/app-context";
 
 const BookingConfirmModal = ({
   toggleModal,
@@ -22,12 +22,12 @@ const BookingConfirmModal = ({
   setToggleModal?: any;
   closeModal?: boolean;
 }) => {
-  const [buttonLoader, setButtonLoader] = useState<boolean>(false);
+  const { setLoading } = useAppContext();
   const routes = all_routes;
 
   const getPdf = async (transaction_id: string) => {
     try {
-      setButtonLoader(true);
+      setLoading({ status: true, description: "Generating PDF..." });
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}booking/download/${transaction_id}`,
         {
@@ -39,7 +39,7 @@ const BookingConfirmModal = ({
     } catch (error) {
       toast.error("Error Generating PDF");
     } finally {
-      setButtonLoader(false);
+      setLoading({ status: false, description: "Generating PDF..." });
     }
   };
 
@@ -109,7 +109,6 @@ const BookingConfirmModal = ({
       centered
     >
       <ToastContainer />
-      <Loader loader={buttonLoader} loadingDescription="Generating PDF..." />
       <div className="modal-content w-100">
         <div className="modal-body">
           {/* Court Request */}

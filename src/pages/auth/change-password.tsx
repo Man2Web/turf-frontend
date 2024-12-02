@@ -4,7 +4,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import ImageWithBasePath from "../../core/data/img/ImageWithBasePath";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import Loader from "../../components/common/loader/Loader";
 import { toast, ToastContainer } from "react-toastify";
 import { useAppContext } from "../../context/app-context";
 

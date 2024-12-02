@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../../../router/all_routes";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import Loader from "../../../components/common/loader/Loader";
 import AdminMenuComponent from "../../../components/admin/profile/adminMenu";
 import { Badge } from "primereact/badge";
 import { useAppContext } from "../../../context/app-context";
