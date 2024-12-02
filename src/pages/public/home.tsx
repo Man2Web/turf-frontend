@@ -30,7 +30,8 @@ const HomePage = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
-
+  const userId =
+    localStorage.getItem("adminId") || localStorage.getItem("userId");
   useEffect(() => {
     AOS.init({ duration: 1200, once: true });
     const fetchData = async () => {
@@ -120,8 +121,8 @@ const HomePage = () => {
           ))}
         </div>
       </section>
-      <RatedCourts />
-      <FetchCourts />
+      <RatedCourts userId={userId} />
+      <FetchCourts userId={userId} />
     </main>
   );
 };

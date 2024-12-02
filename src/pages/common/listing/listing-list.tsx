@@ -2,40 +2,31 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
 import { Dropdown } from "primereact/dropdown";
-import axios from "axios";
-import { toast } from "react-toastify";
 import { FilterForm } from "../../../components/common/courts-list/filters-form";
 import LocationDataModal from "../../../components/common/modal/location-data-modal";
 import GridCard from "../../../components/common/courts-list/grid-card";
 import ListCard from "../../../components/common/courts-list/list-card";
 import { useAppContext } from "../../../context/app-context";
 import { fetchCourtsByLocation } from "../../../utils/court-utils/fetchCourtsByLocation";
+import { getUserWishList } from "../../../utils/commin-utils/getUserWishList";
 
 const sortOptions = [
-  { name: "Relevance" },
+  { name: "Featured" },
   { name: "Price Low - High" },
   { name: "Price High - Low" },
-  { name: "Featured" },
 ];
 
 const ListingList = () => {
   const [viewMode, setViewMode] = useState<number>(0);
   const [showFilters, setShowFilters] = useState<boolean>(false);
-  const [selectedSort, setSelectedSort] = useState<any>(sortOptions[0].name);
-  const [userWishlist, setUserWishlist] = useState<string[]>([]);
+  const [selectedSort, setSelectedSort] = useState<any>(sortOptions[0]);
   const [offset, setOffset] = useState<number>(0);
-  const [filtersLoading, setFiltersLoading] = useState(false);
   const [filteringOptions, setFilteringOptions] =
     useState<AdvancedSearchForm>();
   const userId =
     localStorage.getItem("adminId") || localStorage.getItem("userId");
   const { sportType } = useParams();
-  const { userLocation, setUserLocation, setLoading } = useAppContext();
-  useEffect(() => {
-    if (userId) {
-      getUserWishList();
-    }
-  }, [selectedSort]);
+  const { userLocation, setUserLocation } = useAppContext();
   const { courtsData, totalCount } = fetchCourtsByLocation(
     userLocation,
     offset,
@@ -71,30 +62,8 @@ const ListingList = () => {
     };
   }, [observerTarget, totalCount, courtsData]);
 
-  const updateWishList = async (wishList: number[]) => {
-    if (userId) {
-      try {
-        const response = await axios.put(
-          `${process.env.REACT_APP_BACKEND_URL}user/wishlist/update/${userId}`,
-          { wishList }
-        );
-      } catch (error) {
-        // console.error(error);
-        toast.error("Error Updating Wishlist");
-      }
-    }
-  };
-
-  const getUserWishList = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_BACKEND_URL}user/get/${userId}`
-      );
-      setUserWishlist(response.data.user.wishlist);
-    } catch (error) {
-      // console.error(error);
-    }
-  };
+  const { userWishlist, setUserWishlist, updateWishList } =
+    getUserWishList(userId);
 
   return (
     <>
@@ -170,7 +139,7 @@ const ListingList = () => {
                                   onChange={(e) => setSelectedSort(e.value)}
                                   options={sortOptions}
                                   optionLabel="name"
-                                  placeholder="Relevance"
+                                  placeholder="Sort Options"
                                   className="select custom-select-list"
                                 />
                               </div>
@@ -199,7 +168,6 @@ const ListingList = () => {
                     <div className="row justify-content-start">
                       {/* Grid View */}
                       {viewMode === 0 &&
-                        !filtersLoading &&
                         courtsData.length > 0 &&
                         courtsData?.map((court: CourtsData, idx) => (
                           <div
@@ -217,7 +185,6 @@ const ListingList = () => {
 
                       {/* List View */}
                       {viewMode === 1 &&
-                        !filtersLoading &&
                         courtsData?.map((court: CourtsData, idx) => (
                           <div key={idx} className="col-lg-12 col-md-12 mb-2">
                             <ListCard
@@ -232,9 +199,7 @@ const ListingList = () => {
                       <div ref={observerTarget} />
 
                       {/* If not courts found show this */}
-                      {courtsData.length === 0 && !filtersLoading && (
-                        <h1>No Courts Found</h1>
-                      )}
+                      {courtsData.length === 0 && <h1>No Courts Found</h1>}
                     </div>
                   </div>
                 </div>

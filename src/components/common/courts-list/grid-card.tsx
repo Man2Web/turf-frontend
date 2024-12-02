@@ -13,7 +13,7 @@ import {
 import { formatTime } from "../../../utils/commin-utils/formatTime";
 import { handleWishListUpdate } from "../../../utils/commin-utils/handleWishlistUpdate";
 import { getCourtDuration } from "../../../utils/court-utils/getCourtDuration";
-import { Badge, Button, Card, Divider, Rate } from "antd";
+import { Badge, Button, Card } from "antd";
 import Meta from "antd/es/card/Meta";
 import { getIconsBySport } from "../../../utils/icons/getIconsBySport";
 import Slider from "react-slick";

@@ -3,8 +3,9 @@ import { useAppContext } from "../../../context/app-context";
 import { fetchCourtsByLocation } from "../../../utils/court-utils/fetchCourtsByLocation";
 import InfiniteLoadComponent from "../courts-list/infinite-load";
 import GridCard from "../courts-list/grid-card";
+import { getUserWishList } from "../../../utils/commin-utils/getUserWishList";
 
-const FetchCourts = () => {
+const FetchCourts = ({ userId }: { userId: string | null }) => {
   const { userLocation } = useAppContext();
   const [offset, setOffset] = useState(0);
   const { courtsData, totalCount } = fetchCourtsByLocation(
@@ -33,6 +34,8 @@ const FetchCourts = () => {
       }
     };
   }, [observerTarget, totalCount, courtsData]);
+  const { userWishlist, setUserWishlist, updateWishList } =
+    getUserWishList(userId);
   return (
     <section className="courts-section my-2 text-capitalize">
       <h2>
@@ -41,7 +44,12 @@ const FetchCourts = () => {
       <div className="courts-list">
         {courtsData?.map((court: CourtsData, index: number) => (
           <div key={index} className="p-0 py-2 p-lg-2 col-12 col-md-6 col-lg-4">
-            <GridCard court={court} />
+            <GridCard
+              court={court}
+              userWishlist={userWishlist}
+              setUserWishlist={setUserWishlist}
+              updateWishList={updateWishList}
+            />
           </div>
         ))}
         <div ref={observerTarget} />
