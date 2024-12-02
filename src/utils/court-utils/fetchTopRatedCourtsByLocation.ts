@@ -15,7 +15,6 @@ export const fetchTopRatedCourts = (userLocation: string | null) => {
       const response = await axios.get(
         `${process.env.REACT_APP_BACKEND_URL}court/fetch/rating/${userLocation}`
       );
-      console.log(response.data);
       setCourtsData((prevData) => [
         ...prevData,
         ...response.data.updatedCourtsData,
@@ -26,6 +25,5 @@ export const fetchTopRatedCourts = (userLocation: string | null) => {
       setLoading({ status: false, description: "Fetching Courts Data..." });
     }
   };
-  console.log(courtsData);
   return { courtsData };
 };
