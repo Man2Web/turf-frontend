@@ -7,14 +7,17 @@ const RulesDetails = ({
   control,
   rules,
   setRules,
+  resetField,
 }: {
   errors: any;
   control: any;
   rules: any;
   setRules: any;
+  resetField: any;
 }) => {
   const addRule = (rule: string) => {
     setRules((prev: any) => [...prev, rule]);
+    resetField("rulesOfVenue");
   };
   const removeRule = (index: number) => {
     setRules((prev: any[]) =>
@@ -50,9 +53,14 @@ const RulesDetails = ({
                   Rules of Venue <span>*</span>
                 </label>
                 {rules?.map((rule: string, index: number) => (
-                  <div key={index} className="d-flex gap-1 align-items-center">
-                    <i className="feather-alert-octagon text-danger" />
-                    <p className="m-0">{rule}</p>
+                  <div
+                    key={index}
+                    className="d-flex gap-1 align-items-center justify-content-between"
+                  >
+                    <div className="d-flex gap-1 align-items-center">
+                      <i className="feather-alert-octagon text-danger" />
+                      <p className="m-0">{rule}</p>
+                    </div>
                     <button
                       className="btn btn-red"
                       type="button"

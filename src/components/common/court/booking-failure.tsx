@@ -1,8 +1,10 @@
 import React from "react";
 import ImageWithBasePath from "../../../core/data/img/ImageWithBasePath";
 import { Link } from "react-router-dom";
+import { all_routes } from "../../../router/all_routes";
 
 const BookingFailure = () => {
+  const routes = all_routes;
   return (
     <div
       // className="modal fade"
@@ -26,12 +28,9 @@ const BookingFailure = () => {
             </p>
           </div>
           <div className="modal-footer text-center d-inline-block">
-            <Link
-              to={"routes.userDashboard"}
-              className="btn btn-primary btn-icon"
-            >
+            <Link to={routes.home} className="btn btn-primary btn-icon">
               <i className="feather-arrow-left-circle me-1" />
-              Back to Dashboard
+              Back to Home
             </Link>
           </div>
         </div>

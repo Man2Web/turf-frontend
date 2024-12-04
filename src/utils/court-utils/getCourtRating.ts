@@ -12,7 +12,7 @@ export const useCourtRatings = (courtId: string) => {
   useEffect(() => {
     const getCourtReviewsData = async () => {
       try {
-        setLoading({ status: true, description: "Fetching court ratings..." });
+        setLoading({ status: true, description: "Fetching Court Ratings..." });
         const response = await axios.get(
           `${process.env.REACT_APP_BACKEND_URL}court/rating/${courtId}`
         );
@@ -22,7 +22,7 @@ export const useCourtRatings = (courtId: string) => {
         console.error("Error fetching court ratings:", error);
         setReviewsData({ total_rating: 0, total_reviews: 0 }); // Fallback values
       } finally {
-        setLoading({ status: false, description: "Fetching court ratings..." });
+        setLoading({ status: false, description: "Fetching Court Ratings..." });
       }
     };
 

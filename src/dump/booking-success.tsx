@@ -35,16 +35,6 @@ const BookingSuccess = () => {
 
   const isUser = localStorage.getItem("userId");
 
-  const redirectUrl = () => {
-    if (isAdmin) {
-      return routes.adminDashboard;
-    } else if (isUser) {
-      return routes.userDashboard;
-    } else {
-      return routes.home;
-    }
-  };
-
   const getPdf = async (transaction_id: string | undefined) => {
     try {
       setLoading({ status: true, description: "Fetching Booking Data..." });
@@ -296,9 +286,9 @@ const BookingSuccess = () => {
                   <i className="feather-mail me-1" />
                   Download PDF
                 </button>
-                <Link to={redirectUrl()} className="btn btn-primary btn-icon">
+                <Link to={routes.home} className="btn btn-primary btn-icon">
                   <i className="feather-arrow-left-circle me-1" />
-                  {`Back to ${!isAdmin && !isUser ? "Home" : "Dashboard"}`}
+                  Back to Home
                 </Link>
               </div>
             </div>

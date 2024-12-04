@@ -54,9 +54,9 @@ const BookingConfirmModal = ({
         <i className="feather-mail me-1" />
         Download PDF
       </button>
-      <Link to={routes.adminDashboard} className="btn btn-primary btn-icon">
+      <Link to={routes.home} className="btn btn-primary btn-icon">
         <i className="feather-arrow-left-circle me-1" />
-        Back to Dashboard
+        Back to Home
       </Link>
       {bookingData?.court_reviews === null ? (
         <Link

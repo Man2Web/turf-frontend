@@ -12,21 +12,13 @@ const SuperAdminDashboard = () => {
   return (
     <div>
       {!userLocation && <LocationDataModal />}
-      {/* Dashboard Menu */}
       <SuperAdminMenu />
-      {/* /Dashboard Menu */}
-      {/* Page Content */}
       <div className="content court-bg">
-        <div className="container">
-          {/* Statistics Card */}
+        {/* <div className="container">
           <StatsCardComponent />
-          {/* /Statistics Card */}
-        </div>
-        {/* Data Card */}
+        </div> */}
         <CourtsDataComponent />
-        {/* /Data Card */}
       </div>
-      {/* /Page Content */}
     </div>
   );
 };

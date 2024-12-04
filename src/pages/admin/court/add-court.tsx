@@ -23,6 +23,7 @@ const AddCourt = () => {
     handleSubmit,
     setValue,
     control,
+    resetField,
     formState: { errors },
   } = useForm<CourtFormDataType>();
   const navigate = useNavigate();
@@ -236,6 +237,7 @@ const AddCourt = () => {
                   control={control}
                   rules={rules}
                   setRules={setRules}
+                  resetField={resetField}
                 />
                 {/* Amenities */}
                 <AmenitiesDetails
